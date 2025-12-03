@@ -363,10 +363,14 @@ class MyWindow:
         #---------------- 造型优化模块功能按钮 ---------------- #
         
         #----基于具体频段-----
-        if hasattr(self.current_window, "pushButton_30"):
-            self.current_window.pushButton_30.clicked.connect(self.select_folder_and_fill_files)
-        if hasattr(self.current_window, "pushButton_33"):
-            self.current_window.pushButton_33.clicked.connect(self.select_file_zxpg_4)
+        if hasattr(self.current_window, "pushButton_7"):
+            self.current_window.pushButton_7.clicked.connect(self.select_folder_and_fill_files)
+        if hasattr(self.current_window, "pushButton_8"):
+            self.current_window.pushButton_8.clicked.connect(self.select_file_zxpg_4)
+        if hasattr(self.current_window, "pushButton_9"):
+            self.current_window.pushButton_9.clicked.connect(self.plot_photo_moxingyouhua_pindian)  # 运行优化
+        # if hasattr(self.current_window, "pushButton_10"):
+        #     self.current_window.pushButton_10.clicked.connect(self.select_save_dir_zxpg)  # 保存优化结果
             
         #----基于整体响度-----
         if hasattr(self.current_window, "pushButton_11"):
@@ -1246,8 +1250,6 @@ class MyWindow:
             return
 
         pth_path = ""
-        input_xlsx_path = ""
-        output_xlsx_path = ""
 
         for file_name in os.listdir(folder_path):
             lower_name = file_name.lower()
@@ -1260,17 +1262,11 @@ class MyWindow:
             elif file_name == "输出数据.xlsx":
                 output_xlsx_path = full_path
 
-        if hasattr(self.current_window, "lineEdit_130"):
-            self.current_window.lineEdit_130.setText(pth_path)
-        if hasattr(self.current_window, "lineEdit_131"):
-            self.current_window.lineEdit_131.setText(input_xlsx_path)
-        if hasattr(self.current_window, "lineEdit_132"):
-            self.current_window.lineEdit_132.setText(output_xlsx_path)
+        if hasattr(self.current_window, "lineEdit_9"):
+            self.current_window.lineEdit_9.setText(pth_path)
 
         msg = f"📁 已选择文件夹：{folder_path}\n"
         msg += f"\n模型文件 (.pth)：{pth_path if pth_path else '未找到'}"
-        msg += f"\n输入数据.xlsx：{input_xlsx_path if input_xlsx_path else '未找到'}"
-        msg += f"\n输出数据.xlsx：{output_xlsx_path if output_xlsx_path else '未找到'}"
         QMessageBox.information(None, "文件检测结果", msg)
 
     def select_file_zxpg_4(self):
@@ -1285,8 +1281,8 @@ class MyWindow:
         if not file_path:
             return
 
-        # 写入 lineEdit_133
-        self.current_window.lineEdit_133.setText(file_path)
+        # 写入 lineEdit_15
+        self.current_window.lineEdit_15.setText(file_path)
 
         # ---------------------- 读取 Excel 并自动填入界面 ---------------------- #
         try:
@@ -1322,7 +1318,7 @@ class MyWindow:
 
             # ---------------------- 写入 UI（只写入可调整参数的信息） ---------------------- #
             # 索引写成 "0,1,2" 格式，便于后续 parse
-            self.current_window.lineEdit_143.setText(", ".join(str(i) for i in adjust_indices))
+            self.current_window.lineEdit_12.setText(", ".join(str(i) for i in adjust_indices))
 
             # --- 这里是修改的核心部分 ---
             # 根据 adjust_indices 过滤出对应的最小值和最大值
@@ -1330,8 +1326,8 @@ class MyWindow:
             adjusted_param_max = [param_max_py[i] for i in adjust_indices]
 
             # 只将可调整参数的最小/最大值写成 "1.0, 2.0, 3.0" 格式
-            self.current_window.lineEdit_144.setText(", ".join(str(x) for x in adjusted_param_min))
-            self.current_window.lineEdit_145.setText(", ".join(str(x) for x in adjusted_param_max))
+            self.current_window.lineEdit_13.setText(", ".join(str(x) for x in adjusted_param_min))
+            self.current_window.lineEdit_14.setText(", ".join(str(x) for x in adjusted_param_max))
 
             QMessageBox.information(
                 None, "读取成功",
@@ -1343,6 +1339,73 @@ class MyWindow:
             import traceback
             traceback.print_exc()
             QMessageBox.critical(None, "错误", f"读取 Excel 时出错：\n{e}")
+
+    def plot_photo_moxingyouhua_pindian(self):
+        """绘制模型预测结果图"""
+
+        # 从文件夹中提取图像
+        def load_images_to_array(folder_path, image_names):
+            """
+            从指定文件夹读取图像并存储到数组中
+
+            Args:
+                folder_path (str): 图像文件夹路径
+                image_names (list): 要读取的图像文件名列表（最多4个）
+
+            Returns:
+                list: 包含QPixmap对象的数组，如果图像不存在则对应位置为None
+            """
+            # 初始化结果数组
+            pixmaps = []
+
+            # 确保image_names是列表且最多包含4个文件名
+            if not isinstance(image_names, list):
+                raise TypeError("image_names必须是一个列表")
+
+            # 限制为最多4张图像
+            image_names = image_names[:4]
+
+            for img_name in image_names:
+                # 构建完整的文件路径
+                img_path = os.path.join(folder_path, img_name)
+
+                # 检查文件是否存在
+                if os.path.exists(img_path):
+                    # 创建QPixmap对象
+                    pixmap = QPixmap(img_path)
+
+                    # 检查图像是否成功加载
+                    if not pixmap.isNull():
+                        pixmaps.append(pixmap)
+                        print(f"✅ 成功加载图像: {img_name}")
+                    else:
+                        pixmaps.append(None)
+                        print(f"❌ 无法加载图像: {img_name}（格式不支持或文件损坏）")
+                else:
+                    pixmaps.append(None)
+                    print(f"❌ 图像文件不存在: {img_name}")
+
+            return pixmaps
+
+        folder_name = "绘图\优化结果"
+        folder_path = os.path.join(current_dir, folder_name)
+        image_names = ["频点对比折线图.png", "参数调整对比图.png"]
+        # 加载图像
+        pixmaps = load_images_to_array(folder_path, image_names)
+
+        if pixmaps and len(pixmaps) == 2:
+            if hasattr(self.current_window, "label_35"):
+                self.current_window.label_35.setPixmap(pixmaps[0].scaled(
+                    self.current_window.label_35.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+            else:
+                print("❌ label_35 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+            if hasattr(self.current_window, "label_36"):
+                self.current_window.label_36.setPixmap(pixmaps[1].scaled(
+                    self.current_window.label_36.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+            else:
+                print("❌ label_36 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+        else:
+            print("❌ 无法生成目标定义图，请检查数据集文件！")
             
     #----基于整体响度-----
     def select_folder_and_fill_files_xiangdu(self):
