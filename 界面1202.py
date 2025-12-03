@@ -9,7 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from io import BytesIO
 from typing import Tuple
-from DYAN_OPTIMIZE import main
+# from DYAN_OPTIMIZE import main
 import re
 import shutil
 import pandas as pd
@@ -229,13 +229,15 @@ class MyWindow:
             self.current_window.pushButton_15.clicked.connect(self.run_stl_rotation)
         # 选择保存路径
         if hasattr(self.current_window, "pushButton_16"):
-            self.current_window.pushButton_16.clicked.connect(self.select_save_path)
-        # 选择文件路径写入 lineEdit_28
+            self.current_window.pushButton_16.clicked.connect(self.save_rotated_stl)
+        # 造型提取
         if hasattr(self.current_window, "pushButton_17"):
             self.current_window.pushButton_17.clicked.connect(self.select_file_2)
         # 点击 pushButton_8 输入数据（车高计算、SUV/轿车数据填充）
         if hasattr(self.current_window, "pushButton_18"):
             self.current_window.pushButton_18.clicked.connect(self.run_height_and_fill_data)
+        if hasattr(self.current_window, "pushButton_19"):
+            self.current_window.pushButton_19.clicked.connect(self.fill_default_values)
             
         #------灵敏度分析功能---------
         #点击导入模型及数据集
@@ -378,94 +380,6 @@ class MyWindow:
         if file_path and hasattr(self.current_window, "lineEdit_22"):
             self.current_window.lineEdit_22.setText(file_path)
 
-    def select_file_2(self):
-        """选择 STL 文件路径，写入 lineEdit_28"""
-        file_path, _ = QFileDialog.getOpenFileName(
-            self.current_window, "选择STL文件", "", "STL文件 (*.stl);;所有文件 (*.*)"
-        )
-        if file_path and hasattr(self.current_window, "lineEdit_28"):
-            self.current_window.lineEdit_28.setText(file_path)
-            print(f"✅ 已选择STL文件：{file_path}")
-        else:
-            print("❌ 未选择文件或 lineEdit_28 不存在")
-
-    def run_height_and_fill_data(self):
-        """计算车高并写入 SUV/轿车数据到 lineEdit_6~50"""
-        stl_path = self.current_window.lineEdit_22.text().strip()
-
-        if not stl_path:
-            QMessageBox.warning(self.current_window, "提示", "请先选择STL文件！")
-            return
-
-        try:
-            mesh = trimesh.load_mesh(stl_path)
-            vertices = mesh.vertices
-
-            # 计算车高
-            z_min = np.min(vertices[:, 2])
-            z_max = np.max(vertices[:, 2])
-            H = z_max - z_min
-            print(f"计算得到车高 H = {H:.2f} mm")
-
-            # SUV 数据
-            data1 = [
-                "76.41 - 141.75", "26.57 - 63.56", "9.81 - 23.07", "0.07 - 2.89", "6.38 - 8.75",
-                "1.76 - 8.24", "5.13 - 20.30", "0.00 - 39.25", "7.14 - 12.46", "75.51 - 126.58",
-                "34.06 - 70.15", "5.79 - 32.00", "0.00 - 3.71", "0.00 - 11.58", "4.50 - 12.86",
-                "2.42 - 29.03", "0.00 - 45.71", "7.14 - 12.46", "204.01 - 252.34", "209.01 - 250.36",
-                "148.94 - 170.74", "63.29 - 87.24", "68.11 - 75.08", "170.72 - 264.00", "17.00 - 22.50",
-                "18.00 - 25.00", "149.41 - 157.04", "111.68 - 187.32", "2282.34 - 2876.36", "32.98 - 53.80",
-                "38.48 - 65.24", "54.87 - 59.30", "2.60 - 7.74", "22.63 - 42.11", "82.34 - 90.00",
-                "1.63 - 2.02", "52.10 - 69.81", "37.41 - 73.68", "0.00 - 9.48", "2.71 - 3.22",
-                "0.85 - 23.04", "33.18 - 60.57", "25.80 - 34.30", "78.56 - 81.68", "58.17 - 65.76"
-            ]
-
-            # 轿车数据
-            data2 = [
-                "71.80 - 178.75", "22.17 - 46.09", "2.13 - 41.44", "0.20 - 3.64", "5.97 - 14.98",
-                "1.98 - 11.43", "0.19 - 37.75", "0.00 - 29.51", "6.55 - 15.00", "71.42 - 159.29",
-                "24.35 - 67.09", "3.53 - 107.43", "0.11 - 3.87", "4.99 - 12.63", "3.64 - 17.77",
-                "1.46 - 38.77", "0.00 - 28.04", "6.55 - 15.00", "172.43 - 232.44", "183.01 - 240.44",
-                "127.63 - 171.84", "60.66 - 96.24", "69.64 - 77.52", "125.20 - 243.69", "13.00 - 19.00",
-                "14.00 - 20.00", "148.97 - 181.66", "8.88 - 148.54", "564.81 - 3244.37", "17.98 - 66.08",
-                "12.85 - 79.97", "55.61 - 64.15", "3.19 - 10.07", "12.77 - 59.69", "52.12 - 90.00",
-                "1.72 - 2.24", "50.46 - 68.26", "40.27 - 69.54", "0.00 - 16.54", "2.42 - 3.43",
-                "16.14 - 28.41", "28.12 - 89.71", "23.79 - 44.28", "75.11 - 84.25", "49.52 - 68.02"
-            ]
-
-            # 选择输出数据
-            output_data = data1 if H > 1600 else data2
-            car_type = "SUV" if H > 1600 else "轿车"
-            print(f"检测结果：{car_type}（H = {H:.2f} mm）")
-
-            # 写入 lineEdit_6 ~ lineEdit_50
-            for i, value in enumerate(output_data):
-                line_name = f"lineEdit_{i + 6}"
-                if hasattr(self.current_window, line_name):
-                    getattr(self.current_window, line_name).setText(value)
-
-            QMessageBox.information(
-                self.current_window,
-                "完成",
-                f"检测结果：{car_type}\n车高 H = {H:.2f} mm\n数据已写入 lineEdit_6~lineEdit_50"
-            )
-
-        except Exception as e:
-            QMessageBox.critical(self.current_window, "错误", f"运行出错：\n{e}")
-
-    def select_save_path(self):
-        save_path, _ = QFileDialog.getSaveFileName(
-            self.current_window,
-            "选择保存旋转后STL的路径",
-            "",
-            "STL文件 (*.stl);;所有文件 (*.*)"
-        )
-        if save_path:
-            self.save_path = save_path
-            print(f"旋转后STL保存路径已选择：{self.save_path}")
-        else:
-            print("❌ 未选择保存路径")
-
     def run_stl_plot(self):
         """从 lineEdit 获取 STL 文件路径并将三视图显示在 label_86、label_87、label_88 中"""
         if hasattr(self.current_window, "lineEdit_22"):
@@ -496,7 +410,7 @@ class MyWindow:
     def run_stl_rotation(self):
         """执行 STL 旋转并将旋转后三视图显示在 label_95、label_96、label_97 中"""
         if not hasattr(self.current_window, "lineEdit_22"):
-            print("❌ lineEdit 不存在，请检查 UIzhujiemian.ui 文件")
+            print("❌ lineEdit 不存在，请检查 UI 文件")
             return
 
         stl_path = self.current_window.lineEdit_22.text().strip()
@@ -507,65 +421,188 @@ class MyWindow:
         # 获取旋转角度
         try:
             rx = float(self.current_window.lineEdit_25.text().strip()) if hasattr(self.current_window,
-                                                                                 "lineEdit_25") else 0
+                                                                                  "lineEdit_25") else 0
             ry = float(self.current_window.lineEdit_26.text().strip()) if hasattr(self.current_window,
-                                                                                 "lineEdit_26") else 0
+                                                                                  "lineEdit_26") else 0
             rz = float(self.current_window.lineEdit_27.text().strip()) if hasattr(self.current_window,
-                                                                                 "lineEdit_27") else 0
+                                                                                  "lineEdit_27") else 0
         except ValueError:
-            print("❌ 旋转角度输入无效，请在 lineEdit_25、lineEdit_26、lineEdit_27 中输入有效数字！")
+            print("❌ 旋转角度输入无效，请输入有效数字！")
             return
 
         # 加载 STL 文件
         try:
-            original_mesh = trimesh.load_mesh(stl_path, force='mesh')
-            print(f"原始模型信息：顶点数={len(original_mesh.vertices)}，面数={len(original_mesh.faces)}")
+            self.original_mesh = trimesh.load_mesh(stl_path, force='mesh')
+            print(f"原始模型信息：顶点数={len(self.original_mesh.vertices)}，面数={len(self.original_mesh.faces)}")
         except FileNotFoundError:
-            print(f"错误：未找到STL文件，请检查路径：{stl_path}")
+            print(f"❌ 未找到 STL 文件：{stl_path}")
             return
         except Exception as e:
-            print(f"加载STL文件失败：{str(e)}")
+            print(f"加载 STL 文件失败：{str(e)}")
             return
 
         # 执行旋转
         print(f"正在执行旋转（顺序：xyz）...")
-        rotated_vertices = rotate_stl_vertices(
-            vertices=original_mesh.vertices,
+        self.rotated_vertices = rotate_stl_vertices(
+            vertices=self.original_mesh.vertices,
             rx=rx, ry=ry, rz=rz,
             rotation_order="xyz"
         )
-        rotated_mesh = create_rotated_stl(original_mesh, rotated_vertices)
-
-        # 保存旋转后的 STL 文件（如果已选择保存路径）
-        if self.save_path:
-            try:
-                rotated_mesh.export(self.save_path)
-                print(f"旋转后的STL已保存至：{self.save_path}")
-            except Exception as e:
-                print(f"保存旋转后STL失败：{str(e)}")
+        self.rotated_mesh = create_rotated_stl(self.original_mesh, self.rotated_vertices)
 
         # 生成旋转后三视图并显示
-        pixmaps = plot_rotated_views(rotated_mesh, rx, ry, rz)
+        pixmaps = plot_rotated_views(self.rotated_mesh, rx, ry, rz)
         if pixmaps and len(pixmaps) == 3:
             if hasattr(self.current_window, "label_95"):
                 self.current_window.label_95.setPixmap(pixmaps[0].scaled(
                     self.current_window.label_95.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
-            else:
-                print("❌ label_11 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
             if hasattr(self.current_window, "label_96"):
                 self.current_window.label_96.setPixmap(pixmaps[1].scaled(
                     self.current_window.label_96.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
-            else:
-                print("❌ label_12 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
             if hasattr(self.current_window, "label_97"):
                 self.current_window.label_97.setPixmap(pixmaps[2].scaled(
                     self.current_window.label_97.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
-            else:
-                print("❌ label_97 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
         else:
             print("❌ 无法生成旋转后三视图，请检查 STL 文件或旋转参数！")
-            
-            
+
+    def save_rotated_stl(self):
+        """在旋转完成后保存 STL 文件"""
+        if not hasattr(self, "rotated_mesh"):
+            print("❌ 尚未旋转 STL，无法保存！")
+            return
+
+        # 弹出文件选择对话框
+        save_path, _ = QFileDialog.getSaveFileName(self.current_window, "保存旋转后的 STL 文件", "", "STL Files (*.stl)")
+        if save_path:
+            try:
+                self.rotated_mesh.export(save_path)
+                print(f"旋转后的 STL 已保存至：{save_path}")
+            except Exception as e:
+                print(f"保存旋转后 STL 失败：{str(e)}")
+
+    def select_file_2(self):
+        """选择 STL 文件路径，写入 lineEdit_28"""
+        file_path, _ = QFileDialog.getOpenFileName(
+            self.current_window, "选择STL文件", "", "STL文件 (*.stl);;所有文件 (*.*)"
+        )
+        if file_path and hasattr(self.current_window, "lineEdit_28"):
+            self.current_window.lineEdit_28.setText(file_path)
+            print(f"✅ 已选择STL文件：{file_path}")
+        else:
+            print("❌ 未选择文件或 lineEdit_28 不存在")
+
+    def run_height_and_fill_data(self):
+        """计算车高并写入 SUV/轿车数据到 lineEdit_500~548"""
+        stl_path = self.current_window.lineEdit_28.text().strip()
+
+        if not stl_path:
+            QMessageBox.warning(self.current_window, "提示", "请先选择STL文件！")
+            return
+
+        try:
+            mesh = trimesh.load_mesh(stl_path)
+            vertices = mesh.vertices
+
+            # 计算车高
+            z_min = np.min(vertices[:, 2])
+            z_max = np.max(vertices[:, 2])
+            H = z_max - z_min
+            print(f"计算得到车高 H = {H:.2f} mm")
+
+            # SUV 数据
+            data1 = [
+                "76.41 - 141.75", "26.57 - 63.56", "9.81 - 23.07", "0.07 - 2.89", "6.38 - 8.75",
+                "1.76 - 8.24", "5.13 - 20.30", "0.00 - 39.25", "7.14 - 12.46", "75.51 - 126.58",
+                "34.06 - 70.15", "5.79 - 32.00", "0.00 - 3.71", "0.00 - 11.58", "4.50 - 12.86",
+                "2.42 - 29.03", "0.00 - 45.71", "7.14 - 12.46", "204.01 - 252.34", "209.01 - 250.36",
+                "148.94 - 170.74", "63.29 - 87.24", "68.11 - 75.08", "170.72 - 264.00", "17.00 - 22.50",
+                "18.00 - 25.00", "149.41 - 157.04", "111.68 - 187.32", "2282.34 - 2876.36", "32.98 - 53.80",
+                "38.48 - 65.24", "54.87 - 59.30", "2.60 - 7.74", "22.63 - 42.11", "82.34 - 90.00",
+                "1.63 - 2.02", "19 - 22", "21 - 25", "52.10 - 69.81", "37.41 - 73.68",
+                "0.00 - 9.48", "2.71 - 3.22","0.85 - 23.04", "33.18 - 60.57", "25.80 - 34.30",
+                "78.56 - 81.68", "58.17 - 65.76", "180 - 270", "1.63 - 2.02"
+            ]
+
+            # 轿车数据
+            data2 = [
+                "71.80 - 178.75", "22.17 - 46.09", "2.13 - 41.44", "0.20 - 3.64", "5.97 - 14.98",
+                "1.98 - 11.43", "0.19 - 37.75", "0.00 - 29.51", "6.55 - 15.00", "71.42 - 159.29",
+                "24.35 - 67.09", "3.53 - 107.43", "0.11 - 3.87", "4.99 - 12.63", "3.64 - 17.77",
+                "1.46 - 38.77", "0.00 - 28.04", "6.55 - 15.00", "172.43 - 232.44", "183.01 - 240.44",
+                "127.63 - 171.84", "60.66 - 96.24", "69.64 - 77.52", "125.20 - 243.69", "13.00 - 19.00",
+                "14.00 - 20.00", "148.97 - 181.66", "8.88 - 148.54", "564.81 - 3244.37", "17.98 - 66.08",
+                "12.85 - 79.97", "55.61 - 64.15", "3.19 - 10.07", "12.77 - 59.69", "52.12 - 90.00",
+                "1.72 - 2.24", "13 - 18", "14 - 19", "50.46 - 68.26", "40.27 - 69.54",
+                "0.00 - 16.54", "2.42 - 3.43","16.14 - 28.41", "28.12 - 89.71", "23.79 - 44.28",
+                "75.11 - 84.25", "49.52 - 68.02", "125 - 180", "1.72 - 2.24"
+            ]
+
+            # 选择输出数据
+            output_data = data1 if H > 1600 else data2
+            car_type = "SUV" if H > 1600 else "轿车"
+            print(f"检测结果：{car_type}（H = {H:.2f} mm）")
+
+            # 写入 lineEdit_500 ~ lineEdit_548
+            for i, value in enumerate(output_data):
+                line_name = f"lineEdit_{i + 500}"
+                if hasattr(self.current_window, line_name):
+                    getattr(self.current_window, line_name).setText(value)
+
+            QMessageBox.information(
+                self.current_window,
+                "完成",
+                f"检测结果：{car_type}\n车高 H = {H:.2f} mm\n数据已写入 lineEdit_500~lineEdit_548"
+            )
+
+        except Exception as e:
+            QMessageBox.critical(self.current_window, "错误", f"运行出错：\n{e}")
+
+    def fill_default_values(self):
+        """点击按钮后向 lineEdit_500~548 写入默认数据（红色）"""
+
+        # SUV 数据
+        data1 = [
+            "76.41", "26.57", "9.81", "0.07", "6.38",
+            "1.76", "5.13", "0.00", "7.14", "75.51",
+            "34.06", "5.79", "0.00", "0.00", "4.50",
+            "2.42", "0.00", "7.14", "204.01", "209.01",
+            "148.94", "63.29", "68.11", "170.72", "17.00",
+            "18.00", "149.41", "111.68", "2282.34", "32.98",
+            "38.48", "54.87", "2.60", "22.63", "82.34",
+            "1.63", "19", "21", "52.10", "37.41",
+            "0.00", "2.71", "0.85", "33.18", "25.80",
+            "78.56", "58.17", "180", "1.63"
+        ]
+
+        # # 轿车数据（如需使用，把 data1 改成 data2 即可）
+        # data2 = [
+        #     "71.80", "22.17", "2.13", "0.20", "5.97",
+        #     "1.98", "0.19", "0.00", "6.55", "71.42",
+        #     "24.35", "3.53", "0.11", "4.99", "3.64",
+        #     "1.46", "0.00", "6.55", "172.43", "183.01",
+        #     "127.63", "60.66", "69.64", "125.20", "13.00",
+        #     "14.00", "148.97", "8.88", "564.81", "17.98",
+        #     "12.85", "55.61", "3.19", "12.77", "52.12",
+        #     "1.72", "13", "14", "50.46", "40.27",
+        #     "0.00", "2.42", "16.14", "28.12", "23.79",
+        #     "75.11", "49.52", "125", "1.72"
+        # ]
+
+        # 选择要填充的数据（默认 SUV）
+        values = data1
+
+        # 遍历 lineEdit_500 ~ lineEdit_548
+        start_id = 500
+        for i, val in enumerate(values):
+            obj_name = f"lineEdit_{start_id + i}"
+
+            if hasattr(self.current_window, obj_name):
+                le = getattr(self.current_window, obj_name)
+                le.setText(val)
+                le.setStyleSheet("color: red;")  # 设置红色字体
+            else:
+                print(f"⚠ 未找到控件：{obj_name}（请检查 UIzhujiemianv3.ui）")
+
     #--------灵敏度分析功能------------
     def select_folder_lingmingdu(self):
         """选择文件夹，自动搜索 .pth、输入数据.xlsx、输出数据.xlsx 并写入相应输入框"""
