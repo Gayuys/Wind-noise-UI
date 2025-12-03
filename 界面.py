@@ -262,6 +262,11 @@ class MyWindow:
         if not self.current_window:
             return
 
+        # ←←← 新增：主界面加载完毕后，自动加载14张示意图
+        self.load_styling_schematic_images()
+
+        self.current_window.show()
+
     def check_login_valid(self) -> bool:
         """验证登录账号和密码"""
         user = self.current_window.lineEdit_1.text().strip() if hasattr(self.current_window, "lineEdit_1") else ""
@@ -414,22 +419,22 @@ class MyWindow:
                 self.current_window.label_3.setPixmap(pixmaps[0].scaled(
                     self.current_window.label_3.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
             else:
-                print("❌ label_3 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+                print("❌ label_3 不存在，请检查 UIzhujiemianv2.ui 文件")
             if hasattr(self.current_window, "label_5"):
                 self.current_window.label_5.setPixmap(pixmaps[1].scaled(
                     self.current_window.label_5.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
             else:
-                print("❌ label_3 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+                print("❌ label_3 不存在，请检查 UIzhujiemianv2.ui 文件")
             if hasattr(self.current_window, "label_4"):
                 self.current_window.label_4.setPixmap(pixmaps[2].scaled(
                     self.current_window.label_4.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
             else:
-                print("❌ label_4 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+                print("❌ label_4 不存在，请检查 UIzhujiemianv2.ui 文件")
             if hasattr(self.current_window, "label_2"):
                 self.current_window.label_2.setPixmap(pixmaps[3].scaled(
                 self.current_window.label_2.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
             else:
-                print("❌ label_2 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+                print("❌ label_2 不存在，请检查 UIzhujiemianv2.ui 文件")
         else:
             print("❌ 无法生成目标定义图，请检查数据集文件！")
         
@@ -669,6 +674,78 @@ class MyWindow:
                 le.setStyleSheet("color: red;")  # 设置红色字体
             else:
                 print(f"⚠ 未找到控件：{obj_name}（请检查 UIzhujiemianv3.ui）")
+
+    # --------造型示意图------------
+    def load_styling_schematic_images(self):
+        """加载14张造型示意图（使用安全的相对路径，兼容直接运行和打包成exe）"""
+        # ────────────────────── 相对路径（推荐写法） ──────────────────────
+        folder_name = "绘图/造型示意图"          # 正斜杠在 Windows 上也完全兼容
+        folder_path = os.path.join(current_dir, folder_name)
+
+        # 打包后（PyInstaller）路径兼容处理
+        if getattr(sys, 'frozen', False):                     # 被打包成 exe
+            base_path = sys._MEIPASS if hasattr(sys, '_MEIPASS') else os.path.dirname(sys.executable)
+            folder_path = os.path.join(base_path, folder_name)
+
+        # ────────────────────── 你的14张真实图片文件名（顺序一定要和下面 label 顺序一一对应） ──────────────────────
+        image_names = [
+            "A柱上端X向尺寸.png",
+            "A柱上端Y向尺寸.png",       # 你这里写了两遍相同的，建议改成第二张真正的图名
+            "前风挡上端R角.png",
+            "A柱下端X向尺寸.png",
+            "A柱下端Y向尺寸.png",       # 同上
+            "前风挡下端R角.png",
+            "后视镜X向尺寸.png",
+            "后视镜Y向尺寸.png",
+            "后视镜末端.png",
+            "前轮腔前（后）X向尺寸.png",
+            "后三角窗阶差.png",
+            "顶棚挠度.png",
+            "接近角.png",
+            "离去角.png"
+        ]
+
+        # ────────────────────── 对应的14个 QLabel objectName（顺序必须严格对应上面的图片） ──────────────────────
+        label_names = [
+            "label_14", "label_21", "label_22", "label_27", "label_28",
+            "label_40", "label_42", "label_51", "label_53", "label_148",
+            "label_61", "label_56", "label_58", "label_59"
+        ]
+
+        if len(image_names) != len(label_names):
+            print("错误：图片数量 ≠ label数量！")
+            return
+
+        success_count = 0
+        for img_name, label_name in zip(image_names, label_names):
+            img_path = os.path.join(folder_path, img_name)
+
+            if not os.path.exists(img_path):
+                print(f"警告：图片不存在 → {img_path}")
+                continue
+
+            pixmap = QPixmap(img_path)
+            if pixmap.isNull():
+                print(f"警告：加载失败（可能损坏或格式不支持）→ {img_path}")
+                continue
+
+            label = self.current_window.findChild(QLabel, label_name)
+            if label:
+                # 推荐设置：保持宽高比 + 平滑缩放 + 居中显示
+                scaled = pixmap.scaled(
+                    label.size(),
+                    Qt.KeepAspectRatio,
+                    Qt.SmoothTransformation
+                )
+                label.setPixmap(scaled)
+                label.setAlignment(Qt.AlignCenter)      # 图片在label里居中
+                success_count += 1
+            else:
+                print(f"警告：UI中找不到 QLabel → {label_name}")
+
+        print(f"造型示意图加载完成：成功显示 {success_count}/14 张")
+        print(f"图片文件夹路径：{folder_path}")
+
 
     #--------灵敏度分析功能------------
     def select_folder_lingmingdu(self):
