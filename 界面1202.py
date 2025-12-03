@@ -10,7 +10,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from io import BytesIO
 from typing import Tuple
-#from DYAN_OPTIMIZE import main
 import re
 import shutil
 import pandas as pd
@@ -207,8 +206,8 @@ class MyWindow:
             return
 
         # 3. 手动指定背景图路径（避免解析样式表的问题，直接写绝对路径）
-        bg_folder_name = "绘图\登陆背景"  # 背景图所在文件夹（单独文件夹，不要包含文件名）
-        bg_image_name = "登陆背景.png"  # 背景图文件名
+        bg_folder_name = "绘图\登录背景"  # 背景图所在文件夹（单独文件夹，不要包含文件名）
+        bg_image_name = "登录背景.png"  # 背景图文件名
         bg_image_path = os.path.join(current_dir, bg_folder_name, bg_image_name)  # 正确拼接路径
 
         # 检查路径是否有效
@@ -328,10 +327,7 @@ class MyWindow:
             self.current_window.pushButton_30.clicked.connect(self.select_folder_and_fill_files)
         if hasattr(self.current_window, "pushButton_33"):
             self.current_window.pushButton_33.clicked.connect(self.select_file_zxpg_4)
-        if hasattr(self.current_window, "pushButton_34"):
-            self.current_window.pushButton_34.clicked.connect(self.run_dyan_optimize)  # 运行优化
-        if hasattr(self.current_window, "pushButton_35"):
-            self.current_window.pushButton_35.clicked.connect(self.select_save_dir_zxpg)  # 保存优化结果
+
 
         # 显示主界面
         self.current_window.show()
@@ -937,168 +933,7 @@ class MyWindow:
             traceback.print_exc()
             QMessageBox.critical(None, "错误", f"读取 Excel 时出错：\n{e}")
 
-    def run_dyan_optimize(self):
-        """运行 DYAN_OPTIMIZE 优化逻辑（显示DYAN_OPTIMIZE生成的图像）"""
-        try:
-            # ----------- 读取路径 ----------- #
-            model_path = self.current_window.lineEdit_130.text().strip()
-            input_file_path = self.current_window.lineEdit_131.text().strip()
-            output_file_path = self.current_window.lineEdit_132.text().strip()
-            new_input_path = self.current_window.lineEdit_133.text().strip()
 
-            # ----------- 读取优化参数 ----------- #
-            try:
-                pop_size = int(self.current_window.lineEdit_147.text())
-            except Exception:
-                pop_size = 200
-            try:
-                generations = int(self.current_window.lineEdit_148.text())
-            except Exception:
-                generations = 100
-
-            import DYAN_OPTIMIZE
-            import os
-            import shutil
-
-            # ----------- 调用 DYAN_OPTIMIZE 生成 Excel 和图像文件 ----------- #
-            DYAN_OPTIMIZE.main(
-                model_path=model_path,
-                input_file_path=input_file_path,
-                output_file_path=output_file_path,
-                new_input_path=new_input_path,
-                pop_size=pop_size,
-                generations=generations
-            )
-
-            # ----------- 图像文件路径 ----------- #
-            parent_dir = os.path.dirname(new_input_path) if new_input_path else ""
-            result_path = os.path.join(parent_dir, "参数优化结果.xlsx")
-            freq_path = os.path.join(parent_dir, "频点对比折线图.png")
-            param_path = os.path.join(parent_dir, "参数调整对比图.png")
-
-            # ----------- 存储 optimize_results 供保存按钮使用 ----------- #
-            self.optimize_results = {
-                "result_df": result_path if os.path.exists(result_path) else None,
-                "freq_fig": freq_path if os.path.exists(freq_path) else None,
-                "param_fig": param_path if os.path.exists(param_path) else None
-            }
-
-            # ----------- 显示图像到界面 ----------- #
-            from PySide6.QtGui import QPixmap
-            from PySide6.QtCore import Qt
-
-            if self.optimize_results["freq_fig"]:
-                pixmap1 = QPixmap(self.optimize_results["freq_fig"]).scaled(
-                    self.current_window.label_111.width(),
-                    self.current_window.label_111.height(),
-                    Qt.KeepAspectRatio,
-                    Qt.SmoothTransformation
-                )
-                self.current_window.label_111.setPixmap(pixmap1)
-
-            if self.optimize_results["param_fig"]:
-                pixmap2 = QPixmap(self.optimize_results["param_fig"]).scaled(
-                    self.current_window.label_112.width(),
-                    self.current_window.label_112.height(),
-                    Qt.KeepAspectRatio,
-                    Qt.SmoothTransformation
-                )
-                self.current_window.label_112.setPixmap(pixmap2)
-
-            from PySide6.QtWidgets import QMessageBox
-            QMessageBox.information(None, "完成", "优化完成！图像已显示，结果可通过『保存结果』按钮保存。")
-
-        except Exception as e:
-            import traceback
-            traceback.print_exc()
-            from PySide6.QtWidgets import QMessageBox
-            QMessageBox.critical(None, "错误", f"运行出错：\n{e}")
-
-    def select_save_dir_zxpg(self):
-        """优化完成后保存结果"""
-        if not hasattr(self, "optimize_results") or not self.optimize_results:
-            QMessageBox.warning(None, "提示", "请先运行优化，再进行保存！")
-            return
-
-        folder_path = QFileDialog.getExistingDirectory(None, "选择保存路径")
-        if not folder_path:
-            return
-
-        result_save_path = os.path.join(folder_path, "参数优化结果.xlsx")
-        freq_plot_path = os.path.join(folder_path, "频点对比折线图.png")
-        param_plot_path = os.path.join(folder_path, "参数调整对比图.png")
-
-        try:
-            # ---------------- Excel ---------------- #
-            result_df = self.optimize_results.get("result_df")
-            if result_df:
-                if isinstance(result_df, pd.DataFrame):
-                    # DataFrame 直接保存，会覆盖同名文件
-                    result_df.to_excel(result_save_path, index=False)
-                elif isinstance(result_df, str) and os.path.exists(result_df):
-                    # 文件路径，如果和目标相同，用 os.replace 强制覆盖
-                    if os.path.abspath(result_df) != os.path.abspath(result_save_path):
-                        shutil.copyfile(result_df, result_save_path)
-                    else:
-                        # 相同路径就不用复制了
-                        pass
-
-            # ---------------- 图片 ---------------- #
-            for key, dst_path in [("freq_fig", freq_plot_path), ("param_fig", param_plot_path)]:
-                src = self.optimize_results.get(key)
-                if src:
-                    if hasattr(src, "savefig"):  # matplotlib Figure
-                        src.savefig(dst_path)
-                    elif isinstance(src, str) and os.path.exists(src):
-                        if os.path.abspath(src) != os.path.abspath(dst_path):
-                            shutil.copyfile(src, dst_path)
-
-            QMessageBox.information(None, "保存成功", "结果已成功保存到指定文件夹！")
-
-        except Exception as e:
-            import traceback
-            traceback.print_exc()
-            QMessageBox.critical(None, "保存错误", f"保存时出错：\n{e}")
-
-    def _safe_to_float(self, s: str) -> float:
-        """从字符串中尽可能提取第一个浮点数字并返回 float，失败则抛出异常"""
-        if s is None:
-            raise ValueError("输入为空")
-        s = str(s)
-        # 匹配浮点数（支持科学计数法）
-        m = re.search(r"[-+]?\d*\.?\d+(?:[eE][-+]?\d+)?", s)
-        if not m:
-            raise ValueError(f"无法从字符串中提取数字: {s}")
-        return float(m.group())
-
-    def _parse_list(self, text, dtype=float):
-        """安全解析列表字符串 '[1,2,3]' 或 '1, 2, 3'，并将每个元素转为 dtype（float/int）"""
-        if text is None:
-            return []
-        # 先去掉中括号和中文逗号
-        text = text.strip()
-        text = text.strip("[]")
-        text = text.replace("，", ",")
-        if text == "":
-            return []
-
-        parts = [p.strip() for p in text.split(",") if p.strip()]
-        out = []
-        for p in parts:
-            # 使用 safe parser，再转换为所需 dtype
-            try:
-                val = self._safe_to_float(p)
-                out.append(dtype(val))
-            except Exception:
-                # 如果期望的是 int，尝试直接 int()
-                if dtype is int:
-                    try:
-                        out.append(int(float(p)))
-                        continue
-                    except Exception:
-                        raise
-                raise
-        return out
 
 
 if __name__ == "__main__":
