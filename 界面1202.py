@@ -1,15 +1,16 @@
 import sys
 import os
-from PySide6.QtWidgets import QApplication, QFileDialog, QLabel, QMessageBox
+from PySide6.QtWidgets import QApplication, QFileDialog, QLabel, QMessageBox,QFrame, QStyleOption, QStyledItemDelegate, QMainWindow
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, Qt
-from PySide6.QtGui import QPixmap, QImage
+from PySide6.QtGui import QPixmap, QImage,QPainter
+from PySide6.QtCore import Qt
 import trimesh
 import numpy as np
 import matplotlib.pyplot as plt
 from io import BytesIO
 from typing import Tuple
-# from DYAN_OPTIMIZE import main
+#from DYAN_OPTIMIZE import main
 import re
 import shutil
 import pandas as pd
@@ -162,14 +163,84 @@ def plot_rotated_views(rotated_mesh: trimesh.Trimesh, rx: float, ry: float, rz: 
     return pixmaps
 
 # ---------------- 主窗口类 ---------------- #
+class BackgroundFrame(QFrame):
+    def __init__(self, parent=None, bg_image_path=None):
+        super().__init__(parent)
+        self.bg_pixmap = QPixmap()
+        if bg_image_path and os.path.exists(bg_image_path):
+            self.bg_pixmap = QPixmap(bg_image_path)
+        else:
+            print(f"警告：背景图路径无效或文件不存在：{bg_image_path}")
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.Antialiasing)
+
+        if not self.bg_pixmap.isNull():
+            rect = self.rect()
+            # 🔴 改成“按比例扩展铺满控件（允许裁剪）”
+            scaled_pixmap = self.bg_pixmap.scaled(
+                rect.size(),
+                Qt.KeepAspectRatioByExpanding,  # 扩展到覆盖整个控件
+                Qt.SmoothTransformation
+            )
+            # 居中裁剪显示
+            pixmap_rect = scaled_pixmap.rect()
+            pixmap_rect.moveCenter(rect.center())
+            painter.drawPixmap(rect, scaled_pixmap, pixmap_rect)  # 用控件区域裁剪图片
+
+        super().paintEvent(event)
+
 class MyWindow:
     def __init__(self):
-        # 加载登录界面
-        login_window_name = "login.ui" #登录界面ui文件
+        # 1.加载登录界面
+        login_window_name = "login.ui"  # 登录界面ui文件
         login_window_file = os.path.join(current_dir, login_window_name)
         self.current_window = self.load_ui(login_window_file)
         if not self.current_window:
             return
+        # 2. 替换背景QFrame（必须修改这里的objectName！）
+        TARGET_FRAME_NAME = "frame_2"  # 🔴 改成你Qt Designer中背景QFrame的objectName（比如frame、frame_1）
+        original_frame = self.current_window.findChild(QFrame, TARGET_FRAME_NAME)
+        if not original_frame:
+            print(f"错误：找不到名为'{TARGET_FRAME_NAME}'的QFrame，请检查objectName！")
+            return
+
+        # 3. 手动指定背景图路径（避免解析样式表的问题，直接写绝对路径）
+        bg_folder_name = "绘图\登陆背景"  # 背景图所在文件夹（单独文件夹，不要包含文件名）
+        bg_image_name = "登陆背景.png"  # 背景图文件名
+        bg_image_path = os.path.join(current_dir, bg_folder_name, bg_image_name)  # 正确拼接路径
+
+        # 检查路径是否有效
+        if not os.path.exists(bg_image_path):
+            print(f"错误：背景图文件不存在！路径：{bg_image_path}")
+            return
+
+        # 4. 创建自定义Frame并替换（修改这部分）
+        parent_widget = original_frame.parentWidget()
+        layout = original_frame.layout()
+
+        self.custom_frame = BackgroundFrame(parent=parent_widget, bg_image_path=bg_image_path)
+        self.custom_frame.setObjectName(original_frame.objectName())
+        self.custom_frame.setStyleSheet(original_frame.styleSheet())
+
+        # 🔴 移除setGeometry，改用布局约束（让Frame随父控件自适应）
+        if parent_widget.layout():
+            parent_widget.layout().replaceWidget(original_frame, self.custom_frame)
+        else:
+            # 若父控件无布局，设置Frame为父控件的中心部件
+            parent_widget.setCentralWidget(self.custom_frame)
+
+        # 转移布局（保留子控件）
+        if layout:
+            self.custom_frame.setLayout(layout)
+
+            # 显示自定义Frame，隐藏原Frame
+            original_frame.hide()
+            self.custom_frame.show()
+
+            # 显示窗口
+            self.current_window.show()
 
         # 绑定登录按钮（你 UI 中的 pushButton）
         if hasattr(self.current_window, "pushButton"):

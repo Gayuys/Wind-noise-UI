@@ -1,0 +1,22 @@
+<RCC>
+  <qresource prefix="imgs">
+    <file>imgs/20251201172738_221_158.png</file>
+    <file>imgs/登陆背景.png</file>
+    <file>imgs/差分.png</file>
+    <file>imgs/2025-12-01.png</file>
+    <file>imgs/差分1.png</file>
+    <file>imgs/b1f6ca66-a64c-44b4-ad83-04eb928d8720.png</file>
+    <file>imgs/屏幕截图 2025-11-07 143348.png</file>
+    <file>imgs/屏幕截图 2025-09-11 200247.png</file>
+    <file>res.qrc</file>
+    <file>imgs/屏幕截图 2025-11-18 205541.png</file>
+    <file>imgs/屏幕截图 2025-11-18 205605.png</file>
+    <file>imgs/屏幕截图 2025-11-18 205625.png</file>
+    <file>imgs/屏幕截图 2025-11-18 204621.png</file>
+    <file>imgs/屏幕截图 2025-11-18 204633.png</file>
+    <file>imgs/屏幕截图 2025-11-18 204654.png</file>
+    <file>imgs/屏幕截图 2025-11-18 204712.png</file>
+    <file>imgs/屏幕截图 2025-11-18 204725.png</file>
+    <file>imgs/屏幕截图 2025-11-18 204736.png</file>
+  </qresource>
+</RCC>

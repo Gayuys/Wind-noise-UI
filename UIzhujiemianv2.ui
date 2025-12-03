@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1973</width>
-    <height>1217</height>
+    <width>1977</width>
+    <height>1225</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -73,7 +73,7 @@
          <enum>QTabWidget::TabShape::Triangular</enum>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="tab">
          <property name="styleSheet">
@@ -135,7 +135,7 @@
                        </widget>
                       </item>
                       <item>
-                       <widget class="QPushButton" name="pushButton">
+                       <widget class="QPushButton" name="pushButton_1">
                         <property name="font">
                          <font>
                           <pointsize>12</pointsize>
@@ -382,7 +382,7 @@ B:低于所有选定竟品车的性
              <enum>QTabWidget::TabShape::Rounded</enum>
             </property>
             <property name="currentIndex">
-             <number>3</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tab_14">
              <property name="styleSheet">
@@ -1883,8 +1883,8 @@ QPushButton:hover {
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>1412</width>
-                                <height>534</height>
+                                <width>100</width>
+                                <height>30</height>
                                </rect>
                               </property>
                               <attribute name="label">
@@ -4227,8 +4227,8 @@ QPushButton:hover {
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>1412</width>
-                                <height>499</height>
+                                <width>83</width>
+                                <height>33</height>
                                </rect>
                               </property>
                               <attribute name="label">
@@ -9935,7 +9935,7 @@ QPushButton:hover {
                 <layout class="QVBoxLayout" name="verticalLayout_103" stretch="1,8">
                  <item>
                   <widget class="QWidget" name="widget_94" native="true">
-                   <layout class="QHBoxLayout" name="horizontalLayout_65" stretch="1,5,1,1">
+                   <layout class="QHBoxLayout" name="horizontalLayout_65" stretch="1,5,1,1,1">
                     <item>
                      <widget class="QLabel" name="label_546">
                       <property name="font">
@@ -10010,7 +10010,34 @@ QPushButton:hover {
     }</string>
                       </property>
                       <property name="text">
-                       <string>进行灵敏度分析</string>
+                       <string>进行车内噪声预测</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_53">
+                      <property name="font">
+                       <font>
+                        <pointsize>12</pointsize>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">QPushButton {
+       background-color: #3498db;
+       color: white;
+       border: none;
+       border-radius: 4px;
+       padding: 8px 16px;
+    }
+QPushButton:hover {
+      background-color: #2980b9;
+}
+ QPushButton:pressed {
+       background-color: #21618c;
+    }</string>
+                      </property>
+                      <property name="text">
+                       <string>保存预测结果</string>
                       </property>
                      </widget>
                     </item>
@@ -10624,6 +10651,9 @@ border-image: url(:/imgs/imgs/屏幕截图 2025-11-18 205541.png);
                     <property name="leftMargin">
                      <number>0</number>
                     </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
                     <property name="rightMargin">
                      <number>0</number>
                     </property>
@@ -11217,7 +11247,7 @@ border-image: url(:/imgs/imgs/屏幕截图 2025-09-11 200247.png);
              </font>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="tab_4">
              <attribute name="title">
