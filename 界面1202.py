@@ -1,0 +1,999 @@
+import sys
+import os
+from PySide6.QtWidgets import QApplication, QFileDialog, QLabel, QMessageBox
+from PySide6.QtUiTools import QUiLoader
+from PySide6.QtCore import QFile, Qt
+from PySide6.QtGui import QPixmap, QImage
+import trimesh
+import numpy as np
+import matplotlib.pyplot as plt
+from io import BytesIO
+from typing import Tuple
+from DYAN_OPTIMIZE import main
+import re
+import shutil
+import pandas as pd
+
+# 设置 Matplotlib 中文字体，解决中文显示问题
+plt.rcParams['font.sans-serif'] = ['Microsoft YaHei', 'SimSun', 'Arial']  # 优先使用支持中文的字体
+plt.rcParams['axes.unicode_minus'] = False  # 确保负号正确显示
+current_dir = os.path.dirname(os.path.abspath(__file__)) #获取当前程序所在文件夹
+
+
+def load_stl_and_plot_separate_views(stl_path):
+    try:
+        mesh = trimesh.load_mesh(stl_path)
+        vertices = mesh.vertices
+        print(f"STL文件加载成功！顶点数：{len(vertices)}，面数：{len(mesh.faces)}")
+    except FileNotFoundError:
+        print(f"错误：未找到STL文件，请检查路径：{stl_path}")
+        return None
+    except Exception as e:
+        print(f"加载STL文件失败：{str(e)}")
+        return None
+
+    separate_views = [
+        {"x_coord": vertices[:, 0], "y_coord": vertices[:, 2],
+         "plot_title": "正视图（X-Z平面投影）", "x_label": "X轴", "y_label": "Z轴", "window_title": "正视图"},
+        {"x_coord": vertices[:, 0], "y_coord": vertices[:, 1],
+         "plot_title": "俯视图（X-Y平面投影）", "x_label": "X轴", "y_label": "Y轴", "window_title": "俯视图"},
+        {"x_coord": vertices[:, 1], "y_coord": vertices[:, 2],
+         "plot_title": "侧视图（Y-Z平面投影）", "x_label": "Y轴", "y_label": "Z轴", "window_title": "侧视图"}
+    ]
+
+    pixmaps = []
+    point_size = 2
+    for view in separate_views:
+        fig = plt.figure(figsize=(4, 3), dpi=100)  # 调整大小以适应 QLabel
+        plt.scatter(view["x_coord"], view["y_coord"], color='g', s=point_size, alpha=0.7, label="模型顶点")
+        plt.title(view["plot_title"], fontsize=10, fontweight='bold', pad=10)
+        plt.xlabel(view["x_label"], fontsize=8)
+        plt.ylabel(view["y_label"], fontsize=8)
+        plt.axis('equal')
+        plt.grid(True, alpha=0.3, linestyle='--')
+        plt.legend(fontsize=8)
+        plt.tight_layout()
+
+        # 将 Matplotlib 图形转换为 QPixmap
+        buf = BytesIO()
+        plt.savefig(buf, format='png', bbox_inches='tight')
+        buf.seek(0)
+        image = QImage.fromData(buf.getvalue())
+        pixmap = QPixmap.fromImage(image)
+        pixmaps.append(pixmap)
+        plt.close(fig)  # 关闭图形以释放内存
+        buf.close()
+
+    return pixmaps  # 返回三个视图的 QPixmap 列表
+
+
+def degrees_to_radians(angles: Tuple[float, float, float]) -> Tuple[float, float, float]:
+    """将角度（度）转换为弧度"""
+    return tuple(np.radians(angle) for angle in angles)
+
+
+def create_rotation_matrices(rx: float, ry: float, rz: float) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """创建绕X、Y、Z轴的旋转矩阵"""
+    R_x = np.array([
+        [1, 0, 0],
+        [0, np.cos(rx), -np.sin(rx)],
+        [0, np.sin(rx), np.cos(rx)]
+    ])
+    R_y = np.array([
+        [np.cos(ry), 0, np.sin(ry)],
+        [0, 1, 0],
+        [-np.sin(ry), 0, np.cos(ry)]
+    ])
+    R_z = np.array([
+        [np.cos(rz), -np.sin(rz), 0],
+        [np.sin(rz), np.cos(rz), 0],
+        [0, 0, 1]
+    ])
+    return R_x, R_y, R_z
+
+
+def rotate_stl_vertices(vertices: np.ndarray, rx: float, ry: float, rz: float,
+                        rotation_order: str = "xyz") -> np.ndarray:
+    """对STL模型的顶点进行绕轴旋转"""
+    center = np.mean(vertices, axis=0)
+    vertices_centered = vertices - center
+    rx_rad, ry_rad, rz_rad = degrees_to_radians((rx, ry, rz))
+    R_x, R_y, R_z = create_rotation_matrices(rx_rad, ry_rad, rz_rad)
+
+    rotation_matrix = np.eye(3)
+    for axis in rotation_order.lower():
+        if axis == "x":
+            rotation_matrix = rotation_matrix @ R_x
+        elif axis == "y":
+            rotation_matrix = rotation_matrix @ R_y
+        elif axis == "z":
+            rotation_matrix = rotation_matrix @ R_z
+        else:
+            raise ValueError(f"无效的旋转轴：{axis}，仅支持'x'、'y'、'z'")
+
+    vertices_rotated = vertices_centered @ rotation_matrix.T
+    vertices_final = vertices_rotated + center
+    return vertices_final
+
+
+def create_rotated_stl(mesh: trimesh.Trimesh, rotated_vertices: np.ndarray) -> trimesh.Trimesh:
+    """基于旋转后的顶点创建新的STL网格对象"""
+    rotated_mesh = trimesh.Trimesh(
+        vertices=rotated_vertices,
+        faces=mesh.faces,
+        metadata=mesh.metadata
+    )
+    return rotated_mesh
+
+
+def plot_rotated_views(rotated_mesh: trimesh.Trimesh, rx: float, ry: float, rz: float):
+    """绘制旋转后模型的三视图，并返回 QPixmap 列表"""
+    rot_verts = rotated_mesh.vertices
+    views = [
+        {"title": f"旋转后正视图（X-Z）\n(绕X:{rx}° Y:{ry}° Z:{rz}°)", "x": rot_verts[:, 0], "y": rot_verts[:, 2],
+         "x_label": "X轴", "y_label": "Z轴"},
+        {"title": f"旋转后俯视图（X-Y）\n(绕X:{rx}° Y:{ry}° Z:{rz}°)", "x": rot_verts[:, 0], "y": rot_verts[:, 1],
+         "x_label": "X轴", "y_label": "Y轴"},
+        {"title": f"旋转后侧视图（Y-Z）\n(绕X:{rx}° Y:{ry}° Z:{rz}°)", "x": rot_verts[:, 1], "y": rot_verts[:, 2],
+         "x_label": "Y轴", "y_label": "Z轴"}
+    ]
+
+    pixmaps = []
+    for view in views:
+        fig = plt.figure(figsize=(4, 3), dpi=100)
+        plt.scatter(view["x"], view["y"], c='crimson', s=1, alpha=0.6, label="旋转后模型")
+        plt.title(view["title"], fontsize=10, fontweight='bold')
+        plt.xlabel(view["x_label"], fontsize=8)
+        plt.ylabel(view["y_label"], fontsize=8)
+        plt.axis('equal')
+        plt.grid(True, alpha=0.3)
+        plt.legend(fontsize=8)
+        plt.tight_layout()
+
+        buf = BytesIO()
+        plt.savefig(buf, format='png', bbox_inches='tight')
+        buf.seek(0)
+        image = QImage.fromData(buf.getvalue())
+        pixmap = QPixmap.fromImage(image)
+        pixmaps.append(pixmap)
+        plt.close(fig)
+        buf.close()
+
+    return pixmaps
+
+# ---------------- 主窗口类 ---------------- #
+class MyWindow:
+    def __init__(self):
+        # 加载登录界面
+        login_window_name = "login.ui" #登录界面ui文件
+        login_window_file = os.path.join(current_dir, login_window_name)
+        self.current_window = self.load_ui(login_window_file)
+        if not self.current_window:
+            return
+
+        # 绑定登录按钮（你 UI 中的 pushButton）
+        if hasattr(self.current_window, "pushButton"):
+            self.current_window.pushButton.clicked.connect(self.handle_login_button)
+        else:
+            print("⚠️ 警告：login.ui 中未找到 pushButton 组件")
+
+        self.current_window.show()
+
+    def switch_to_main_ui(self):
+        """切换到主界面 UIzhujiemianv2.ui"""
+        # 关闭当前窗口
+        if self.current_window:
+            self.current_window.close()
+
+        # 加载新的主界面 UI
+        zhujiemian_window_name = "UIzhujiemianv2.ui" #主界面ui文件
+        zhujiemian_window_file = os.path.join(current_dir, zhujiemian_window_name)
+        self.current_window = self.load_ui(zhujiemian_window_file)
+        if not self.current_window:
+            return
+
+    def check_login_valid(self) -> bool:
+        """验证登录账号和密码"""
+        user = self.current_window.lineEdit_1.text().strip() if hasattr(self.current_window, "lineEdit_1") else ""
+        password = self.current_window.lineEdit_2.text().strip() if hasattr(self.current_window, "lineEdit_2") else ""
+
+        if user == "Faw" and password == "19530715":
+            return True
+        else:
+            QMessageBox.warning(self.current_window, "登录失败", "账号或密码错误，请重新输入！")
+            return False
+
+    def handle_login_button(self):
+        """点击登录按钮后执行登录验证并跳转主界面"""
+        if self.check_login_valid():
+            self.switch_to_main_ui()
+
+
+        # ---------------- 目标定义模块功能按钮 ---------------- #
+        # 选择 目标定义数据集
+        if hasattr(self.current_window, "pushButton"):
+            self.current_window.pushButton.clicked.connect(self.select_Data_file)
+        # 输出 目标定义结果
+        if hasattr(self.current_window, "pushButton_2"):
+            self.current_window.pushButton_2.clicked.connect(self.plot_photo)
+
+        # ---------------- 造型评估模块功能按钮 ---------------- #
+        # 选择 STL 文件
+        if hasattr(self.current_window, "pushButton_13"):
+            self.current_window.pushButton_13.clicked.connect(self.select_file)
+        # 显示原始三视图
+        if hasattr(self.current_window, "pushButton_14"):
+            self.current_window.pushButton_14.clicked.connect(self.run_stl_plot)
+        # 执行旋转并显示旋转后三视图
+        if hasattr(self.current_window, "pushButton_15"):
+            self.current_window.pushButton_15.clicked.connect(self.run_stl_rotation)
+        # 选择保存路径
+        if hasattr(self.current_window, "pushButton_16"):
+            self.current_window.pushButton_16.clicked.connect(self.select_save_path)
+        # 选择文件路径写入 lineEdit_28
+        if hasattr(self.current_window, "pushButton_17"):
+            self.current_window.pushButton_17.clicked.connect(self.select_file_2)
+        # 点击 pushButton_8 输入数据（车高计算、SUV/轿车数据填充）
+        if hasattr(self.current_window, "pushButton_18"):
+            self.current_window.pushButton_18.clicked.connect(self.run_height_and_fill_data)
+            
+        #------灵敏度分析功能---------
+        #点击导入模型及数据集
+        if hasattr(self.current_window, "pushButton_33"):
+            self.current_window.pushButton_33.clicked.connect(self.select_folder_lingmingdu)
+        #点击导入数据
+        if hasattr(self.current_window, "pushButton_51"):
+            self.current_window.pushButton_51.clicked.connect(self.select_lingmingduData_file)
+        #点击进行灵敏度分析
+        if hasattr(self.current_window, "pushButton_52"):
+            self.current_window.pushButton_52.clicked.connect(self.plot_photo_lingmingdu)
+
+        # ---------------- 预测模型模块功能按钮 ---------------- #
+
+        # ---------------- 造型优化模块功能按钮 ---------------- #
+        if hasattr(self.current_window, "pushButton_30"):
+            self.current_window.pushButton_30.clicked.connect(self.select_folder_and_fill_files)
+        if hasattr(self.current_window, "pushButton_33"):
+            self.current_window.pushButton_33.clicked.connect(self.select_file_zxpg_4)
+        if hasattr(self.current_window, "pushButton_34"):
+            self.current_window.pushButton_34.clicked.connect(self.run_dyan_optimize)  # 运行优化
+        if hasattr(self.current_window, "pushButton_35"):
+            self.current_window.pushButton_35.clicked.connect(self.select_save_dir_zxpg)  # 保存优化结果
+
+        # 显示主界面
+        self.current_window.show()
+
+    # ---------------- 登陆界面模块功能 ---------------- #
+    def load_ui(self, path):
+        ui_file = QFile(path)
+        if not ui_file.open(QFile.ReadOnly):
+            print(f"❌ 无法打开UI文件: {ui_file.errorString()}")
+            return None
+        loader = QUiLoader()
+        window = loader.load(ui_file)
+        ui_file.close()
+        if not window:
+            print(f"❌ UI加载失败: {loader.errorString()}")
+            return None
+        return window
+
+    # ---------------- 目标定义模块功能 ---------------- #
+    def select_Data_file(self):
+        file_path, _ = QFileDialog.getOpenFileName(
+            self.current_window,
+            "选择文件",
+            "",
+            "数据集 (*.xlsx);;所有文件 (*.*)"
+        )
+        if file_path and hasattr(self.current_window, "lineEdit"):
+            self.current_window.lineEdit.setText(file_path)
+            
+    def plot_photo(self):
+        """绘制目标定义结果图"""
+        
+        #从文件夹中提取图像
+        def load_images_to_array(folder_path, image_names):
+            """
+            从指定文件夹读取图像并存储到数组中
+            
+            Args:
+                folder_path (str): 图像文件夹路径
+                image_names (list): 要读取的图像文件名列表（最多4个）
+                
+            Returns:
+                list: 包含QPixmap对象的数组，如果图像不存在则对应位置为None
+            """
+            # 初始化结果数组
+            pixmaps = []
+            
+            # 确保image_names是列表且最多包含4个文件名
+            if not isinstance(image_names, list):
+                raise TypeError("image_names必须是一个列表")
+            
+            # 限制为最多4张图像
+            image_names = image_names[:4]
+            
+            for img_name in image_names:
+                # 构建完整的文件路径
+                img_path = os.path.join(folder_path, img_name)
+                
+                # 检查文件是否存在
+                if os.path.exists(img_path):
+                    # 创建QPixmap对象
+                    pixmap = QPixmap(img_path)
+                    
+                    # 检查图像是否成功加载
+                    if not pixmap.isNull():
+                        pixmaps.append(pixmap)
+                        print(f"✅ 成功加载图像: {img_name}")
+                    else:
+                        pixmaps.append(None)
+                        print(f"❌ 无法加载图像: {img_name}（格式不支持或文件损坏）")
+                else:
+                    pixmaps.append(None)
+                    print(f"❌ 图像文件不存在: {img_name}")
+            
+            return pixmaps
+        folder_name = "绘图\目标定义"
+        folder_path = os.path.join(current_dir, folder_name)
+        image_names = ["数据展示.png", "A.png", "B.png", "L.png"]
+        # 加载图像
+        pixmaps = load_images_to_array(folder_path, image_names)
+        
+        if pixmaps and len(pixmaps) == 4:
+            if hasattr(self.current_window, "label_3"):
+                self.current_window.label_3.setPixmap(pixmaps[0].scaled(
+                    self.current_window.label_3.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+            else:
+                print("❌ label_3 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+            if hasattr(self.current_window, "label_5"):
+                self.current_window.label_5.setPixmap(pixmaps[1].scaled(
+                    self.current_window.label_5.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+            else:
+                print("❌ label_3 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+            if hasattr(self.current_window, "label_4"):
+                self.current_window.label_4.setPixmap(pixmaps[2].scaled(
+                    self.current_window.label_4.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+            else:
+                print("❌ label_4 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+            if hasattr(self.current_window, "label_2"):
+                self.current_window.label_2.setPixmap(pixmaps[3].scaled(
+                self.current_window.label_2.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+            else:
+                print("❌ label_2 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+        else:
+            print("❌ 无法生成目标定义图，请检查数据集文件！")
+        
+
+        
+
+    # ---------------- 造型评估模块功能 ---------------- #
+    def select_file(self):
+        file_path, _ = QFileDialog.getOpenFileName(
+            self.current_window,
+            "选择文件",
+            "",
+            "STL文件 (*.stl);;所有文件 (*.*)"
+        )
+        if file_path and hasattr(self.current_window, "lineEdit_22"):
+            self.current_window.lineEdit_22.setText(file_path)
+
+    def select_file_2(self):
+        """选择 STL 文件路径，写入 lineEdit_28"""
+        file_path, _ = QFileDialog.getOpenFileName(
+            self.current_window, "选择STL文件", "", "STL文件 (*.stl);;所有文件 (*.*)"
+        )
+        if file_path and hasattr(self.current_window, "lineEdit_28"):
+            self.current_window.lineEdit_28.setText(file_path)
+            print(f"✅ 已选择STL文件：{file_path}")
+        else:
+            print("❌ 未选择文件或 lineEdit_28 不存在")
+
+    def run_height_and_fill_data(self):
+        """计算车高并写入 SUV/轿车数据到 lineEdit_6~50"""
+        stl_path = self.current_window.lineEdit_22.text().strip()
+
+        if not stl_path:
+            QMessageBox.warning(self.current_window, "提示", "请先选择STL文件！")
+            return
+
+        try:
+            mesh = trimesh.load_mesh(stl_path)
+            vertices = mesh.vertices
+
+            # 计算车高
+            z_min = np.min(vertices[:, 2])
+            z_max = np.max(vertices[:, 2])
+            H = z_max - z_min
+            print(f"计算得到车高 H = {H:.2f} mm")
+
+            # SUV 数据
+            data1 = [
+                "76.41 - 141.75", "26.57 - 63.56", "9.81 - 23.07", "0.07 - 2.89", "6.38 - 8.75",
+                "1.76 - 8.24", "5.13 - 20.30", "0.00 - 39.25", "7.14 - 12.46", "75.51 - 126.58",
+                "34.06 - 70.15", "5.79 - 32.00", "0.00 - 3.71", "0.00 - 11.58", "4.50 - 12.86",
+                "2.42 - 29.03", "0.00 - 45.71", "7.14 - 12.46", "204.01 - 252.34", "209.01 - 250.36",
+                "148.94 - 170.74", "63.29 - 87.24", "68.11 - 75.08", "170.72 - 264.00", "17.00 - 22.50",
+                "18.00 - 25.00", "149.41 - 157.04", "111.68 - 187.32", "2282.34 - 2876.36", "32.98 - 53.80",
+                "38.48 - 65.24", "54.87 - 59.30", "2.60 - 7.74", "22.63 - 42.11", "82.34 - 90.00",
+                "1.63 - 2.02", "52.10 - 69.81", "37.41 - 73.68", "0.00 - 9.48", "2.71 - 3.22",
+                "0.85 - 23.04", "33.18 - 60.57", "25.80 - 34.30", "78.56 - 81.68", "58.17 - 65.76"
+            ]
+
+            # 轿车数据
+            data2 = [
+                "71.80 - 178.75", "22.17 - 46.09", "2.13 - 41.44", "0.20 - 3.64", "5.97 - 14.98",
+                "1.98 - 11.43", "0.19 - 37.75", "0.00 - 29.51", "6.55 - 15.00", "71.42 - 159.29",
+                "24.35 - 67.09", "3.53 - 107.43", "0.11 - 3.87", "4.99 - 12.63", "3.64 - 17.77",
+                "1.46 - 38.77", "0.00 - 28.04", "6.55 - 15.00", "172.43 - 232.44", "183.01 - 240.44",
+                "127.63 - 171.84", "60.66 - 96.24", "69.64 - 77.52", "125.20 - 243.69", "13.00 - 19.00",
+                "14.00 - 20.00", "148.97 - 181.66", "8.88 - 148.54", "564.81 - 3244.37", "17.98 - 66.08",
+                "12.85 - 79.97", "55.61 - 64.15", "3.19 - 10.07", "12.77 - 59.69", "52.12 - 90.00",
+                "1.72 - 2.24", "50.46 - 68.26", "40.27 - 69.54", "0.00 - 16.54", "2.42 - 3.43",
+                "16.14 - 28.41", "28.12 - 89.71", "23.79 - 44.28", "75.11 - 84.25", "49.52 - 68.02"
+            ]
+
+            # 选择输出数据
+            output_data = data1 if H > 1600 else data2
+            car_type = "SUV" if H > 1600 else "轿车"
+            print(f"检测结果：{car_type}（H = {H:.2f} mm）")
+
+            # 写入 lineEdit_6 ~ lineEdit_50
+            for i, value in enumerate(output_data):
+                line_name = f"lineEdit_{i + 6}"
+                if hasattr(self.current_window, line_name):
+                    getattr(self.current_window, line_name).setText(value)
+
+            QMessageBox.information(
+                self.current_window,
+                "完成",
+                f"检测结果：{car_type}\n车高 H = {H:.2f} mm\n数据已写入 lineEdit_6~lineEdit_50"
+            )
+
+        except Exception as e:
+            QMessageBox.critical(self.current_window, "错误", f"运行出错：\n{e}")
+
+    def select_save_path(self):
+        save_path, _ = QFileDialog.getSaveFileName(
+            self.current_window,
+            "选择保存旋转后STL的路径",
+            "",
+            "STL文件 (*.stl);;所有文件 (*.*)"
+        )
+        if save_path:
+            self.save_path = save_path
+            print(f"旋转后STL保存路径已选择：{self.save_path}")
+        else:
+            print("❌ 未选择保存路径")
+
+    def run_stl_plot(self):
+        """从 lineEdit 获取 STL 文件路径并将三视图显示在 label_86、label_87、label_88 中"""
+        if hasattr(self.current_window, "lineEdit_22"):
+            stl_path = self.current_window.lineEdit_22.text().strip()
+            if stl_path:
+                pixmaps = load_stl_and_plot_separate_views(stl_path)
+                if pixmaps and len(pixmaps) == 3:
+                    if hasattr(self.current_window, "label_86"):
+                        self.current_window.label_86.setPixmap(pixmaps[0].scaled(
+                            self.current_window.label_86.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+                    else:
+                        print("❌ label_86 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+                    if hasattr(self.current_window, "label_87"):
+                        self.current_window.label_87.setPixmap(pixmaps[1].scaled(
+                            self.current_window.label_87.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+                    else:
+                        print("❌ label_87 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+                    if hasattr(self.current_window, "label_88"):
+                        self.current_window.label_88.setPixmap(pixmaps[2].scaled(
+                            self.current_window.label_88.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+                    else:
+                        print("❌ label_88 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+                else:
+                    print("❌ 无法生成三视图，请检查 STL 文件！")
+            else:
+                print("❌ lineEdit 为空，请先选择 STL 文件！")
+
+    def run_stl_rotation(self):
+        """执行 STL 旋转并将旋转后三视图显示在 label_95、label_96、label_97 中"""
+        if not hasattr(self.current_window, "lineEdit_22"):
+            print("❌ lineEdit 不存在，请检查 UIzhujiemian.ui 文件")
+            return
+
+        stl_path = self.current_window.lineEdit_22.text().strip()
+        if not stl_path:
+            print("❌ lineEdit 为空，请先选择 STL 文件！")
+            return
+
+        # 获取旋转角度
+        try:
+            rx = float(self.current_window.lineEdit_25.text().strip()) if hasattr(self.current_window,
+                                                                                 "lineEdit_25") else 0
+            ry = float(self.current_window.lineEdit_26.text().strip()) if hasattr(self.current_window,
+                                                                                 "lineEdit_26") else 0
+            rz = float(self.current_window.lineEdit_27.text().strip()) if hasattr(self.current_window,
+                                                                                 "lineEdit_27") else 0
+        except ValueError:
+            print("❌ 旋转角度输入无效，请在 lineEdit_25、lineEdit_26、lineEdit_27 中输入有效数字！")
+            return
+
+        # 加载 STL 文件
+        try:
+            original_mesh = trimesh.load_mesh(stl_path, force='mesh')
+            print(f"原始模型信息：顶点数={len(original_mesh.vertices)}，面数={len(original_mesh.faces)}")
+        except FileNotFoundError:
+            print(f"错误：未找到STL文件，请检查路径：{stl_path}")
+            return
+        except Exception as e:
+            print(f"加载STL文件失败：{str(e)}")
+            return
+
+        # 执行旋转
+        print(f"正在执行旋转（顺序：xyz）...")
+        rotated_vertices = rotate_stl_vertices(
+            vertices=original_mesh.vertices,
+            rx=rx, ry=ry, rz=rz,
+            rotation_order="xyz"
+        )
+        rotated_mesh = create_rotated_stl(original_mesh, rotated_vertices)
+
+        # 保存旋转后的 STL 文件（如果已选择保存路径）
+        if self.save_path:
+            try:
+                rotated_mesh.export(self.save_path)
+                print(f"旋转后的STL已保存至：{self.save_path}")
+            except Exception as e:
+                print(f"保存旋转后STL失败：{str(e)}")
+
+        # 生成旋转后三视图并显示
+        pixmaps = plot_rotated_views(rotated_mesh, rx, ry, rz)
+        if pixmaps and len(pixmaps) == 3:
+            if hasattr(self.current_window, "label_95"):
+                self.current_window.label_95.setPixmap(pixmaps[0].scaled(
+                    self.current_window.label_95.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+            else:
+                print("❌ label_11 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+            if hasattr(self.current_window, "label_96"):
+                self.current_window.label_96.setPixmap(pixmaps[1].scaled(
+                    self.current_window.label_96.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+            else:
+                print("❌ label_12 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+            if hasattr(self.current_window, "label_97"):
+                self.current_window.label_97.setPixmap(pixmaps[2].scaled(
+                    self.current_window.label_97.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+            else:
+                print("❌ label_97 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+        else:
+            print("❌ 无法生成旋转后三视图，请检查 STL 文件或旋转参数！")
+            
+            
+    #--------灵敏度分析功能------------
+    def select_folder_lingmingdu(self):
+        """选择文件夹，自动搜索 .pth、输入数据.xlsx、输出数据.xlsx 并写入相应输入框"""
+        """选择文件夹，自动搜索 .pth、输入数据.xlsx、输出数据.xlsx 并写入相应输入框"""
+        folder_path = QFileDialog.getExistingDirectory(None, "选择包含模型和数据的文件夹")
+        if not folder_path:
+            return
+
+        pth_path = ""
+        input_xlsx_path = ""
+        output_xlsx_path = ""
+
+        for file_name in os.listdir(folder_path):
+            lower_name = file_name.lower()
+            full_path = os.path.join(folder_path, file_name)
+
+            if lower_name.endswith(".pth") and not pth_path:
+                pth_path = full_path
+            elif file_name == "输入数据.xlsx":
+                input_xlsx_path = full_path
+            elif file_name == "输出数据.xlsx":
+                output_xlsx_path = full_path
+
+        if hasattr(self.current_window, "lineEdit_136"):
+            self.current_window.lineEdit_136.setText(pth_path)
+        if hasattr(self.current_window, "lineEdit_137"):
+            self.current_window.lineEdit_137.setText(input_xlsx_path)
+        if hasattr(self.current_window, "lineEdit_115"):
+            self.current_window.lineEdit_115.setText(output_xlsx_path)
+
+        msg = f"📁 已选择文件夹：{folder_path}\n"
+        msg += f"\n模型文件 (.pth)：{pth_path if pth_path else '未找到'}"
+        msg += f"\n输入数据.xlsx：{input_xlsx_path if input_xlsx_path else '未找到'}"
+        msg += f"\n输出数据.xlsx：{output_xlsx_path if output_xlsx_path else '未找到'}"
+        QMessageBox.information(None, "文件检测结果", msg)
+        
+    def select_lingmingduData_file(self):
+        file_path, _ = QFileDialog.getOpenFileName(
+            self.current_window,
+            "选择文件",
+            "",
+            "数据集 (*.xlsx);;所有文件 (*.*)"
+        )
+        if file_path and hasattr(self.current_window, "lineEdit_116"):
+            self.current_window.lineEdit_116.setText(file_path)
+            
+    def plot_photo_lingmingdu(self):
+        """绘制目标定义结果图"""
+        #从输入框中获取图像名称
+        def parse_coordinate_string(text):
+            """
+            将格式为"(200,300)"的文本解析成包含两个数字的数组
+            
+            Args:
+                text (str): 输入的坐标字符串，格式为"(数字1,数字2)"
+                
+            Returns:
+                list: 包含两个整数的列表 [数字1, 数字2]
+                
+            Raises:
+                ValueError: 当输入格式不正确或无法转换为数字时
+            """
+            try:
+                # 移除括号并去除前后空白字符
+                clean_text = text.strip('() ')
+                
+                # 以逗号为分隔符分割字符串
+                parts = clean_text.split(',')
+                
+                # 确保只有两个部分
+                if len(parts) != 2:
+                    raise ValueError("输入格式不正确，应为'(数字1,数字2)'格式")
+                
+                # 去除每个部分的空白字符并转换为整数
+                num1 = int(parts[0].strip())
+                num2 = int(parts[1].strip())
+                
+                # 返回包含两个数字的列表
+                return [num1, num2]
+            except Exception as e:
+                # 如果解析失败，抛出详细的错误信息
+                raise ValueError(f"无法解析输入字符串: {e}")
+        #从文件夹中提取图像
+        def load_images_to_array(folder_path, image_names):
+            """
+            从指定文件夹读取图像并存储到数组中
+            
+            Args:
+                folder_path (str): 图像文件夹路径
+                image_names (list): 要读取的图像文件名列表（最多4个）
+                
+            Returns:
+                list: 包含QPixmap对象的数组，如果图像不存在则对应位置为None
+            """
+            # 初始化结果数组
+            pixmaps = []
+            
+            # 确保image_names是列表且最多包含4个文件名
+            if not isinstance(image_names, list):
+                raise TypeError("image_names必须是一个列表")
+            
+            # 限制为最多4张图像
+            image_names = image_names[:18]
+            
+            for img_name in image_names:
+                # 构建完整的文件路径
+                img_path = os.path.join(folder_path, img_name)
+                
+                # 检查文件是否存在
+                if os.path.exists(img_path):
+                    # 创建QPixmap对象
+                    pixmap = QPixmap(img_path)
+                    
+                    # 检查图像是否成功加载
+                    if not pixmap.isNull():
+                        pixmaps.append(pixmap)
+                        print(f"✅ 成功加载图像: {img_name}")
+                    else:
+                        pixmaps.append(None)
+                        print(f"❌ 无法加载图像: {img_name}（格式不支持或文件损坏）")
+                else:
+                    pixmaps.append(None)
+                    print(f"❌ 图像文件不存在: {img_name}")
+            
+            return pixmaps
+        folder_name = "绘图\灵敏度结果"
+        folder_path = os.path.join(current_dir, folder_name)
+        image_names = ["全频段.png", "200Hz.png", "250Hz.png", "315Hz.png", "400Hz.png", "500Hz.png", "630Hz.png", 
+                       "800Hz.png", "1000Hz.png", "1250Hz.png", "1600Hz.png", "2000Hz.png", "2500Hz.png", "3150Hz.png",
+                       "4000Hz.png", "5000Hz.png", "6300Hz.png", "8000Hz.png"]
+        # 加载图像
+        pixmaps = load_images_to_array(folder_path, image_names)
+        photo_name = self.current_window.lineEdit_4.text().strip() if hasattr(self.current_window, "lineEdit_4") else "" #获取文本
+        fre_range = parse_coordinate_string(photo_name) #转换为数字
+              
+        if pixmaps and len(pixmaps) == 18:
+            if fre_range[0] == fre_range[1]:
+                target_filename = f"{fre_range[0]}Hz.png"
+                try:
+                    position = image_names.index(target_filename)                  
+                except ValueError:
+                    print(f"{target_filename} 超出计算范围")
+ 
+                if hasattr(self.current_window, "label_166"):
+                    self.current_window.label_166.setPixmap(pixmaps[position].scaled(
+                        self.current_window.label_166.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+            else:
+                if hasattr(self.current_window, "label_166"):
+                    self.current_window.label_166.setPixmap(pixmaps[0].scaled(
+                        self.current_window.label_166.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))               
+
+        else:
+            print("❌ 无法进行灵敏度计算，请检查数据集文件！")   
+
+    # ---------------- 预测模型模块功能 ---------------- #
+
+
+    # ---------------- 造型优化模块功能 ---------------- #
+    def select_folder_and_fill_files(self):
+        """选择文件夹，自动搜索 .pth、输入数据.xlsx、输出数据.xlsx 并写入相应输入框"""
+        folder_path = QFileDialog.getExistingDirectory(None, "选择包含模型和数据的文件夹")
+        if not folder_path:
+            return
+
+        pth_path = ""
+        input_xlsx_path = ""
+        output_xlsx_path = ""
+
+        for file_name in os.listdir(folder_path):
+            lower_name = file_name.lower()
+            full_path = os.path.join(folder_path, file_name)
+
+            if lower_name.endswith(".pth") and not pth_path:
+                pth_path = full_path
+            elif file_name == "输入数据.xlsx":
+                input_xlsx_path = full_path
+            elif file_name == "输出数据.xlsx":
+                output_xlsx_path = full_path
+
+        if hasattr(self.current_window, "lineEdit_130"):
+            self.current_window.lineEdit_130.setText(pth_path)
+        if hasattr(self.current_window, "lineEdit_131"):
+            self.current_window.lineEdit_131.setText(input_xlsx_path)
+        if hasattr(self.current_window, "lineEdit_132"):
+            self.current_window.lineEdit_132.setText(output_xlsx_path)
+
+        msg = f"📁 已选择文件夹：{folder_path}\n"
+        msg += f"\n模型文件 (.pth)：{pth_path if pth_path else '未找到'}"
+        msg += f"\n输入数据.xlsx：{input_xlsx_path if input_xlsx_path else '未找到'}"
+        msg += f"\n输出数据.xlsx：{output_xlsx_path if output_xlsx_path else '未找到'}"
+        QMessageBox.information(None, "文件检测结果", msg)
+
+    def select_file_zxpg_4(self):
+        """选择 new_input_path 文件并自动读取原始值、最小值、最大值，填入 lineEdit"""
+        file_path, _ = QFileDialog.getOpenFileName(
+            None,
+            "选择需要优化的造型数据",
+            "",
+            "Excel 文件 (*.xlsx)"
+        )
+
+        if not file_path:
+            return
+
+        # 写入 lineEdit_133
+        self.current_window.lineEdit_133.setText(file_path)
+
+        # ---------------------- 读取 Excel 并自动填入界面 ---------------------- #
+        try:
+            import pandas as pd
+
+            df = pd.read_excel(file_path, sheet_name="sheet1")
+
+            required_cols = ["原始值", "最小值", "最大值"]
+            if not all(col in df.columns for col in required_cols):
+                QMessageBox.warning(
+                    None, "格式错误",
+                    "Excel sheet1 必须包含 '原始值'、'最小值'、'最大值' 三列！"
+                )
+                return
+
+            base_params = df['原始值'].values
+            param_min = df['最小值'].values
+            param_max = df['最大值'].values
+
+            # 转换为原生 python float，避免 np.float64(...) 的字符串
+            try:
+                param_min_py = [float(x) for x in param_min]
+                param_max_py = [float(x) for x in param_max]
+                base_params_py = [float(x) for x in base_params]
+            except Exception:
+                # 如果逐元素转换失败，退回到逐项用 safe 提取
+                param_min_py = [self._safe_to_float(str(x)) for x in param_min]
+                param_max_py = [self._safe_to_float(str(x)) for x in param_max]
+                base_params_py = [self._safe_to_float(str(x)) for x in base_params]
+
+            # 自动识别可调整参数
+            adjust_indices = [i for i in range(len(base_params_py)) if param_min_py[i] != param_max_py[i]]
+
+            # ---------------------- 写入 UI（只写入可调整参数的信息） ---------------------- #
+            # 索引写成 "0,1,2" 格式，便于后续 parse
+            self.current_window.lineEdit_143.setText(", ".join(str(i) for i in adjust_indices))
+
+            # --- 这里是修改的核心部分 ---
+            # 根据 adjust_indices 过滤出对应的最小值和最大值
+            adjusted_param_min = [param_min_py[i] for i in adjust_indices]
+            adjusted_param_max = [param_max_py[i] for i in adjust_indices]
+
+            # 只将可调整参数的最小/最大值写成 "1.0, 2.0, 3.0" 格式
+            self.current_window.lineEdit_144.setText(", ".join(str(x) for x in adjusted_param_min))
+            self.current_window.lineEdit_145.setText(", ".join(str(x) for x in adjusted_param_max))
+
+            QMessageBox.information(
+                None, "读取成功",
+                "已成功读取 Excel：\n"
+                f"识别到可调整参数个数：{len(adjust_indices)}"
+            )
+
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            QMessageBox.critical(None, "错误", f"读取 Excel 时出错：\n{e}")
+
+    def run_dyan_optimize(self):
+        """运行 DYAN_OPTIMIZE 优化逻辑（显示DYAN_OPTIMIZE生成的图像）"""
+        try:
+            # ----------- 读取路径 ----------- #
+            model_path = self.current_window.lineEdit_130.text().strip()
+            input_file_path = self.current_window.lineEdit_131.text().strip()
+            output_file_path = self.current_window.lineEdit_132.text().strip()
+            new_input_path = self.current_window.lineEdit_133.text().strip()
+
+            # ----------- 读取优化参数 ----------- #
+            try:
+                pop_size = int(self.current_window.lineEdit_147.text())
+            except Exception:
+                pop_size = 200
+            try:
+                generations = int(self.current_window.lineEdit_148.text())
+            except Exception:
+                generations = 100
+
+            import DYAN_OPTIMIZE
+            import os
+            import shutil
+
+            # ----------- 调用 DYAN_OPTIMIZE 生成 Excel 和图像文件 ----------- #
+            DYAN_OPTIMIZE.main(
+                model_path=model_path,
+                input_file_path=input_file_path,
+                output_file_path=output_file_path,
+                new_input_path=new_input_path,
+                pop_size=pop_size,
+                generations=generations
+            )
+
+            # ----------- 图像文件路径 ----------- #
+            parent_dir = os.path.dirname(new_input_path) if new_input_path else ""
+            result_path = os.path.join(parent_dir, "参数优化结果.xlsx")
+            freq_path = os.path.join(parent_dir, "频点对比折线图.png")
+            param_path = os.path.join(parent_dir, "参数调整对比图.png")
+
+            # ----------- 存储 optimize_results 供保存按钮使用 ----------- #
+            self.optimize_results = {
+                "result_df": result_path if os.path.exists(result_path) else None,
+                "freq_fig": freq_path if os.path.exists(freq_path) else None,
+                "param_fig": param_path if os.path.exists(param_path) else None
+            }
+
+            # ----------- 显示图像到界面 ----------- #
+            from PySide6.QtGui import QPixmap
+            from PySide6.QtCore import Qt
+
+            if self.optimize_results["freq_fig"]:
+                pixmap1 = QPixmap(self.optimize_results["freq_fig"]).scaled(
+                    self.current_window.label_111.width(),
+                    self.current_window.label_111.height(),
+                    Qt.KeepAspectRatio,
+                    Qt.SmoothTransformation
+                )
+                self.current_window.label_111.setPixmap(pixmap1)
+
+            if self.optimize_results["param_fig"]:
+                pixmap2 = QPixmap(self.optimize_results["param_fig"]).scaled(
+                    self.current_window.label_112.width(),
+                    self.current_window.label_112.height(),
+                    Qt.KeepAspectRatio,
+                    Qt.SmoothTransformation
+                )
+                self.current_window.label_112.setPixmap(pixmap2)
+
+            from PySide6.QtWidgets import QMessageBox
+            QMessageBox.information(None, "完成", "优化完成！图像已显示，结果可通过『保存结果』按钮保存。")
+
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            from PySide6.QtWidgets import QMessageBox
+            QMessageBox.critical(None, "错误", f"运行出错：\n{e}")
+
+    def select_save_dir_zxpg(self):
+        """优化完成后保存结果"""
+        if not hasattr(self, "optimize_results") or not self.optimize_results:
+            QMessageBox.warning(None, "提示", "请先运行优化，再进行保存！")
+            return
+
+        folder_path = QFileDialog.getExistingDirectory(None, "选择保存路径")
+        if not folder_path:
+            return
+
+        result_save_path = os.path.join(folder_path, "参数优化结果.xlsx")
+        freq_plot_path = os.path.join(folder_path, "频点对比折线图.png")
+        param_plot_path = os.path.join(folder_path, "参数调整对比图.png")
+
+        try:
+            # ---------------- Excel ---------------- #
+            result_df = self.optimize_results.get("result_df")
+            if result_df:
+                if isinstance(result_df, pd.DataFrame):
+                    # DataFrame 直接保存，会覆盖同名文件
+                    result_df.to_excel(result_save_path, index=False)
+                elif isinstance(result_df, str) and os.path.exists(result_df):
+                    # 文件路径，如果和目标相同，用 os.replace 强制覆盖
+                    if os.path.abspath(result_df) != os.path.abspath(result_save_path):
+                        shutil.copyfile(result_df, result_save_path)
+                    else:
+                        # 相同路径就不用复制了
+                        pass
+
+            # ---------------- 图片 ---------------- #
+            for key, dst_path in [("freq_fig", freq_plot_path), ("param_fig", param_plot_path)]:
+                src = self.optimize_results.get(key)
+                if src:
+                    if hasattr(src, "savefig"):  # matplotlib Figure
+                        src.savefig(dst_path)
+                    elif isinstance(src, str) and os.path.exists(src):
+                        if os.path.abspath(src) != os.path.abspath(dst_path):
+                            shutil.copyfile(src, dst_path)
+
+            QMessageBox.information(None, "保存成功", "结果已成功保存到指定文件夹！")
+
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            QMessageBox.critical(None, "保存错误", f"保存时出错：\n{e}")
+
+    def _safe_to_float(self, s: str) -> float:
+        """从字符串中尽可能提取第一个浮点数字并返回 float，失败则抛出异常"""
+        if s is None:
+            raise ValueError("输入为空")
+        s = str(s)
+        # 匹配浮点数（支持科学计数法）
+        m = re.search(r"[-+]?\d*\.?\d+(?:[eE][-+]?\d+)?", s)
+        if not m:
+            raise ValueError(f"无法从字符串中提取数字: {s}")
+        return float(m.group())
+
+    def _parse_list(self, text, dtype=float):
+        """安全解析列表字符串 '[1,2,3]' 或 '1, 2, 3'，并将每个元素转为 dtype（float/int）"""
+        if text is None:
+            return []
+        # 先去掉中括号和中文逗号
+        text = text.strip()
+        text = text.strip("[]")
+        text = text.replace("，", ",")
+        if text == "":
+            return []
+
+        parts = [p.strip() for p in text.split(",") if p.strip()]
+        out = []
+        for p in parts:
+            # 使用 safe parser，再转换为所需 dtype
+            try:
+                val = self._safe_to_float(p)
+                out.append(dtype(val))
+            except Exception:
+                # 如果期望的是 int，尝试直接 int()
+                if dtype is int:
+                    try:
+                        out.append(int(float(p)))
+                        continue
+                    except Exception:
+                        raise
+                raise
+        return out
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = MyWindow()
+    sys.exit(app.exec())
