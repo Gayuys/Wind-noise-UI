@@ -285,9 +285,10 @@ class MyWindow:
 
 
         # ---------------- 目标定义模块功能按钮 ---------------- #
+        #------STL文件预处理功能---------
         # 选择 目标定义数据集
-        if hasattr(self.current_window, "pushButton"):
-            self.current_window.pushButton.clicked.connect(self.select_Data_file)
+        if hasattr(self.current_window, "pushButton_1"):
+            self.current_window.pushButton_1.clicked.connect(self.select_Data_file)
         # 输出 目标定义结果
         if hasattr(self.current_window, "pushButton_2"):
             self.current_window.pushButton_2.clicked.connect(self.plot_photo)
@@ -313,7 +314,18 @@ class MyWindow:
             self.current_window.pushButton_18.clicked.connect(self.run_height_and_fill_data)
         if hasattr(self.current_window, "pushButton_19"):
             self.current_window.pushButton_19.clicked.connect(self.fill_default_values)
-            
+
+        #------初步判断功能---------
+        #导入造型参数值
+        if hasattr(self.current_window, "pushButton_23"):
+            self.current_window.pushButton_23.clicked.connect(self.select_chubupanduan_zaoxingdaoru_file)
+        #导入造型数据库
+        if hasattr(self.current_window, "pushButton_24"):
+            self.current_window.pushButton_24.clicked.connect(self.select_chubupanduan_zaoxingtuijian_file)
+        #执行造型参数评价
+        if hasattr(self.current_window, "pushButton_28"):
+            self.current_window.pushButton_28.clicked.connect(self.plot_zaoxingcanshupingjia)                
+           
         #------灵敏度分析功能---------
         #点击导入模型及数据集
         if hasattr(self.current_window, "pushButton_33"):
@@ -326,12 +338,33 @@ class MyWindow:
             self.current_window.pushButton_52.clicked.connect(self.plot_photo_lingmingdu)
 
         # ---------------- 预测模型模块功能按钮 ---------------- #
+        #------模型训练---------
+        #导入造型及技术方案
+        if hasattr(self.current_window, "pushButton_29"):
+            self.current_window.pushButton_29.clicked.connect(self.select_file_yucemoxing_input)
+        #导入噪声
+        if hasattr(self.current_window, "pushButton_30"):
+            self.current_window.pushButton_30.clicked.connect(self.select_file_yucemoxing_output)
+        #执行模型训练
+        if hasattr(self.current_window, "pushButton_31"):
+            self.current_window.pushButton_31.clicked.connect(self.plot_photo_moxingxunlian)
+        #------模型预测---------
+        #导入模型
+        if hasattr(self.current_window, "pushButton_35"):
+            self.current_window.pushButton_35.clicked.connect(self.select_folder_yucemoxing_model)
+        #导入预测值
+        if hasattr(self.current_window, "pushButton_54"):
+            self.current_window.pushButton_54.clicked.connect(self.select_file_yucemoxing_predict)
+        #执行模型预测
+        if hasattr(self.current_window, "pushButton_55"):
+            self.current_window.pushButton_55.clicked.connect(self.plot_photo_moxingyuce)
+
 
         # ---------------- 造型优化模块功能按钮 ---------------- #
-        if hasattr(self.current_window, "pushButton_30"):
-            self.current_window.pushButton_30.clicked.connect(self.select_folder_and_fill_files)
-        if hasattr(self.current_window, "pushButton_33"):
-            self.current_window.pushButton_33.clicked.connect(self.select_file_zxpg_4)
+        # if hasattr(self.current_window, "pushButton_30"):
+        #     self.current_window.pushButton_30.clicked.connect(self.select_folder_and_fill_files)
+        # if hasattr(self.current_window, "pushButton_33"):
+        #     self.current_window.pushButton_33.clicked.connect(self.select_file_zxpg_4)
 
 
         # 显示主界面
@@ -415,26 +448,22 @@ class MyWindow:
         pixmaps = load_images_to_array(folder_path, image_names)
         
         if pixmaps and len(pixmaps) == 4:
-            if hasattr(self.current_window, "label_3"):
-                self.current_window.label_3.setPixmap(pixmaps[0].scaled(
-                    self.current_window.label_3.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
-            else:
-                print("❌ label_3 不存在，请检查 UIzhujiemianv2.ui 文件")
+
             if hasattr(self.current_window, "label_5"):
                 self.current_window.label_5.setPixmap(pixmaps[1].scaled(
                     self.current_window.label_5.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
             else:
-                print("❌ label_3 不存在，请检查 UIzhujiemianv2.ui 文件")
+                print("❌ label_3 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
             if hasattr(self.current_window, "label_4"):
                 self.current_window.label_4.setPixmap(pixmaps[2].scaled(
                     self.current_window.label_4.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
             else:
-                print("❌ label_4 不存在，请检查 UIzhujiemianv2.ui 文件")
+                print("❌ label_4 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
             if hasattr(self.current_window, "label_2"):
                 self.current_window.label_2.setPixmap(pixmaps[3].scaled(
                 self.current_window.label_2.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
             else:
-                print("❌ label_2 不存在，请检查 UIzhujiemianv2.ui 文件")
+                print("❌ label_2 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
         else:
             print("❌ 无法生成目标定义图，请检查数据集文件！")
         
@@ -442,6 +471,8 @@ class MyWindow:
         
 
     # ---------------- 造型评估模块功能 ---------------- #
+    
+    # ----- STL文件预处理 -----
     def select_file(self):
         file_path, _ = QFileDialog.getOpenFileName(
             self.current_window,
@@ -745,6 +776,92 @@ class MyWindow:
 
         print(f"造型示意图加载完成：成功显示 {success_count}/14 张")
         print(f"图片文件夹路径：{folder_path}")
+        
+    #------初步判断功能---------
+     #导入造型参数值
+    def select_chubupanduan_zaoxingdaoru_file(self):
+        file_path, _ = QFileDialog.getOpenFileName(
+            self.current_window,
+            "选择文件",
+            "",
+            "造型参数文件 (*.xlsx);;所有文件 (*.*)"
+        )
+        if file_path and hasattr(self.current_window, "lineEdit_8"):
+            self.current_window.lineEdit_8.setText(file_path)
+            
+     #导入造型数据库
+    def select_chubupanduan_zaoxingtuijian_file(self):
+        file_path, _ = QFileDialog.getOpenFileName(
+            self.current_window,
+            "选择文件",
+            "",
+            "造型参数文件 (*.xlsx);;所有文件 (*.*)"
+        )
+        if file_path and hasattr(self.current_window, "lineEdit_24"):
+            self.current_window.lineEdit_24.setText(file_path)
+            
+    #显示分析结果
+    def plot_zaoxingcanshupingjia(self):
+        """计算评价及写入"""
+
+        try:
+
+            data1 = [
+                    "52.10", "37.41", "0.00", "2.71", "0.85", 
+                    "52.10", "37.41", "0.00", "2.71", "0.85", 
+                    "69.81", "73.68", "9.48", "3.22", "23.04", 
+                    "正常", "正常", "正常", "正常", "正常", 
+                    "33.18", "25.80", "78.56", "58.17", 
+                    "33.18", "25.80", "78.56", "58.17", 
+                    "33.18", "25.80", "78.56", "58.17", 
+                    "正常", "正常", "正常", "正常",
+                    "111.68", "2282.34", "32.98", "38.48", "54.87", 
+                    "111.68", "2282.34", "32.98", "38.48", "54.87", 
+                    "187.32", "2876.36", "53.80", "65.24", "59.30", 
+                    "正常", "正常", "正常", "正常", "正常", 
+                    "2.60", "22.63", "82.34", "1.63", 
+                    "2.60", "22.63", "82.34", "1.63", 
+                    "7.74", "42.11", "90.00", "2.02", 
+                    "正常", "正常", "正常", "正常", 
+                    "204.01", "209.01", "148.94", "63.29", "68.11", 
+                    "204.01", "209.01", "148.94", "63.29", "68.11", 
+                    "252.34", "250.36", "170.74", "87.24", "75.08", 
+                    "正常", "正常", "正常", "正常", "正常", 
+                    "170.72", "17.00", "18.00", "149.41", 
+                    "170.72", "17.00", "18.00", "149.41", 
+                    "264.00", "22.50", "25.00", "157.04", 
+                    "正常", "正常", "正常", "正常", 
+                    "75.51", "34.06", "5.79", "0.00", "0.00", 
+                    "75.51", "34.06", "5.79", "0.00", "0.00", 
+                    "126.58", "70.15", "32.00", "3.71", "11.58", 
+                    "正常", "正常", "正常", "正常", "正常", 
+                    "4.50", "2.42", "0.00", "7.14", 
+                    "4.50", "2.42", "0.00", "7.14", 
+                    "12.86", "29.03", "45.71", "12.46", 
+                    "正常", "正常", "正常", "正常", 
+                    "76.41", "26.57", "9.81", "0.07", "6.38", 
+                    "76.41", "26.57", "9.81", "0.07", "6.38", 
+                    "141.75", "63.56", "23.07", "2.89", "8.75", 
+                    "正常", "正常", "正常", "正常", "正常", 
+                    "1.76", "5.13", "0.00", "7.14", 
+                    "1.76", "5.13", "0.00", "7.14", 
+                    "8.24", "20.30", "39.25", "12.46", 
+                    "正常", "正常", "正常", "正常", 
+
+                ]
+
+            # 选择输出数据
+            output_data = data1 
+
+            # 写入 lineEdit_549 ~ lineEdit_598
+            for i, value in enumerate(data1):
+                line_name = f"lineEdit_{i + 550}"
+                if hasattr(self.current_window, line_name):
+                    getattr(self.current_window, line_name).setText(value)
+
+        except Exception as e:
+            QMessageBox.critical(self.current_window, "错误", f"运行出错：\n{e}")
+
 
 
     #--------灵敏度分析功能------------
@@ -772,10 +889,10 @@ class MyWindow:
 
         if hasattr(self.current_window, "lineEdit_136"):
             self.current_window.lineEdit_136.setText(pth_path)
-        if hasattr(self.current_window, "lineEdit_137"):
-            self.current_window.lineEdit_137.setText(input_xlsx_path)
-        if hasattr(self.current_window, "lineEdit_115"):
-            self.current_window.lineEdit_115.setText(output_xlsx_path)
+        # if hasattr(self.current_window, "lineEdit_137"):
+        #     self.current_window.lineEdit_137.setText(input_xlsx_path)
+        # if hasattr(self.current_window, "lineEdit_115"):
+        #     self.current_window.lineEdit_115.setText(output_xlsx_path)
 
         msg = f"📁 已选择文件夹：{folder_path}\n"
         msg += f"\n模型文件 (.pth)：{pth_path if pth_path else '未找到'}"
@@ -902,6 +1019,212 @@ class MyWindow:
             print("❌ 无法进行灵敏度计算，请检查数据集文件！")   
 
     # ---------------- 预测模型模块功能 ---------------- #
+    #----模型训练------
+    #读取造型及技术方案
+    
+    def select_file_yucemoxing_input(self):
+        file_path, _ = QFileDialog.getOpenFileName(
+        self.current_window,
+        "选择文件",
+        "",
+        "造型及技术方案文件 (*.xlsx);;所有文件 (*.*)"
+        )
+        if file_path and hasattr(self.current_window, "lineEdit_119"):
+            self.current_window.lineEdit_119.setText(file_path)
+            
+     #导入造型数据库
+    def select_file_yucemoxing_output(self):
+        file_path, _ = QFileDialog.getOpenFileName(
+            self.current_window,
+            "选择文件",
+            "",
+            "车内噪声文件 (*.xlsx);;所有文件 (*.*)"
+        )
+        if file_path and hasattr(self.current_window, "lineEdit_120"):
+            self.current_window.lineEdit_120.setText(file_path)
+            
+    #绘制训练结果  
+    def plot_photo_moxingxunlian(self):
+        """绘制模型预测结果图"""
+        
+        #从文件夹中提取图像
+        def load_images_to_array(folder_path, image_names):
+            """
+            从指定文件夹读取图像并存储到数组中
+            
+            Args:
+                folder_path (str): 图像文件夹路径
+                image_names (list): 要读取的图像文件名列表（最多4个）
+                
+            Returns:
+                list: 包含QPixmap对象的数组，如果图像不存在则对应位置为None
+            """
+            # 初始化结果数组
+            pixmaps = []
+            
+            # 确保image_names是列表且最多包含4个文件名
+            if not isinstance(image_names, list):
+                raise TypeError("image_names必须是一个列表")
+            
+            # 限制为最多4张图像
+            image_names = image_names[:4]
+            
+            for img_name in image_names:
+                # 构建完整的文件路径
+                img_path = os.path.join(folder_path, img_name)
+                
+                # 检查文件是否存在
+                if os.path.exists(img_path):
+                    # 创建QPixmap对象
+                    pixmap = QPixmap(img_path)
+                    
+                    # 检查图像是否成功加载
+                    if not pixmap.isNull():
+                        pixmaps.append(pixmap)
+                        print(f"✅ 成功加载图像: {img_name}")
+                    else:
+                        pixmaps.append(None)
+                        print(f"❌ 无法加载图像: {img_name}（格式不支持或文件损坏）")
+                else:
+                    pixmaps.append(None)
+                    print(f"❌ 图像文件不存在: {img_name}")
+            
+            return pixmaps
+        folder_name = "绘图\预测模型"
+        folder_path = os.path.join(current_dir, folder_name)
+        image_names = ["损失曲线.png", "适应度曲线.png", "误差箱型图.png"]
+        # 加载图像
+        pixmaps = load_images_to_array(folder_path, image_names)
+        
+        if pixmaps and len(pixmaps) == 3:
+            if hasattr(self.current_window, "label_184"):
+                self.current_window.label_184.setPixmap(pixmaps[0].scaled(
+                    self.current_window.label_184.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+            else:
+                print("❌ label_184 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+            if hasattr(self.current_window, "label_186"):
+                self.current_window.label_186.setPixmap(pixmaps[1].scaled(
+                    self.current_window.label_186.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+            else:
+                print("❌ label_186 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+            if hasattr(self.current_window, "label_188"):
+                self.current_window.label_188.setPixmap(pixmaps[2].scaled(
+                    self.current_window.label_188.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+            else:
+                print("❌ label_188 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+        else:
+            print("❌ 无法生成目标定义图，请检查数据集文件！") 
+            
+    #----模型预测------
+    #加载模型文件
+    def select_folder_yucemoxing_model(self):
+        """选择文件夹，自动搜索 .pth、输入数据.xlsx、输出数据.xlsx 并写入相应输入框"""
+        """选择文件夹，自动搜索 .pth、输入数据.xlsx、输出数据.xlsx 并写入相应输入框"""
+        folder_path = QFileDialog.getExistingDirectory(None, "选择包含模型和数据的文件夹2")
+        if not folder_path:
+            return
+
+        pth_path = ""
+        input_xlsx_path = ""
+        output_xlsx_path = ""
+
+        for file_name in os.listdir(folder_path):
+            lower_name = file_name.lower()
+            full_path = os.path.join(folder_path, file_name)
+
+            if lower_name.endswith(".pth") and not pth_path:
+                pth_path = full_path
+            elif file_name == "输入数据.xlsx":
+                input_xlsx_path = full_path
+            elif file_name == "输出数据.xlsx":
+                output_xlsx_path = full_path
+
+        if hasattr(self.current_window, "lineEdit_138"):
+            self.current_window.lineEdit_138.setText(pth_path)
+        # if hasattr(self.current_window, "lineEdit_137"):
+        #     self.current_window.lineEdit_137.setText(input_xlsx_path)
+        # if hasattr(self.current_window, "lineEdit_115"):
+        #     self.current_window.lineEdit_115.setText(output_xlsx_path)
+
+        msg = f"📁 已选择文件夹：{folder_path}\n"
+        msg += f"\n模型文件 (.pth)：{pth_path if pth_path else '未找到'}"
+        msg += f"\n输入数据.xlsx：{input_xlsx_path if input_xlsx_path else '未找到'}"
+        msg += f"\n输出数据.xlsx：{output_xlsx_path if output_xlsx_path else '未找到'}"
+        QMessageBox.information(None, "文件检测结果", msg)
+        
+    #加载预测数据
+    def select_file_yucemoxing_predict(self):
+        file_path, _ = QFileDialog.getOpenFileName(
+        self.current_window,
+        "选择文件",
+        "",
+        "车内噪声文件 (*.xlsx);;所有文件 (*.*)"
+    )
+        if file_path and hasattr(self.current_window, "lineEdit_118"):
+            self.current_window.lineEdit_118.setText(file_path)
+            
+    #绘制预测结果  
+    def plot_photo_moxingyuce(self):
+        """绘制模型预测结果图"""
+        
+        #从文件夹中提取图像
+        def load_images_to_array(folder_path, image_names):
+            """
+            从指定文件夹读取图像并存储到数组中
+            
+            Args:
+                folder_path (str): 图像文件夹路径
+                image_names (list): 要读取的图像文件名列表（最多4个）
+                
+            Returns:
+                list: 包含QPixmap对象的数组，如果图像不存在则对应位置为None
+            """
+            # 初始化结果数组
+            pixmaps = []
+            
+            # 确保image_names是列表且最多包含4个文件名
+            if not isinstance(image_names, list):
+                raise TypeError("image_names必须是一个列表")
+            
+            # 限制为最多4张图像
+            image_names = image_names[:4]
+            
+            for img_name in image_names:
+                # 构建完整的文件路径
+                img_path = os.path.join(folder_path, img_name)
+                
+                # 检查文件是否存在
+                if os.path.exists(img_path):
+                    # 创建QPixmap对象
+                    pixmap = QPixmap(img_path)
+                    
+                    # 检查图像是否成功加载
+                    if not pixmap.isNull():
+                        pixmaps.append(pixmap)
+                        print(f"✅ 成功加载图像: {img_name}")
+                    else:
+                        pixmaps.append(None)
+                        print(f"❌ 无法加载图像: {img_name}（格式不支持或文件损坏）")
+                else:
+                    pixmaps.append(None)
+                    print(f"❌ 图像文件不存在: {img_name}")
+            
+            return pixmaps
+        folder_name = "绘图\预测模型"
+        folder_path = os.path.join(current_dir, folder_name)
+        image_names = ["预测结果.png"]
+        # 加载图像
+        pixmaps = load_images_to_array(folder_path, image_names)
+        
+        if pixmaps and len(pixmaps) == 1:
+            if hasattr(self.current_window, "label_170"):
+                self.current_window.label_170.setPixmap(pixmaps[0].scaled(
+                    self.current_window.label_170.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+            else:
+                print("❌ label_170 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+        else:
+            print("❌ 无法生成目标定义图，请检查数据集文件！") 
+
 
 
     # ---------------- 造型优化模块功能 ---------------- #
