@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1397</width>
-    <height>745</height>
+    <width>1393</width>
+    <height>737</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -208,6 +208,9 @@ background: transparent;}</string>
                  <property name="text">
                   <string/>
                  </property>
+                 <property name="echoMode">
+                  <enum>QLineEdit::EchoMode::Password</enum>
+                 </property>
                  <property name="placeholderText">
                   <string>请输入账号：</string>
                  </property>
@@ -225,6 +228,9 @@ background: transparent;}</string>
                   <font>
                    <pointsize>14</pointsize>
                   </font>
+                 </property>
+                 <property name="echoMode">
+                  <enum>QLineEdit::EchoMode::Password</enum>
                  </property>
                  <property name="placeholderText">
                   <string>请输入密码：</string>
