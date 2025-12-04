@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1464</width>
-    <height>908</height>
+    <width>2000</width>
+    <height>1250</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,9 +21,6 @@
     <number>0</number>
    </property>
    <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
     <number>0</number>
    </property>
    <property name="bottomMargin">
@@ -73,7 +70,7 @@
          <enum>QTabWidget::TabShape::Triangular</enum>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>3</number>
         </property>
         <widget class="QWidget" name="tab">
          <property name="styleSheet">
@@ -455,7 +452,7 @@ QPushButton:hover {
                             </font>
                            </property>
                            <property name="text">
-                            <string>B:低于所有选定竟品车的性能平均值(目标&lt;平均值)。</string>
+                            <string>B:低于所有选定竟品车的性能平均值(目标&lt;平均值)。</string>
                            </property>
                           </widget>
                          </item>
@@ -695,7 +692,7 @@ QPushButton:hover {
              <enum>QTabWidget::TabShape::Rounded</enum>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>2</number>
             </property>
             <widget class="QWidget" name="tab_14">
              <property name="styleSheet">
@@ -2118,8 +2115,8 @@ QPushButton:hover {
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>1030</width>
-                                <height>271</height>
+                                <width>1027</width>
+                                <height>295</height>
                                </rect>
                               </property>
                               <attribute name="label">
@@ -2153,8 +2150,8 @@ QPushButton:hover {
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>1030</width>
-                                <height>271</height>
+                                <width>100</width>
+                                <height>30</height>
                                </rect>
                               </property>
                               <attribute name="label">
@@ -2205,8 +2202,8 @@ QPushButton:hover {
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>1030</width>
-                                <height>271</height>
+                                <width>100</width>
+                                <height>30</height>
                                </rect>
                               </property>
                               <attribute name="label">
@@ -2218,8 +2215,8 @@ QPushButton:hover {
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>1030</width>
-                                <height>271</height>
+                                <width>83</width>
+                                <height>33</height>
                                </rect>
                               </property>
                               <attribute name="label">
@@ -2740,8 +2737,8 @@ QPushButton:hover {
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>1030</width>
-                                <height>271</height>
+                                <width>36</width>
+                                <height>33</height>
                                </rect>
                               </property>
                               <attribute name="label">
@@ -2840,8 +2837,8 @@ QPushButton:hover {
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>1030</width>
-                                <height>271</height>
+                                <width>83</width>
+                                <height>33</height>
                                </rect>
                               </property>
                               <attribute name="label">
@@ -3356,8 +3353,8 @@ QPushButton:hover {
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>1030</width>
-                                <height>306</height>
+                                <width>36</width>
+                                <height>33</height>
                                </rect>
                               </property>
                               <attribute name="label">
@@ -3440,8 +3437,8 @@ QPushButton:hover {
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>1030</width>
-                                <height>306</height>
+                                <width>83</width>
+                                <height>33</height>
                                </rect>
                               </property>
                               <attribute name="label">
@@ -4034,8 +4031,8 @@ QPushButton:hover {
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>1030</width>
-                                <height>271</height>
+                                <width>48</width>
+                                <height>33</height>
                                </rect>
                               </property>
                               <attribute name="label">
@@ -4138,8 +4135,8 @@ QPushButton:hover {
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>1030</width>
-                                <height>271</height>
+                                <width>83</width>
+                                <height>33</height>
                                </rect>
                               </property>
                               <attribute name="label">
@@ -4732,8 +4729,8 @@ QPushButton:hover {
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>1030</width>
-                                <height>236</height>
+                                <width>83</width>
+                                <height>33</height>
                                </rect>
                               </property>
                               <attribute name="label">
@@ -4772,8 +4769,8 @@ border-image: url(:/imgs/imgs/屏幕截图 2025-11-07 143348.png);</string>
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>1030</width>
-                                <height>236</height>
+                                <width>100</width>
+                                <height>30</height>
                                </rect>
                               </property>
                               <attribute name="label">
@@ -4850,8 +4847,8 @@ border-image: url(:/imgs/imgs/屏幕截图 2025-11-07 143348.png);</string>
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>1030</width>
-                                <height>236</height>
+                                <width>48</width>
+                                <height>33</height>
                                </rect>
                               </property>
                               <attribute name="label">
@@ -10641,7 +10638,7 @@ border-image: url(:/imgs/imgs/b1f6ca66-a64c-44b4-ad83-04eb928d8720.png);
              </font>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tab_2">
              <attribute name="title">
@@ -11564,7 +11561,7 @@ QPushButton:hover {
                  </item>
                  <item>
                   <widget class="QWidget" name="widget_106" native="true">
-                   <layout class="QHBoxLayout" name="horizontalLayout_71" stretch="1,8">
+                   <layout class="QHBoxLayout" name="horizontalLayout_53" stretch="1,7,3">
                     <item>
                      <widget class="QLabel" name="label_169">
                       <property name="font">
@@ -11603,6 +11600,16 @@ border-image: url(:/imgs/imgs/屏幕截图 2025-09-11 200247.png);
                       </property>
                      </widget>
                     </item>
+                    <item>
+                     <widget class="QLabel" name="label_63">
+                      <property name="styleSheet">
+                       <string notr="true">background-color: rgb(255, 255, 255);</string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
                    </layout>
                   </widget>
                  </item>
@@ -11631,13 +11638,13 @@ border-image: url(:/imgs/imgs/屏幕截图 2025-09-11 200247.png);
              </font>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="tab_4">
              <attribute name="title">
               <string>基于具体频段为目标</string>
              </attribute>
-             <layout class="QVBoxLayout" name="verticalLayout_20" stretch="1,2">
+             <layout class="QVBoxLayout" name="verticalLayout_37">
               <item>
                <widget class="QGroupBox" name="groupBox_3">
                 <property name="font">
@@ -11649,7 +11656,7 @@ border-image: url(:/imgs/imgs/屏幕截图 2025-09-11 200247.png);
                 <property name="title">
                  <string>车辆造型参数优化设置</string>
                 </property>
-                <layout class="QVBoxLayout" name="verticalLayout_37">
+                <layout class="QVBoxLayout" name="verticalLayout_20">
                  <item>
                   <widget class="QWidget" name="widget_42" native="true">
                    <property name="font">
@@ -11804,6 +11811,122 @@ QPushButton:hover {
                   </widget>
                  </item>
                  <item>
+                  <widget class="QWidget" name="widget_68" native="true">
+                   <layout class="QHBoxLayout" name="horizontalLayout_21">
+                    <item>
+                     <widget class="QLabel" name="label_34">
+                      <property name="font">
+                       <font>
+                        <pointsize>12</pointsize>
+                        <bold>false</bold>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>请输入需要优化的造型数据：</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="lineEdit_15">
+                      <property name="font">
+                       <font>
+                        <pointsize>12</pointsize>
+                        <bold>false</bold>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">background-color: rgb(255, 255, 255);</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_8">
+                      <property name="font">
+                       <font>
+                        <pointsize>12</pointsize>
+                        <bold>false</bold>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">QPushButton {
+       background-color: #3498db;
+       color: white;
+       border: none;
+       border-radius: 4px;
+       padding: 8px 16px;
+    }
+QPushButton:hover {
+      background-color: #2980b9;
+}
+ QPushButton:pressed {
+       background-color: #21618c;
+    }</string>
+                      </property>
+                      <property name="text">
+                       <string>导入数据</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_9">
+                      <property name="font">
+                       <font>
+                        <pointsize>12</pointsize>
+                        <bold>false</bold>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">QPushButton {
+       background-color: #3498db;
+       color: white;
+       border: none;
+       border-radius: 4px;
+       padding: 8px 16px;
+    }
+QPushButton:hover {
+      background-color: #2980b9;
+}
+ QPushButton:pressed {
+       background-color: #21618c;
+    }</string>
+                      </property>
+                      <property name="text">
+                       <string>进行参数优化</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_10">
+                      <property name="font">
+                       <font>
+                        <pointsize>12</pointsize>
+                        <bold>false</bold>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">QPushButton {
+       background-color: #3498db;
+       color: white;
+       border: none;
+       border-radius: 4px;
+       padding: 8px 16px;
+    }
+QPushButton:hover {
+      background-color: #2980b9;
+}
+ QPushButton:pressed {
+       background-color: #21618c;
+    }</string>
+                      </property>
+                      <property name="text">
+                       <string>保存造型优化数据</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
                   <widget class="QWidget" name="widget_50" native="true">
                    <layout class="QHBoxLayout" name="horizontalLayout_18" stretch="3,1">
                     <property name="leftMargin">
@@ -11854,7 +11977,19 @@ QPushButton:hover {
                        </item>
                        <item>
                         <widget class="QWidget" name="widget_63" native="true">
-                         <layout class="QVBoxLayout" name="verticalLayout_47">
+                         <layout class="QHBoxLayout" name="horizontalLayout_57">
+                          <item>
+                           <widget class="QLabel" name="label_65">
+                            <property name="font">
+                             <font>
+                              <pointsize>12</pointsize>
+                             </font>
+                            </property>
+                            <property name="text">
+                             <string>索引值:</string>
+                            </property>
+                           </widget>
+                          </item>
                           <item>
                            <widget class="QLineEdit" name="lineEdit_12">
                             <property name="font">
@@ -11914,7 +12049,7 @@ QPushButton:hover {
                              </font>
                             </property>
                             <property name="text">
-                             <string>最小值</string>
+                             <string>最小值:</string>
                             </property>
                            </widget>
                           </item>
@@ -11952,7 +12087,7 @@ QPushButton:hover {
                              </font>
                             </property>
                             <property name="text">
-                             <string>最大值</string>
+                             <string>最大值:</string>
                             </property>
                            </widget>
                           </item>
@@ -12092,125 +12227,9 @@ QPushButton:hover {
                  </font>
                 </property>
                 <property name="title">
-                 <string>车辆造型参数优化及优化前后的车内噪声对比图</string>
+                 <string>车辆造型参数优化前后的车内噪声对比图</string>
                 </property>
-                <layout class="QVBoxLayout" name="verticalLayout_50" stretch="1,8">
-                 <item>
-                  <widget class="QWidget" name="widget_68" native="true">
-                   <layout class="QHBoxLayout" name="horizontalLayout_21">
-                    <item>
-                     <widget class="QLabel" name="label_34">
-                      <property name="font">
-                       <font>
-                        <pointsize>12</pointsize>
-                        <bold>false</bold>
-                       </font>
-                      </property>
-                      <property name="text">
-                       <string>请输入需要优化的造型数据：</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QLineEdit" name="lineEdit_15">
-                      <property name="font">
-                       <font>
-                        <pointsize>12</pointsize>
-                        <bold>false</bold>
-                       </font>
-                      </property>
-                      <property name="styleSheet">
-                       <string notr="true">background-color: rgb(255, 255, 255);</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QPushButton" name="pushButton_8">
-                      <property name="font">
-                       <font>
-                        <pointsize>12</pointsize>
-                        <bold>false</bold>
-                       </font>
-                      </property>
-                      <property name="styleSheet">
-                       <string notr="true">QPushButton {
-       background-color: #3498db;
-       color: white;
-       border: none;
-       border-radius: 4px;
-       padding: 8px 16px;
-    }
-QPushButton:hover {
-      background-color: #2980b9;
-}
- QPushButton:pressed {
-       background-color: #21618c;
-    }</string>
-                      </property>
-                      <property name="text">
-                       <string>导入数据</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QPushButton" name="pushButton_9">
-                      <property name="font">
-                       <font>
-                        <pointsize>12</pointsize>
-                        <bold>false</bold>
-                       </font>
-                      </property>
-                      <property name="styleSheet">
-                       <string notr="true">QPushButton {
-       background-color: #3498db;
-       color: white;
-       border: none;
-       border-radius: 4px;
-       padding: 8px 16px;
-    }
-QPushButton:hover {
-      background-color: #2980b9;
-}
- QPushButton:pressed {
-       background-color: #21618c;
-    }</string>
-                      </property>
-                      <property name="text">
-                       <string>进行参数优化</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QPushButton" name="pushButton_10">
-                      <property name="font">
-                       <font>
-                        <pointsize>12</pointsize>
-                        <bold>false</bold>
-                       </font>
-                      </property>
-                      <property name="styleSheet">
-                       <string notr="true">QPushButton {
-       background-color: #3498db;
-       color: white;
-       border: none;
-       border-radius: 4px;
-       padding: 8px 16px;
-    }
-QPushButton:hover {
-      background-color: #2980b9;
-}
- QPushButton:pressed {
-       background-color: #21618c;
-    }</string>
-                      </property>
-                      <property name="text">
-                       <string>保存造型优化数据</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </widget>
-                 </item>
+                <layout class="QHBoxLayout" name="horizontalLayout_55">
                  <item>
                   <widget class="QWidget" name="widget_69" native="true">
                    <layout class="QHBoxLayout" name="horizontalLayout_22">
@@ -12264,7 +12283,7 @@ QPushButton:hover {
              <attribute name="title">
               <string>基于噪声的响度为目标</string>
              </attribute>
-             <layout class="QVBoxLayout" name="verticalLayout_28" stretch="1,1">
+             <layout class="QVBoxLayout" name="verticalLayout_28">
               <item>
                <widget class="QGroupBox" name="groupBox_5">
                 <property name="font">
@@ -12285,10 +12304,7 @@ QPushButton:hover {
                      <bold>false</bold>
                     </font>
                    </property>
-                   <layout class="QVBoxLayout" name="verticalLayout_51">
-                    <property name="spacing">
-                     <number>0</number>
-                    </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_43" stretch="0,0">
                     <property name="leftMargin">
                      <number>0</number>
                     </property>
@@ -12314,24 +12330,6 @@ QPushButton:hover {
                       </property>
                      </widget>
                     </item>
-                   </layout>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QWidget" name="widget_71" native="true">
-                   <layout class="QHBoxLayout" name="horizontalLayout_23" stretch="0">
-                    <property name="leftMargin">
-                     <number>0</number>
-                    </property>
-                    <property name="topMargin">
-                     <number>0</number>
-                    </property>
-                    <property name="rightMargin">
-                     <number>0</number>
-                    </property>
-                    <property name="bottomMargin">
-                     <number>0</number>
-                    </property>
                     <item>
                      <widget class="QWidget" name="widget_72" native="true">
                       <layout class="QVBoxLayout" name="verticalLayout_42">
@@ -12451,18 +12449,133 @@ QPushButton:hover {
                   </widget>
                  </item>
                  <item>
-                  <widget class="QWidget" name="widget_77" native="true">
-                   <layout class="QVBoxLayout" name="verticalLayout_55">
+                  <widget class="QWidget" name="widget_30" native="true">
+                   <layout class="QHBoxLayout" name="horizontalLayout_23">
                     <item>
                      <widget class="QLabel" name="label_43">
                       <property name="font">
                        <font>
                         <pointsize>14</pointsize>
-                        <bold>false</bold>
                        </font>
                       </property>
                       <property name="text">
                        <string>车辆造型优化参数设置：</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="widget_86" native="true">
+                   <layout class="QHBoxLayout" name="horizontalLayout_29">
+                    <item>
+                     <widget class="QLabel" name="label_48">
+                      <property name="font">
+                       <font>
+                        <pointsize>12</pointsize>
+                        <bold>false</bold>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>请输入需要优化的造型数据：</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="lineEdit_23">
+                      <property name="font">
+                       <font>
+                        <pointsize>12</pointsize>
+                        <bold>false</bold>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">background-color: rgb(255, 255, 255);</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_12">
+                      <property name="font">
+                       <font>
+                        <pointsize>12</pointsize>
+                        <bold>false</bold>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">QPushButton {
+       background-color: #3498db;
+       color: white;
+       border: none;
+       border-radius: 4px;
+       padding: 8px 16px;
+    }
+QPushButton:hover {
+      background-color: #2980b9;
+}
+ QPushButton:pressed {
+       background-color: #21618c;
+    }</string>
+                      </property>
+                      <property name="text">
+                       <string>导入数据</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_21">
+                      <property name="font">
+                       <font>
+                        <pointsize>12</pointsize>
+                        <bold>false</bold>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">QPushButton {
+       background-color: #3498db;
+       color: white;
+       border: none;
+       border-radius: 4px;
+       padding: 8px 16px;
+    }
+QPushButton:hover {
+      background-color: #2980b9;
+}
+ QPushButton:pressed {
+       background-color: #21618c;
+    }</string>
+                      </property>
+                      <property name="text">
+                       <string>进行参数优化</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_22">
+                      <property name="font">
+                       <font>
+                        <pointsize>12</pointsize>
+                        <bold>false</bold>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">QPushButton {
+       background-color: #3498db;
+       color: white;
+       border: none;
+       border-radius: 4px;
+       padding: 8px 16px;
+    }
+QPushButton:hover {
+      background-color: #2980b9;
+}
+ QPushButton:pressed {
+       background-color: #21618c;
+    }</string>
+                      </property>
+                      <property name="text">
+                       <string>保存造型优化数据</string>
                       </property>
                      </widget>
                     </item>
@@ -12520,7 +12633,19 @@ QPushButton:hover {
                        </item>
                        <item>
                         <widget class="QWidget" name="widget_81" native="true">
-                         <layout class="QVBoxLayout" name="verticalLayout_80">
+                         <layout class="QHBoxLayout" name="horizontalLayout_56">
+                          <item>
+                           <widget class="QLabel" name="label_64">
+                            <property name="font">
+                             <font>
+                              <pointsize>12</pointsize>
+                             </font>
+                            </property>
+                            <property name="text">
+                             <string>索引值:</string>
+                            </property>
+                           </widget>
+                          </item>
                           <item>
                            <widget class="QLineEdit" name="lineEdit_19">
                             <property name="font">
@@ -12580,7 +12705,7 @@ QPushButton:hover {
                              </font>
                             </property>
                             <property name="text">
-                             <string>最小值</string>
+                             <string>最小值:</string>
                             </property>
                            </widget>
                           </item>
@@ -12618,7 +12743,7 @@ QPushButton:hover {
                              </font>
                             </property>
                             <property name="text">
-                             <string>最大值</string>
+                             <string>最大值:</string>
                             </property>
                            </widget>
                           </item>
@@ -12758,125 +12883,9 @@ QPushButton:hover {
                  </font>
                 </property>
                 <property name="title">
-                 <string>车辆造型参数优化及优化前后的车内噪声对比图</string>
+                 <string>车辆造型参数优化前后的车内噪声对比图</string>
                 </property>
-                <layout class="QVBoxLayout" name="verticalLayout_82" stretch="1,8">
-                 <item>
-                  <widget class="QWidget" name="widget_86" native="true">
-                   <layout class="QHBoxLayout" name="horizontalLayout_29">
-                    <item>
-                     <widget class="QLabel" name="label_48">
-                      <property name="font">
-                       <font>
-                        <pointsize>12</pointsize>
-                        <bold>false</bold>
-                       </font>
-                      </property>
-                      <property name="text">
-                       <string>请输入需要优化的造型数据：</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QLineEdit" name="lineEdit_23">
-                      <property name="font">
-                       <font>
-                        <pointsize>12</pointsize>
-                        <bold>false</bold>
-                       </font>
-                      </property>
-                      <property name="styleSheet">
-                       <string notr="true">background-color: rgb(255, 255, 255);</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QPushButton" name="pushButton_12">
-                      <property name="font">
-                       <font>
-                        <pointsize>12</pointsize>
-                        <bold>false</bold>
-                       </font>
-                      </property>
-                      <property name="styleSheet">
-                       <string notr="true">QPushButton {
-       background-color: #3498db;
-       color: white;
-       border: none;
-       border-radius: 4px;
-       padding: 8px 16px;
-    }
-QPushButton:hover {
-      background-color: #2980b9;
-}
- QPushButton:pressed {
-       background-color: #21618c;
-    }</string>
-                      </property>
-                      <property name="text">
-                       <string>导入数据</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QPushButton" name="pushButton_21">
-                      <property name="font">
-                       <font>
-                        <pointsize>12</pointsize>
-                        <bold>false</bold>
-                       </font>
-                      </property>
-                      <property name="styleSheet">
-                       <string notr="true">QPushButton {
-       background-color: #3498db;
-       color: white;
-       border: none;
-       border-radius: 4px;
-       padding: 8px 16px;
-    }
-QPushButton:hover {
-      background-color: #2980b9;
-}
- QPushButton:pressed {
-       background-color: #21618c;
-    }</string>
-                      </property>
-                      <property name="text">
-                       <string>进行参数优化</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QPushButton" name="pushButton_22">
-                      <property name="font">
-                       <font>
-                        <pointsize>12</pointsize>
-                        <bold>false</bold>
-                       </font>
-                      </property>
-                      <property name="styleSheet">
-                       <string notr="true">QPushButton {
-       background-color: #3498db;
-       color: white;
-       border: none;
-       border-radius: 4px;
-       padding: 8px 16px;
-    }
-QPushButton:hover {
-      background-color: #2980b9;
-}
- QPushButton:pressed {
-       background-color: #21618c;
-    }</string>
-                      </property>
-                      <property name="text">
-                       <string>保存造型优化数据</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </widget>
-                 </item>
+                <layout class="QHBoxLayout" name="horizontalLayout_54">
                  <item>
                   <widget class="QWidget" name="widget_107" native="true">
                    <layout class="QHBoxLayout" name="horizontalLayout_30">
