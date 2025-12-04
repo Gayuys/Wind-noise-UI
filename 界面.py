@@ -357,7 +357,7 @@ class MyWindow:
             self.current_window.pushButton_54.clicked.connect(self.select_file_yucemoxing_predict)
         #执行模型预测
         if hasattr(self.current_window, "pushButton_55"):
-            self.current_window.pushButton_55.clicked.connect(self.plot_photo_moxingyouhua)
+            self.current_window.pushButton_55.clicked.connect(self.plot_photo_moxingyuce)
 
 
         #---------------- 造型优化模块功能按钮 ---------------- #
