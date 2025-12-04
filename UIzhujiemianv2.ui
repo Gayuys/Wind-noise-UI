@@ -100,7 +100,7 @@
                 </font>
                </property>
                <property name="currentIndex">
-                <number>0</number>
+                <number>1</number>
                </property>
                <widget class="QWidget" name="tab_28">
                 <attribute name="title">
@@ -536,7 +536,7 @@ QPushButton:hover {
                        </font>
                       </property>
                       <property name="currentIndex">
-                       <number>0</number>
+                       <number>2</number>
                       </property>
                       <widget class="QWidget" name="tab_22">
                        <attribute name="title">
@@ -4435,7 +4435,7 @@ QPushButton:hover {
                              </font>
                             </property>
                             <property name="title">
-                             <string>A (目标&gt;平均值（75%分位点））</string>
+                             <string>A (目标&gt;平均值）</string>
                             </property>
                             <layout class="QVBoxLayout" name="verticalLayout_55">
                              <item>
@@ -4465,7 +4465,7 @@ QPushButton:hover {
                              </font>
                             </property>
                             <property name="title">
-                             <string>B (目标&lt;平均值（25%分位点）)</string>
+                             <string>B (目标&lt;平均值)</string>
                             </property>
                             <layout class="QVBoxLayout" name="verticalLayout_82">
                              <item>
@@ -5956,8 +5956,8 @@ QPushButton:hover {
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>1426</width>
-                                <height>561</height>
+                                <width>36</width>
+                                <height>33</height>
                                </rect>
                               </property>
                               <attribute name="label">
@@ -6578,8 +6578,8 @@ QPushButton:hover {
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>1426</width>
-                                <height>561</height>
+                                <width>36</width>
+                                <height>33</height>
                                </rect>
                               </property>
                               <attribute name="label">
@@ -7194,8 +7194,8 @@ QPushButton:hover {
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>1426</width>
-                                <height>596</height>
+                                <width>36</width>
+                                <height>33</height>
                                </rect>
                               </property>
                               <attribute name="label">
@@ -7872,8 +7872,8 @@ QPushButton:hover {
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>1426</width>
-                                <height>561</height>
+                                <width>48</width>
+                                <height>33</height>
                                </rect>
                               </property>
                               <attribute name="label">
@@ -8688,8 +8688,8 @@ border-image: url(:/imgs/imgs/屏幕截图 2025-11-07 143348.png);</string>
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>1426</width>
-                                <height>526</height>
+                                <width>48</width>
+                                <height>33</height>
                                </rect>
                               </property>
                               <attribute name="label">
@@ -9138,7 +9138,7 @@ QPushButton:hover {
                     </font>
                    </property>
                    <property name="currentIndex">
-                    <number>0</number>
+                    <number>4</number>
                    </property>
                    <widget class="QWidget" name="tab_7">
                     <attribute name="title">
@@ -13390,7 +13390,7 @@ QPushButton:hover {
                         </widget>
                        </item>
                        <item row="2" column="1">
-                        <widget class="QLineEdit" name="lineEdit_549">
+                        <widget class="QLineEdit" name="lineEdit_550">
                          <property name="font">
                           <font>
                            <pointsize>12</pointsize>
@@ -13475,7 +13475,7 @@ QPushButton:hover {
                        <item row="2" column="2">
                         <layout class="QGridLayout" name="gridLayout_20">
                          <item row="0" column="0">
-                          <widget class="QLineEdit" name="lineEdit_554">
+                          <widget class="QLineEdit" name="lineEdit_555">
                            <property name="font">
                             <font>
                              <pointsize>12</pointsize>
@@ -13606,7 +13606,7 @@ QPushButton:hover {
                         </spacer>
                        </item>
                        <item row="8" column="1">
-                        <widget class="QLineEdit" name="lineEdit_552">
+                        <widget class="QLineEdit" name="lineEdit_553">
                          <property name="font">
                           <font>
                            <pointsize>12</pointsize>
@@ -13652,7 +13652,7 @@ QPushButton:hover {
                         </widget>
                        </item>
                        <item row="6" column="1">
-                        <widget class="QLineEdit" name="lineEdit_551">
+                        <widget class="QLineEdit" name="lineEdit_552">
                          <property name="font">
                           <font>
                            <pointsize>12</pointsize>
@@ -13755,7 +13755,7 @@ QPushButton:hover {
                         </widget>
                        </item>
                        <item row="10" column="1">
-                        <widget class="QLineEdit" name="lineEdit_553">
+                        <widget class="QLineEdit" name="lineEdit_554">
                          <property name="font">
                           <font>
                            <pointsize>12</pointsize>
@@ -13849,7 +13849,7 @@ QPushButton:hover {
                         </widget>
                        </item>
                        <item row="4" column="1">
-                        <widget class="QLineEdit" name="lineEdit_550">
+                        <widget class="QLineEdit" name="lineEdit_551">
                          <property name="font">
                           <font>
                            <pointsize>12</pointsize>
@@ -15479,7 +15479,7 @@ border-image: url(:/imgs/imgs/屏幕截图 2025-09-11 200247.png);
              </font>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tab_4">
              <attribute name="title">
