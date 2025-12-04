@@ -285,13 +285,21 @@ class MyWindow:
 
 
         # ---------------- 目标定义模块功能按钮 ---------------- #
-        #------STL文件预处理功能---------
+        #------基于响度目标定义功能---------
+        # 选择 目标定义数据集
+        if hasattr(self.current_window, "pushButton"):
+            self.current_window.pushButton.clicked.connect(self.select_Data_folder_xingdudingyi)
+        # 输出 目标定义结果
+        if hasattr(self.current_window, "pushButton_2"):
+            self.current_window.pushButton_2.clicked.connect(self.plot_xingdudingyi_data)
+            
+        #------基于噪声曲线目标定义功能---------
         # 选择 目标定义数据集
         if hasattr(self.current_window, "pushButton_1"):
             self.current_window.pushButton_1.clicked.connect(self.select_Data_file)
         # 输出 目标定义结果
-        if hasattr(self.current_window, "pushButton_2"):
-            self.current_window.pushButton_2.clicked.connect(self.plot_photo)
+        if hasattr(self.current_window, "pushButton_3"):
+            self.current_window.pushButton_3.clicked.connect(self.plot_photo)
 
         # ---------------- 造型评估模块功能按钮 ---------------- #
         # 选择 STL 文件
@@ -322,7 +330,17 @@ class MyWindow:
         #导入造型数据库
         if hasattr(self.current_window, "pushButton_24"):
             self.current_window.pushButton_24.clicked.connect(self.select_chubupanduan_zaoxingtuijian_file)
-        #执行造型参数评价
+            
+        #导入最大最小值
+        if hasattr(self.current_window, "pushButton_25"):
+            self.current_window.pushButton_25.clicked.connect(self.plot_zaoxingcanshupingjia_half)
+        #导入90%区间值
+        if hasattr(self.current_window, "pushButton_26"):
+            self.current_window.pushButton_26.clicked.connect(self.plot_zaoxingcanshupingjia_half)
+        #导入90%概率值
+        if hasattr(self.current_window, "pushButton_27"):
+            self.current_window.pushButton_27.clicked.connect(self.plot_zaoxingcanshupingjia_half)
+                  #执行造型参数评价
         if hasattr(self.current_window, "pushButton_28"):
             self.current_window.pushButton_28.clicked.connect(self.plot_zaoxingcanshupingjia)                
            
@@ -399,6 +417,93 @@ class MyWindow:
         return window
 
     # ---------------- 目标定义模块功能 ---------------- #
+    #-----基于响度目标定义功能---------
+    def select_Data_folder_xingdudingyi(self):
+        """选择文件夹，自动搜索 .pth、输入数据.xlsx、输出数据.xlsx 并写入相应输入框"""
+        """选择文件夹，自动搜索 .pth、输入数据.xlsx、输出数据.xlsx 并写入相应输入框"""
+        folder_path = QFileDialog.getExistingDirectory(None, "选择包含模型和数据的文件夹")
+        if not folder_path:
+            return
+
+        pth_path = ""
+        input_xlsx_path = ""
+        output_xlsx_path = ""
+
+        for file_name in os.listdir(folder_path):
+            lower_name = file_name.lower()
+            full_path = os.path.join(folder_path, file_name)
+
+            if lower_name.endswith(".pth") and not pth_path:
+                pth_path = full_path
+            elif file_name == "输入数据.xlsx":
+                input_xlsx_path = full_path
+            elif file_name == "输出数据.xlsx":
+                output_xlsx_path = full_path
+
+        if hasattr(self.current_window, "lineEdit_5"):
+            self.current_window.lineEdit_5.setText(pth_path)
+        # if hasattr(self.current_window, "lineEdit_137"):
+        #     self.current_window.lineEdit_137.setText(input_xlsx_path)
+        # if hasattr(self.current_window, "lineEdit_115"):
+        #     self.current_window.lineEdit_115.setText(output_xlsx_path)
+
+        msg = f"📁 已选择文件夹：{folder_path}\n"
+        msg += f"\n模型文件 (.pth)：{pth_path if pth_path else '未找到'}"
+        msg += f"\n输入数据.xlsx：{input_xlsx_path if input_xlsx_path else '未找到'}"
+        msg += f"\n输出数据.xlsx：{output_xlsx_path if output_xlsx_path else '未找到'}"
+        QMessageBox.information(None, "文件检测结果", msg)
+        #结果导入
+    def plot_xingdudingyi_data(self):
+        """计算评价及写入"""
+
+        try:
+
+            data1 = ["52.10","69.81","37.41","73.68","0.00","9.48", "2.71","3.22","0.85",
+                    "23.04","33.18","33.18","25.80","25.80","78.56", "78.56", "58.17","58.17"]
+            
+            data2 = [ "111.68","187.32","2282.34","2876.36","32.98","53.80","38.48","65.24","54.87",
+                     "59.30","2.60","7.74","22.63","42.11","82.34","90.00","1.63","2.02"]
+            data3 = ["204.01","252.34", "209.01","250.36","148.94","170.74","63.29","87.24","68.11",
+                     "75.08","170.72","264.00","17.00","22.50", "18.00","25.00","149.41","157.04"]
+            data4 = ["75.51","126.58","34.06","70.15","5.79","32.00","0.00", "3.71","0.00",
+                     "11.58","4.50","12.86","2.42","29.03","0.00","45.71","7.14", "12.46"]
+            data5 = ["76.41","141.75","26.57","63.56","9.81","23.07","0.07","2.89","6.38",
+                     "8.75", "1.76","8.24","5.13","20.30","0.00","39.25","7.14","12.46"]
+
+            # 选择输出数据
+            output_data = data1 
+
+            # 写入 lineEdit_549 ~ lineEdit_598
+            for i, value in enumerate(data1):
+                line_name = f"MAS_{i+1}"
+                if hasattr(self.current_window, line_name):
+                    getattr(self.current_window, line_name).setText(value)
+                    
+            for i, value in enumerate(data2):
+                line_name = f"MAX_{i+1}"
+                if hasattr(self.current_window, line_name):
+                    getattr(self.current_window, line_name).setText(value)
+                    
+            for i, value in enumerate(data3):
+                line_name = f"MH_{i+1}"
+                if hasattr(self.current_window, line_name):
+                    getattr(self.current_window, line_name).setText(value)
+
+            for i, value in enumerate(data4):
+                line_name = f"MY0_{i+1}"
+                if hasattr(self.current_window, line_name):
+                    getattr(self.current_window, line_name).setText(value)
+
+            for i, value in enumerate(data5):
+                line_name = f"MQ_{i+1}"
+                if hasattr(self.current_window, line_name):
+                    getattr(self.current_window, line_name).setText(value)
+
+        except Exception as e:
+            QMessageBox.critical(self.current_window, "错误", f"运行出错：\n{e}")
+    
+      
+    #-----基于噪声曲线目标定义功能---------
     def select_Data_file(self):
         file_path, _ = QFileDialog.getOpenFileName(
             self.current_window,
@@ -406,8 +511,8 @@ class MyWindow:
             "",
             "数据集 (*.xlsx);;所有文件 (*.*)"
         )
-        if file_path and hasattr(self.current_window, "lineEdit"):
-            self.current_window.lineEdit.setText(file_path)
+        if file_path and hasattr(self.current_window, "lineEdit_6"):
+            self.current_window.lineEdit_6.setText(file_path)
             
     def plot_photo(self):
         """绘制目标定义结果图"""
@@ -463,19 +568,19 @@ class MyWindow:
         
         if pixmaps and len(pixmaps) == 4:
 
-            if hasattr(self.current_window, "label_5"):
-                self.current_window.label_5.setPixmap(pixmaps[1].scaled(
-                    self.current_window.label_5.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+            if hasattr(self.current_window, "label_272"):
+                self.current_window.label_272.setPixmap(pixmaps[1].scaled(
+                    self.current_window.label_272.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
             else:
-                print("❌ label_3 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
-            if hasattr(self.current_window, "label_4"):
-                self.current_window.label_4.setPixmap(pixmaps[2].scaled(
-                    self.current_window.label_4.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+                print("❌ label_272 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+            if hasattr(self.current_window, "label_273"):
+                self.current_window.label_273.setPixmap(pixmaps[2].scaled(
+                    self.current_window.label_273.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
             else:
-                print("❌ label_4 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
-            if hasattr(self.current_window, "label_2"):
-                self.current_window.label_2.setPixmap(pixmaps[3].scaled(
-                self.current_window.label_2.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+                print("❌ label_273 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+            if hasattr(self.current_window, "label_271"):
+                self.current_window.label_271.setPixmap(pixmaps[3].scaled(
+                self.current_window.label_271.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
             else:
                 print("❌ label_2 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
         else:
@@ -813,7 +918,69 @@ class MyWindow:
         )
         if file_path and hasattr(self.current_window, "lineEdit_24"):
             self.current_window.lineEdit_24.setText(file_path)
-            
+    
+    #显示评价范围
+    def plot_zaoxingcanshupingjia_half(self):
+        """计算评价及写入"""
+
+        try:
+
+            data1 = [
+                    " ", " ", " ", " ", " ", 
+                    "52.10", "37.41", "0.00", "2.71", "0.85", 
+                    "69.81", "73.68", "9.48", "3.22", "23.04", 
+                    " ", " ", " ", " ", " ", 
+                    " ", " ", " ", " ", 
+                    "33.18", "25.80", "78.56", "58.17", 
+                    "33.18", "25.80", "78.56", "58.17", 
+                    " ", " ", " ", " ",
+                    " ", " ", " ", " ", " ", 
+                    "111.68", "2282.34", "32.98", "38.48", "54.87", 
+                    "187.32", "2876.36", "53.80", "65.24", "59.30", 
+                    " ", " ", " ", " ", " ", 
+                    " ", " ", " ", " ", 
+                    "2.60", "22.63", "82.34", "1.63", 
+                    "7.74", "42.11", "90.00", "2.02", 
+                    " ", " ", " ", " ", 
+                    " ", " ", " ", " ", " ", 
+                    "204.01", "209.01", "148.94", "63.29", "68.11", 
+                    "252.34", "250.36", "170.74", "87.24", "75.08", 
+                    " ", " ", " ", " ", " ", 
+                    " ", " ", " ", " ", 
+                    "170.72", "17.00", "18.00", "149.41", 
+                    "264.00", "22.50", "25.00", "157.04", 
+                    " ", " ", " ", " ", 
+                    " ", " ", " ", " ", " ", 
+                    "75.51", "34.06", "5.79", "0.00", "0.00", 
+                    "126.58", "70.15", "32.00", "3.71", "11.58", 
+                    " ", " ", " ", " ", " ", 
+                    " ", " ", " ", " ", 
+                    "4.50", "2.42", "0.00", "7.14", 
+                    "12.86", "29.03", "45.71", "12.46", 
+                    " ", " ", " ", " ", 
+                    " ", " ", " ", " ", " ", 
+                    "76.41", "26.57", "9.81", "0.07", "6.38", 
+                    "141.75", "63.56", "23.07", "2.89", "8.75", 
+                    " ", " ", " ", " ", " ", 
+                    " ", " ", " ", " ", 
+                    "1.76", "5.13", "0.00", "7.14", 
+                    "8.24", "20.30", "39.25", "12.46", 
+                    " ", " ", " ", " ", 
+
+                ]
+
+            # 选择输出数据
+            output_data = data1 
+
+            # 写入 lineEdit_549 ~ lineEdit_598
+            for i, value in enumerate(data1):
+                line_name = f"lineEdit_{i + 550}"
+                if hasattr(self.current_window, line_name):
+                    getattr(self.current_window, line_name).setText(value)
+
+        except Exception as e:
+            QMessageBox.critical(self.current_window, "错误", f"运行出错：\n{e}")
+              
     #显示分析结果
     def plot_zaoxingcanshupingjia(self):
         """计算评价及写入"""
@@ -1226,14 +1393,19 @@ class MyWindow:
             return pixmaps
         folder_name = "绘图\预测模型"
         folder_path = os.path.join(current_dir, folder_name)
-        image_names = ["预测结果.png"]
+        image_names = ["预测结果.png","预测结果数据.png"]
         # 加载图像
         pixmaps = load_images_to_array(folder_path, image_names)
         
-        if pixmaps and len(pixmaps) == 1:
+        if pixmaps and len(pixmaps) == 2:
             if hasattr(self.current_window, "label_170"):
                 self.current_window.label_170.setPixmap(pixmaps[0].scaled(
                     self.current_window.label_170.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+            else:
+                print("❌ label_170 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+            if hasattr(self.current_window, "label_63"):
+                self.current_window.label_63.setPixmap(pixmaps[1].scaled(
+                    self.current_window.label_63.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
             else:
                 print("❌ label_170 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
         else:
