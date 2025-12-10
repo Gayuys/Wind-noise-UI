@@ -1,10 +1,13 @@
 import sys
 import os
-from PySide6.QtWidgets import QApplication, QFileDialog, QLabel, QMessageBox,QFrame, QStyleOption, QStyledItemDelegate, QMainWindow
+from PySide6.QtWidgets import QApplication, QFileDialog, QLabel, QWidget, QMessageBox,QFrame, QStyleOption, QStyledItemDelegate, QMainWindow, QVBoxLayout
 from PySide6.QtUiTools import QUiLoader
+from PySide6.QtWidgets import QApplication, QWidget, QMessageBox
 from PySide6.QtCore import QFile, Qt
 from PySide6.QtGui import QPixmap, QImage,QPainter
 from PySide6.QtCore import Qt
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 import trimesh
 import numpy as np
 import matplotlib.pyplot as plt
@@ -13,6 +16,8 @@ from typing import Tuple
 import re
 import shutil
 import pandas as pd
+import xcepxin_train
+import typing
 
 # 设置 Matplotlib 中文字体，解决中文显示问题
 plt.rcParams['font.sans-serif'] = ['Microsoft YaHei', 'SimSun', 'Arial']  # 优先使用支持中文的字体
@@ -250,13 +255,13 @@ class MyWindow:
         self.current_window.show()
 
     def switch_to_main_ui(self):
-        """切换到主界面 UIzhujiemianv2.ui"""
+        """切换到主界面 UIzhujiemian.ui"""
         # 关闭当前窗口
         if self.current_window:
             self.current_window.close()
 
         # 加载新的主界面 UI
-        zhujiemian_window_name = "UIzhujiemianv2.ui" #主界面ui文件
+        zhujiemian_window_name = "UIzhujiemian.ui" #主界面ui文件
         zhujiemian_window_file = os.path.join(current_dir, zhujiemian_window_name)
         self.current_window = self.load_ui(zhujiemian_window_file)
         if not self.current_window:
@@ -283,6 +288,24 @@ class MyWindow:
         if self.check_login_valid():
             self.switch_to_main_ui()
 
+        # ---------------- 参数设置模块功能按钮 ---------------- #
+        #------模型训练功能---------
+        # 选择 目标定义数据集
+        if hasattr(self.current_window, "pushButton_32"):
+            self.current_window.pushButton_32.clicked.connect(self.select_file_yucemoxing_input)
+        # 输出 目标定义结果
+        if hasattr(self.current_window, "pushButton_36"):
+            self.current_window.pushButton_36.clicked.connect(self.select_file_yucemoxing_output)
+        if hasattr(self.current_window, "CPB_1"):
+            self.current_window.CPB_1.clicked.connect(self.model_train)
+            
+        #------模型预测功能---------
+        # 选择 目标定义数据集
+        if hasattr(self.current_window, "pushButton_1"):
+            self.current_window.pushButton_1.clicked.connect(self.select_Data_file)
+        # 输出 目标定义结果
+        if hasattr(self.current_window, "pushButton_3"):
+            self.current_window.pushButton_3.clicked.connect(self.plot_photo)
 
         # ---------------- 目标定义模块功能按钮 ---------------- #
         #------基于响度目标定义功能---------
@@ -356,16 +379,6 @@ class MyWindow:
             self.current_window.pushButton_52.clicked.connect(self.plot_photo_lingmingdu)
 
         # ---------------- 预测模型模块功能按钮 ---------------- #
-        #------模型训练---------
-        #导入造型及技术方案
-        if hasattr(self.current_window, "pushButton_29"):
-            self.current_window.pushButton_29.clicked.connect(self.select_file_yucemoxing_input)
-        #导入噪声
-        if hasattr(self.current_window, "pushButton_30"):
-            self.current_window.pushButton_30.clicked.connect(self.select_file_yucemoxing_output)
-        #执行模型训练
-        if hasattr(self.current_window, "pushButton_31"):
-            self.current_window.pushButton_31.clicked.connect(self.plot_photo_moxingxunlian)
         #------模型预测---------
         #导入模型
         if hasattr(self.current_window, "pushButton_35"):
@@ -415,6 +428,281 @@ class MyWindow:
             print(f"❌ UI加载失败: {loader.errorString()}")
             return None
         return window
+
+    # ---------------- 参数设置模块功能 ---------------- #
+    
+    #----模型训练------
+    #读取造型及技术方案   
+    def select_file_yucemoxing_input(self):
+        file_path, _ = QFileDialog.getOpenFileName(
+        self.current_window,
+        "选择文件",
+        "",
+        "造型及技术方案文件 (*.xlsx);;所有文件 (*.*)"
+        )
+        if file_path and hasattr(self.current_window, "C_1"):
+            self.current_window.C_1.setText(file_path)
+            
+     #导入造型数据库
+    def select_file_yucemoxing_output(self):
+        file_path, _ = QFileDialog.getOpenFileName(
+            self.current_window,
+            "选择文件",
+            "",
+            "车内噪声文件 (*.xlsx);;所有文件 (*.*)"
+        )
+        if file_path and hasattr(self.current_window, "C_2"):
+            self.current_window.C_2.setText(file_path)
+    
+    #执行模型训练 
+    
+    #绘制箱型图
+    def plot_fitness_history(self, best_fitness_history, avg_fitness_history,max_generations):
+        """绘制最佳适应度和平均适应度的折线图，并根据QWidget的尺寸调整图像大小"""
+        
+        # 获取 QWidget 的尺寸
+        plot_widget = self.current_window.findChild(QWidget, "Cwidget_2")
+        if not plot_widget:
+            print("警告: 找不到名为'Cwidget_2'的QWidget")
+            return
+        
+        # 获取 QWidget 的宽度和高度
+        widget_width = plot_widget.width()
+        widget_height = plot_widget.height()
+        
+        # 创建matplotlib图形并调整图像大小以适应 QWidget_1 的尺寸
+        fig, ax = plt.subplots(figsize=(widget_width / 100, widget_height / 100))  # 转换为英寸（1英寸=100像素）
+        ax.plot(range(1, max_generations + 1), best_fitness_history, 'r-', linewidth=2,
+                label='每代最优适应度')
+        ax.plot(range(1, max_generations + 1), avg_fitness_history, 'b--', linewidth=2,
+                label='每代平均适应度')
+        
+        # 设置标题和标签
+        ax.set_title('遗传算法优化过程中的适应度曲线', fontsize=14)
+        ax.set_xlabel('迭代次数', fontsize=14)
+        ax.set_ylabel('适应度值', fontsize=14)
+        ax.legend()
+        
+        # 将图表嵌入到 QWidget_2 中
+        canvas = FigureCanvas(fig)
+        canvas.setParent(plot_widget)
+        canvas.draw()
+
+        # 自动适应 QWidget_1 的大小
+        canvas.setGeometry(plot_widget.rect())  # 根据QWidget_1的大小来设置图像尺寸
+        canvas.setSizePolicy(plot_widget.sizePolicy())
+        layout = plot_widget.layout()
+        if layout is None:
+            layout = QVBoxLayout(plot_widget)  #设置布局管理器
+
+        # 显示图表
+        plot_widget.layout().addWidget(canvas)    
+        
+    def plot_loss_history(self, losses, val_losses):
+        """绘制最佳适应度和平均适应度的折线图，并根据QWidget的尺寸调整图像大小"""
+    
+        # 获取 QWidget 的尺寸
+        plot_widget = self.current_window.findChild(QWidget, "Cwidget_1")
+        if not plot_widget:
+            print("警告: 找不到名为'Cwidget_1'的QWidget")
+            return
+        
+        # 获取 QWidget 的宽度和高度
+        widget_width = plot_widget.width()
+        widget_height = plot_widget.height()
+        
+        # 创建matplotlib图形并调整图像大小以适应 QWidget_1 的尺寸
+        fig, ax = plt.subplots(figsize=(widget_width / 100, widget_height / 100))  # 转换为英寸（1英寸=100像素）
+        ax.plot(range(1, len(losses) + 1), losses, label='训练损失', linewidth=2)
+        ax.plot(range(1, len(val_losses) + 1), val_losses, label='验证损失', linewidth=2)
+        
+        # 设置标题和标签
+        ax.set_title('训练+验证损失曲线', fontsize=14)
+        ax.set_xlabel('轮次', fontsize=14)
+        ax.set_ylabel('损失', fontsize=14)
+        ax.legend()
+        
+        # 将图表嵌入到 QWidget_1 中
+        canvas = FigureCanvas(fig)
+        canvas.setParent(plot_widget)
+        canvas.draw()
+
+        # 自动适应 QWidget_1 的大小
+        canvas.setGeometry(plot_widget.rect())  # 根据QWidget_1的大小来设置图像尺寸
+        canvas.setSizePolicy(plot_widget.sizePolicy())
+        layout = plot_widget.layout()
+        if layout is None:
+            layout = QVBoxLayout(plot_widget)  #设置布局管理器
+
+        # 显示图表
+        plot_widget.layout().addWidget(canvas)
+        
+    def plot_boxplot(self, y_true_denorm, y_pred_denorm):
+        """绘制 losses 和 val_losses 之间差值的箱型图"""
+        
+        # 计算 losses 和 val_losses 之间的差值
+        errors = np.subtract(y_pred_denorm, y_true_denorm )  # 计算差值
+        #定义频率刻度
+        frequencies = [200, 250, 315, 400, 500, 630, 800, 1000, 1250, 1600,
+                   2000, 2500, 3150, 4000, 5000, 6300, 8000]
+        
+        # 获取 QWidget_1 的尺寸
+        plot_widget = self.current_window.findChild(QWidget, "Cwidget_3")
+        if not plot_widget:
+            print("警告: 找不到名为'QWidget_3'的QWidget")
+            return
+        
+        # 获取 QWidget_1 的宽度和高度
+        widget_width = plot_widget.width()
+        widget_height = plot_widget.height()
+        
+        # 创建 matplotlib 图形并调整图像大小以适应 QWidget_1 的尺寸
+        fig, ax = plt.subplots(figsize=(widget_width / 100, widget_height / 100))  # 转换为英寸（1英寸=100像素）
+
+        # 绘制箱型图
+        bp = ax.boxplot(
+            [errors[:, i] for i in range(errors.shape[1])],
+            patch_artist=True,
+            widths=0.6,
+            labels=[f'{f}Hz' for f in frequencies]
+        )
+
+        # 美化颜色
+        for patch in bp['boxes']:
+            patch.set_facecolor('#A0D8EF')       # 浅蓝色填充
+        for whisker in bp['whiskers']:
+            whisker.set_color('#333333')
+        for cap in bp['caps']:
+            cap.set_color('#333333')
+        for median in bp['medians']:
+            median.set_color('#FF4500')          # 中位数用橙红色
+            median.set_linewidth(2)
+        for flier in bp['fliers']:
+            flier.set(marker='o', color='#FF0000', alpha=0.5, markersize=5)
+
+        # 8. 零误差参考线
+        ax.axhline(y=0, color='red', linestyle='--', linewidth=1.5, alpha=0.8, label='零误差线')
+
+        # 9. 坐标轴设置
+        ax.set_xlabel('频率 (Hz)', fontsize=12)
+        ax.set_ylabel('误差（预测值 - 真实值） (dB)', fontsize=12)
+        ax.set_title('各频率点预测误差分布', fontsize=14, pad=15)
+        ax.grid(axis='y', linestyle='--', alpha=0.6)
+        ax.legend(fontsize=11)
+        # 显示图表
+        # 将图表嵌入到 QWidget_1 中
+        canvas = FigureCanvas(fig)
+        canvas.setParent(plot_widget)
+        canvas.draw()
+
+        # 自动适应 QWidget_1 的大小
+        canvas.setGeometry(plot_widget.rect())  # 根据QWidget_1的大小来设置图像尺寸
+        canvas.setSizePolicy(plot_widget.sizePolicy())
+
+        layout = plot_widget.layout()
+        if layout is None:
+            layout = QVBoxLayout(plot_widget)  #设置布局管理器
+        
+        # 显示图表
+        plot_widget.layout().addWidget(canvas)
+    
+    def model_train(self):
+        #处理参数设置
+        try:
+            ga_max_generations = int(self.current_window.C_4.text().strip())
+        except ValueError:
+            QMessageBox.warning(self.current_window, "输入错误", "遗传算法迭代次数必须为数字！")
+        try:
+            ga_pop_size = int(self.current_window.C_3.text().strip())
+        except ValueError:
+            QMessageBox.warning(self.current_window, "输入错误", "遗传算法方案数量必须为数字！")
+            
+        best_fitness_history, avg_fitness_history, losses, val_losses, y_true_denorm, y_pred_denorm = xcepxin_train.model_Train_main(
+             input_file_path=self.current_window.C_1.text().strip(),
+             output_file_path=self.current_window.C_2.text().strip(),
+             ga_max_generations=ga_max_generations,
+             ga_pop_size=ga_pop_size
+        )
+        # # 绘制适应度历史图
+        self.plot_fitness_history(best_fitness_history, avg_fitness_history, ga_max_generations)
+        #绘制损失函数图
+        self.plot_loss_history(losses, val_losses)       
+        #绘制箱型图
+        self.plot_boxplot(y_true_denorm, y_pred_denorm)
+        
+            
+    #绘制训练结果  
+    def plot_photo_moxingxunlian(self):
+        """绘制模型预测结果图"""
+        
+        #从文件夹中提取图像
+        def load_images_to_array(folder_path, image_names):
+            """
+            从指定文件夹读取图像并存储到数组中
+            
+            Args:
+                folder_path (str): 图像文件夹路径
+                image_names (list): 要读取的图像文件名列表（最多4个）
+                
+            Returns:
+                list: 包含QPixmap对象的数组，如果图像不存在则对应位置为None
+            """
+            # 初始化结果数组
+            pixmaps = []
+            
+            # 确保image_names是列表且最多包含4个文件名
+            if not isinstance(image_names, list):
+                raise TypeError("image_names必须是一个列表")
+            
+            # 限制为最多4张图像
+            image_names = image_names[:4]
+            
+            for img_name in image_names:
+                # 构建完整的文件路径
+                img_path = os.path.join(folder_path, img_name)
+                
+                # 检查文件是否存在
+                if os.path.exists(img_path):
+                    # 创建QPixmap对象
+                    pixmap = QPixmap(img_path)
+                    
+                    # 检查图像是否成功加载
+                    if not pixmap.isNull():
+                        pixmaps.append(pixmap)
+                        print(f"✅ 成功加载图像: {img_name}")
+                    else:
+                        pixmaps.append(None)
+                        print(f"❌ 无法加载图像: {img_name}（格式不支持或文件损坏）")
+                else:
+                    pixmaps.append(None)
+                    print(f"❌ 图像文件不存在: {img_name}")
+            
+            return pixmaps
+        folder_name = "绘图\预测模型"
+        folder_path = os.path.join(current_dir, folder_name)
+        image_names = ["损失曲线.png", "适应度曲线.png", "误差箱型图.png"]
+        # 加载图像
+        pixmaps = load_images_to_array(folder_path, image_names)
+        
+        if pixmaps and len(pixmaps) == 3:
+            if hasattr(self.current_window, "label_184"):
+                self.current_window.label_184.setPixmap(pixmaps[0].scaled(
+                    self.current_window.label_184.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+            else:
+                print("❌ label_184 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+            if hasattr(self.current_window, "label_186"):
+                self.current_window.label_186.setPixmap(pixmaps[1].scaled(
+                    self.current_window.label_186.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+            else:
+                print("❌ label_186 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+            if hasattr(self.current_window, "label_188"):
+                self.current_window.label_188.setPixmap(pixmaps[2].scaled(
+                    self.current_window.label_188.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+            else:
+                print("❌ label_188 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
+        else:
+            print("❌ 无法生成目标定义图，请检查数据集文件！") 
+            
 
     # ---------------- 目标定义模块功能 ---------------- #
     #-----基于响度目标定义功能---------
@@ -1200,102 +1488,7 @@ class MyWindow:
             print("❌ 无法进行灵敏度计算，请检查数据集文件！")   
 
     # ---------------- 预测模型模块功能 ---------------- #
-    #----模型训练------
-    #读取造型及技术方案
-    
-    def select_file_yucemoxing_input(self):
-        file_path, _ = QFileDialog.getOpenFileName(
-        self.current_window,
-        "选择文件",
-        "",
-        "造型及技术方案文件 (*.xlsx);;所有文件 (*.*)"
-        )
-        if file_path and hasattr(self.current_window, "lineEdit_119"):
-            self.current_window.lineEdit_119.setText(file_path)
-            
-     #导入造型数据库
-    def select_file_yucemoxing_output(self):
-        file_path, _ = QFileDialog.getOpenFileName(
-            self.current_window,
-            "选择文件",
-            "",
-            "车内噪声文件 (*.xlsx);;所有文件 (*.*)"
-        )
-        if file_path and hasattr(self.current_window, "lineEdit_120"):
-            self.current_window.lineEdit_120.setText(file_path)
-            
-    #绘制训练结果  
-    def plot_photo_moxingxunlian(self):
-        """绘制模型预测结果图"""
-        
-        #从文件夹中提取图像
-        def load_images_to_array(folder_path, image_names):
-            """
-            从指定文件夹读取图像并存储到数组中
-            
-            Args:
-                folder_path (str): 图像文件夹路径
-                image_names (list): 要读取的图像文件名列表（最多4个）
-                
-            Returns:
-                list: 包含QPixmap对象的数组，如果图像不存在则对应位置为None
-            """
-            # 初始化结果数组
-            pixmaps = []
-            
-            # 确保image_names是列表且最多包含4个文件名
-            if not isinstance(image_names, list):
-                raise TypeError("image_names必须是一个列表")
-            
-            # 限制为最多4张图像
-            image_names = image_names[:4]
-            
-            for img_name in image_names:
-                # 构建完整的文件路径
-                img_path = os.path.join(folder_path, img_name)
-                
-                # 检查文件是否存在
-                if os.path.exists(img_path):
-                    # 创建QPixmap对象
-                    pixmap = QPixmap(img_path)
-                    
-                    # 检查图像是否成功加载
-                    if not pixmap.isNull():
-                        pixmaps.append(pixmap)
-                        print(f"✅ 成功加载图像: {img_name}")
-                    else:
-                        pixmaps.append(None)
-                        print(f"❌ 无法加载图像: {img_name}（格式不支持或文件损坏）")
-                else:
-                    pixmaps.append(None)
-                    print(f"❌ 图像文件不存在: {img_name}")
-            
-            return pixmaps
-        folder_name = "绘图\预测模型"
-        folder_path = os.path.join(current_dir, folder_name)
-        image_names = ["损失曲线.png", "适应度曲线.png", "误差箱型图.png"]
-        # 加载图像
-        pixmaps = load_images_to_array(folder_path, image_names)
-        
-        if pixmaps and len(pixmaps) == 3:
-            if hasattr(self.current_window, "label_184"):
-                self.current_window.label_184.setPixmap(pixmaps[0].scaled(
-                    self.current_window.label_184.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
-            else:
-                print("❌ label_184 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
-            if hasattr(self.current_window, "label_186"):
-                self.current_window.label_186.setPixmap(pixmaps[1].scaled(
-                    self.current_window.label_186.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
-            else:
-                print("❌ label_186 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
-            if hasattr(self.current_window, "label_188"):
-                self.current_window.label_188.setPixmap(pixmaps[2].scaled(
-                    self.current_window.label_188.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
-            else:
-                print("❌ label_188 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
-        else:
-            print("❌ 无法生成目标定义图，请检查数据集文件！") 
-            
+
     #----模型预测------
     #加载模型文件
     def select_folder_yucemoxing_model(self):
