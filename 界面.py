@@ -13,11 +13,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from io import BytesIO
 from typing import Tuple
+from openpyxl import Workbook
+from openpyxl import load_workbook
 import re
 import shutil
 import pandas as pd
 import xcepxin_train
 import typing
+from PySide6.QtCore import QSize,QTimer
 
 # 设置 Matplotlib 中文字体，解决中文显示问题
 plt.rcParams['font.sans-serif'] = ['Microsoft YaHei', 'SimSun', 'Arial']  # 优先使用支持中文的字体
@@ -253,6 +256,12 @@ class MyWindow:
             print("⚠️ 警告：login.ui 中未找到 pushButton 组件")
 
         self.current_window.show()
+        
+        #定义用于数据交换所需的全局变量
+        self.model_file = "./缓存/best_model.pth"  # 要移动的模型路径
+        self.histroy_data = "./缓存/histroy_data.xlsx"  # 要移动的历史数据路径
+        # self.model_file = "./bestmodel.pth"  # 要移动的模型路径
+        # self.model_file = "./bestmodel.pth"  # 要移动的模型路径
 
     def switch_to_main_ui(self):
         """切换到主界面 UIzhujiemian.ui"""
@@ -268,7 +277,7 @@ class MyWindow:
             return
 
         # ←←← 新增：主界面加载完毕后，自动加载14张示意图
-        self.load_styling_schematic_images()
+        QTimer.singleShot(100, self.load_styling_schematic_images)
 
         self.current_window.show()
 
@@ -298,8 +307,11 @@ class MyWindow:
             self.current_window.pushButton_36.clicked.connect(self.select_file_yucemoxing_output)
         if hasattr(self.current_window, "CPB_1"):
             self.current_window.CPB_1.clicked.connect(self.model_train)
+        #保存模型
+        if hasattr(self.current_window, "CPB_2"):
+            self.current_window.CPB_2.clicked.connect(self.save_model)
             
-        #------模型预测功能---------
+        #------模型加载功能---------
         # 选择 目标定义数据集
         if hasattr(self.current_window, "pushButton_1"):
             self.current_window.pushButton_1.clicked.connect(self.select_Data_file)
@@ -452,18 +464,16 @@ class MyWindow:
             "车内噪声文件 (*.xlsx);;所有文件 (*.*)"
         )
         if file_path and hasattr(self.current_window, "C_2"):
-            self.current_window.C_2.setText(file_path)
-    
-    #执行模型训练 
-    
+            self.current_window.C_2.setText(file_path)  
+    #执行模型训练    
     #绘制箱型图
-    def plot_fitness_history(self, best_fitness_history, avg_fitness_history,max_generations):
+    def plot_fitness_history(self, best_fitness_history, avg_fitness_history,max_generations,widget_name):
         """绘制最佳适应度和平均适应度的折线图，并根据QWidget的尺寸调整图像大小"""
         
         # 获取 QWidget 的尺寸
-        plot_widget = self.current_window.findChild(QWidget, "Cwidget_2")
+        plot_widget = self.current_window.findChild(QWidget, widget_name)
         if not plot_widget:
-            print("警告: 找不到名为'Cwidget_2'的QWidget")
+            print(f"警告: 找不到名为'{widget_name}'的QWidget")
             return
         
         # 获取 QWidget 的宽度和高度
@@ -498,13 +508,13 @@ class MyWindow:
         # 显示图表
         plot_widget.layout().addWidget(canvas)    
         
-    def plot_loss_history(self, losses, val_losses):
-        """绘制最佳适应度和平均适应度的折线图，并根据QWidget的尺寸调整图像大小"""
+    def plot_loss_history(self, losses, val_losses,widget_name):
+        """绘制损失函数图，并根据QWidget的尺寸调整图像大小"""
     
         # 获取 QWidget 的尺寸
-        plot_widget = self.current_window.findChild(QWidget, "Cwidget_1")
+        plot_widget = self.current_window.findChild(QWidget, widget_name)
         if not plot_widget:
-            print("警告: 找不到名为'Cwidget_1'的QWidget")
+            print(f"警告: 找不到名为'{widget_name}'的QWidget")
             return
         
         # 获取 QWidget 的宽度和高度
@@ -537,19 +547,16 @@ class MyWindow:
         # 显示图表
         plot_widget.layout().addWidget(canvas)
         
-    def plot_boxplot(self, y_true_denorm, y_pred_denorm):
+    def plot_boxplot(self, errors,widget_name):
         """绘制 losses 和 val_losses 之间差值的箱型图"""
-        
-        # 计算 losses 和 val_losses 之间的差值
-        errors = np.subtract(y_pred_denorm, y_true_denorm )  # 计算差值
         #定义频率刻度
         frequencies = [200, 250, 315, 400, 500, 630, 800, 1000, 1250, 1600,
                    2000, 2500, 3150, 4000, 5000, 6300, 8000]
         
         # 获取 QWidget_1 的尺寸
-        plot_widget = self.current_window.findChild(QWidget, "Cwidget_3")
+        plot_widget = self.current_window.findChild(QWidget, widget_name)
         if not plot_widget:
-            print("警告: 找不到名为'QWidget_3'的QWidget")
+            print(f"警告: 找不到名为'{widget_name}'的QWidget")
             return
         
         # 获取 QWidget_1 的宽度和高度
@@ -564,7 +571,7 @@ class MyWindow:
             [errors[:, i] for i in range(errors.shape[1])],
             patch_artist=True,
             widths=0.6,
-            labels=[f'{f}Hz' for f in frequencies]
+            tick_labels=[f'{f}Hz' for f in frequencies]
         )
 
         # 美化颜色
@@ -623,85 +630,132 @@ class MyWindow:
              ga_max_generations=ga_max_generations,
              ga_pop_size=ga_pop_size
         )
-        # # 绘制适应度历史图
-        self.plot_fitness_history(best_fitness_history, avg_fitness_history, ga_max_generations)
+        errors = np.subtract(y_pred_denorm, y_true_denorm )
+        errors_to_list = errors.tolist() if hasattr(errors, 'tolist') else errors
+        # 绘制适应度历史图
+        self.plot_fitness_history(best_fitness_history, avg_fitness_history, ga_max_generations, "Cwidget_1")
         #绘制损失函数图
-        self.plot_loss_history(losses, val_losses)       
+        self.plot_loss_history(losses, val_losses, "Cwidget_2")       
         #绘制箱型图
-        self.plot_boxplot(y_true_denorm, y_pred_denorm)
+        self.plot_boxplot(errors, "Cwidget_3")       
+        #保存过程数据
+        wb = Workbook()
+        # 2. 将过程数据写入sheet
+        ws1 = wb.active
+        ws1.title = "适应度"  # 第一个sheet命名为“适应度”
+        ws1.append(best_fitness_history.tolist() if hasattr(best_fitness_history, 'tolist') else best_fitness_history)
+        ws1.append(avg_fitness_history.tolist() if hasattr(avg_fitness_history, 'tolist') else avg_fitness_history)
+        ws2 = wb.create_sheet(title="损失")
+        ws2.append(losses.tolist() if hasattr(losses, 'tolist') else losses)
+        ws2.append(val_losses.tolist() if hasattr(val_losses, 'tolist') else val_losses)
+        ws3 = wb.create_sheet(title="误差")
+        for row in errors_to_list:
+            ws3.append(row)
+        wb.save("./缓存/histroy_data.xlsx")
+        print("数据已写入多个sheet，文件保存成功！")
         
-            
-    #绘制训练结果  
-    def plot_photo_moxingxunlian(self):
-        """绘制模型预测结果图"""
-        
-        #从文件夹中提取图像
-        def load_images_to_array(folder_path, image_names):
-            """
-            从指定文件夹读取图像并存储到数组中
-            
-            Args:
-                folder_path (str): 图像文件夹路径
-                image_names (list): 要读取的图像文件名列表（最多4个）
-                
-            Returns:
-                list: 包含QPixmap对象的数组，如果图像不存在则对应位置为None
-            """
-            # 初始化结果数组
-            pixmaps = []
-            
-            # 确保image_names是列表且最多包含4个文件名
-            if not isinstance(image_names, list):
-                raise TypeError("image_names必须是一个列表")
-            
-            # 限制为最多4张图像
-            image_names = image_names[:4]
-            
-            for img_name in image_names:
-                # 构建完整的文件路径
-                img_path = os.path.join(folder_path, img_name)
-                
-                # 检查文件是否存在
-                if os.path.exists(img_path):
-                    # 创建QPixmap对象
-                    pixmap = QPixmap(img_path)
-                    
-                    # 检查图像是否成功加载
-                    if not pixmap.isNull():
-                        pixmaps.append(pixmap)
-                        print(f"✅ 成功加载图像: {img_name}")
-                    else:
-                        pixmaps.append(None)
-                        print(f"❌ 无法加载图像: {img_name}（格式不支持或文件损坏）")
-                else:
-                    pixmaps.append(None)
-                    print(f"❌ 图像文件不存在: {img_name}")
-            
-            return pixmaps
-        folder_name = "绘图\预测模型"
-        folder_path = os.path.join(current_dir, folder_name)
-        image_names = ["损失曲线.png", "适应度曲线.png", "误差箱型图.png"]
-        # 加载图像
-        pixmaps = load_images_to_array(folder_path, image_names)
-        
-        if pixmaps and len(pixmaps) == 3:
-            if hasattr(self.current_window, "label_184"):
-                self.current_window.label_184.setPixmap(pixmaps[0].scaled(
-                    self.current_window.label_184.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
-            else:
-                print("❌ label_184 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
-            if hasattr(self.current_window, "label_186"):
-                self.current_window.label_186.setPixmap(pixmaps[1].scaled(
-                    self.current_window.label_186.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
-            else:
-                print("❌ label_186 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
-            if hasattr(self.current_window, "label_188"):
-                self.current_window.label_188.setPixmap(pixmaps[2].scaled(
-                    self.current_window.label_188.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
-            else:
-                print("❌ label_188 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
-        else:
-            print("❌ 无法生成目标定义图，请检查数据集文件！") 
+    #----模型保存------              
+    #保存训练好的模型
+    def save_model(self):
+        """在旋转完成后保存 STL 文件"""
+        if not hasattr(self, "model_train"):
+            print("❌ 尚未进行模型训练，无法保存！")
+            return
+
+        # 弹出文件选择对话框
+        save_path, _ = QFileDialog.getSaveFileName(self.current_window, "保存训练好的模型", "", "文件夹 (*)")
+        try:
+            # 4. 创建新文件夹（exist_ok=False 避免重名）
+            os.makedirs(save_path, exist_ok=False)
+        except FileExistsError:
+            QMessageBox.critical(None, "错误", f"文件夹「{save_path}」已存在！")
+            return
+        except Exception as e:
+            QMessageBox.critical(None, "错误", f"创建文件夹失败：{str(e)}")
+            return
+
+        # 5. 检查要移动的模型是否存在
+        if not os.path.exists(self.model_file):
+            QMessageBox.critical(None, "错误", f"指定文件「{self.model_file}」不存在！")
+            return
+        if not os.path.exists(self.histroy_data):
+            QMessageBox.critical(None, "错误", f"指定文件「{self.histroy_data}」不存在！")
+            return
+        input_file_path=self.current_window.C_1.text().strip()
+        output_file_path=self.current_window.C_2.text().strip()
+
+        # 6. 拼接文件移动后的新路径
+        model_name = os.path.basename(self.model_file) 
+        new_model_path = os.path.join(save_path, model_name) #保存模型
+        data_name = os.path.basename(self.histroy_data)
+        new_data_path = os.path.join(save_path, data_name) #保存历史数据
+        input_name = os.path.basename(input_file_path)
+        new_input_path = os.path.join(save_path, input_name) #保存输入数据
+        output_name = os.path.basename(output_file_path)
+        new_output_path = os.path.join(save_path, output_name) #保存输入数据
+
+        try:
+            # 7. 移动文件到新文件夹
+            shutil.move(self.model_file, new_model_path)
+            shutil.move(self.histroy_data, new_data_path)
+            shutil.move(input_file_path, new_input_path)
+            shutil.move(output_file_path, new_output_path)
+        except Exception as e:
+            QMessageBox.critical(None, "错误", f"移动文件失败：{str(e)}")
+            return
+
+        # 8. 弹窗提示文件保存的路径
+        QMessageBox.information(
+            None, "成功", f"文件已移动至：\n{save_path}"
+        )
+    #-----模型导入功能---------
+    def select_Data_folder_canshushezhi(self):
+        """选择文件夹，自动搜索 .pth、输入数据.xlsx、输出数据.xlsx 并写入相应输入框"""
+        folder_path = QFileDialog.getExistingDirectory(None, "选择包含模型和数据的文件夹")
+        if not folder_path:
+            return
+
+        pth_path = ""
+        input_xlsx_path = ""
+        output_xlsx_path = ""
+
+        for file_name in os.listdir(folder_path):
+            lower_name = file_name.lower()
+            full_path = os.path.join(folder_path, file_name)
+
+            if lower_name.endswith(".pth") and not pth_path:
+                pth_path = full_path
+            elif file_name == "输入数据.xlsx":
+                input_xlsx_path = full_path
+            elif file_name == "输出数据.xlsx":
+                output_xlsx_path = full_path
+            elif file_name == "histroy_data.xlsx":
+                histroy_data = full_path
+
+        if hasattr(self.current_window, "C_5"):
+            self.current_window.C_5.setText(pth_path)
+        if hasattr(self.current_window, "C_6"):
+            self.current_window.C_6.setText(input_xlsx_path)
+        if hasattr(self.current_window, "C_7"):
+            self.current_window.C_7.setText(output_xlsx_path)
+
+        msg = f"📁 已选择文件夹：{folder_path}\n"
+        msg += f"\n模型文件 (.pth)：{pth_path if pth_path else '未找到'}"
+        msg += f"\n输入数据.xlsx：{input_xlsx_path if input_xlsx_path else '未找到'}"
+        msg += f"\n输出数据.xlsx：{output_xlsx_path if output_xlsx_path else '未找到'}"
+        QMessageBox.information(None, "文件检测结果", msg)
+        #解析训练历史数据
+        wb = load_workbook("student_data.xlsx", read_only=False)
+        ws1 = wb["适应度"]
+        best_fitness_history = ws1[0,:]
+        avg_fitness_history = ws1[1,:]
+        ws2 = wb["损失"]
+        losses = ws2[0,:]
+        val_losses = ws2[1,:]
+        ws3 = wb["误差"]
+        errors = ws3
+           
+          
             
 
     # ---------------- 目标定义模块功能 ---------------- #
@@ -1114,75 +1168,92 @@ class MyWindow:
                 print(f"⚠ 未找到控件：{obj_name}（请检查 UIzhujiemianv3.ui）")
 
     # --------造型示意图------------
-    def load_styling_schematic_images(self):
-        """加载14张造型示意图（使用安全的相对路径，兼容直接运行和打包成exe）"""
-        # ────────────────────── 相对路径（推荐写法） ──────────────────────
-        folder_name = "绘图/造型示意图"          # 正斜杠在 Windows 上也完全兼容
-        folder_path = os.path.join(current_dir, folder_name)
+def load_styling_schematic_images(self):
+    """加载14张造型示意图（使用安全的相对路径，兼容直接运行和打包成exe）"""
+    # 正确定义根目录
+    if getattr(sys, 'frozen', False):
+        current_dir = os.path.dirname(sys.executable)
+    else:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
 
-        # 打包后（PyInstaller）路径兼容处理
-        if getattr(sys, 'frozen', False):                     # 被打包成 exe
-            base_path = sys._MEIPASS if hasattr(sys, '_MEIPASS') else os.path.dirname(sys.executable)
-            folder_path = os.path.join(base_path, folder_name)
+    folder_name = "绘图/造型示意图"
+    folder_path = os.path.join(current_dir, folder_name)
 
-        # ────────────────────── 你的14张真实图片文件名（顺序一定要和下面 label 顺序一一对应） ──────────────────────
-        image_names = [
-            "A柱上端X向尺寸.png",
-            "A柱上端Y向尺寸.png",       # 你这里写了两遍相同的，建议改成第二张真正的图名
-            "前风挡上端R角.png",
-            "A柱下端X向尺寸.png",
-            "A柱下端Y向尺寸.png",       # 同上
-            "前风挡下端R角.png",
-            "后视镜X向尺寸.png",
-            "后视镜Y向尺寸.png",
-            "后视镜末端.png",
-            "前轮腔前（后）X向尺寸.png",
-            "后三角窗阶差.png",
-            "顶棚挠度.png",
-            "接近角.png",
-            "离去角.png"
-        ]
+    # 打包后路径兼容
+    if getattr(sys, 'frozen', False):
+        base_path = sys._MEIPASS if hasattr(sys, '_MEIPASS') else current_dir
+        folder_path = os.path.join(base_path, folder_name)
 
-        # ────────────────────── 对应的14个 QLabel objectName（顺序必须严格对应上面的图片） ──────────────────────
-        label_names = [
-            "label_14", "label_21", "label_22", "label_27", "label_28",
-            "label_40", "label_42", "label_51", "label_53", "label_148",
-            "label_61", "label_56", "label_58", "label_59"
-        ]
+    image_names = [
+        "A柱上端X向尺寸.png", "A柱上端Y向尺寸.png", "前风挡上端R角.png",
+        "A柱下端X向尺寸.png", "A柱下端Y向尺寸.png", "前风挡下端R角.png",
+        "后视镜X向尺寸.png", "后视镜Y向尺寸.png", "后视镜末端.png",
+        "前轮腔前（后）X向尺寸.png", "后三角窗阶差.png", "顶棚挠度.png",
+        "接近角.png", "离去角.png"
+    ]
 
-        if len(image_names) != len(label_names):
-            print("错误：图片数量 ≠ label数量！")
-            return
+    label_names = [
+        "label_14", "label_21", "label_22", "label_27", "label_28",
+        "label_40", "label_42", "label_51", "label_53", "label_148",
+        "label_61", "label_56", "label_58", "label_59"
+    ]
 
-        success_count = 0
-        for img_name, label_name in zip(image_names, label_names):
-            img_path = os.path.join(folder_path, img_name)
+    if len(image_names) != len(label_names):
+        print(f"【错误】图片数量({len(image_names)}) ≠ label数量({len(label_names)})")
+        return
 
-            if not os.path.exists(img_path):
-                print(f"警告：图片不存在 → {img_path}")
-                continue
+    success_count = 0
 
-            pixmap = QPixmap(img_path)
-            if pixmap.isNull():
-                print(f"警告：加载失败（可能损坏或格式不支持）→ {img_path}")
-                continue
+    # 打印表头，方便查看
+    print(f"\n{'Label名称':<12} | {'尺寸(WxH)':<12} | {'状态':<8} | {'图片文件'}")
+    print("-" * 80)
 
-            label = self.current_window.findChild(QLabel, label_name)
-            if label:
-                # 推荐设置：保持宽高比 + 平滑缩放 + 居中显示
-                scaled = pixmap.scaled(
-                    label.size(),
-                    Qt.KeepAspectRatio,
-                    Qt.SmoothTransformation
-                )
-                label.setPixmap(scaled)
-                label.setAlignment(Qt.AlignCenter)      # 图片在label里居中
-                success_count += 1
-            else:
-                print(f"警告：UI中找不到 QLabel → {label_name}")
+    for idx, (img_name, label_name) in enumerate(zip(image_names, label_names), 1):
+        img_path = os.path.normpath(os.path.join(folder_path, img_name))
 
-        print(f"造型示意图加载完成：成功显示 {success_count}/14 张")
-        print(f"图片文件夹路径：{folder_path}")
+        # 1. 检查Label是否存在
+        label = self.current_window.findChild(QLabel, label_name)
+        if not label:
+            print(f"{label_name:<12} | {'None':<12} | ❌ 缺失 | {img_name}")
+            continue
+
+        # 2. 【核心修改】在此处获取并打印尺寸
+        w, h = label.width(), label.height()
+
+        # 标记尺寸状态
+        size_str = f"{w}x{h}"
+        # 如果宽或高小于50，通常意味着布局未完成或在隐藏Tab页中，会导致图片缩成点
+        status = "⚠️ 极小" if (w < 50 or h < 50) else "✅ 正常"
+
+        print(f"{label_name:<12} | {size_str:<12} | {status} | {img_name}")
+
+        # 3. 检查文件
+        if not os.path.exists(img_path):
+            print(f"  -> ❌ 图片不存在: {img_path}")
+            continue
+
+        pixmap = QPixmap(img_path)
+        if pixmap.isNull():
+            print(f"  -> ❌ 图片损坏")
+            continue
+
+        # 4. 加载图片
+        # 【建议】如果发现尺寸极小(status是警告)，强行给一个默认尺寸，防止图片不可见
+        target_size = label.size()
+        if w < 50 or h < 50:
+            # 给一个临时默认值，确保图片能看清（例如 400x300）
+            target_size = QSize(699, 536)
+
+        scaled = pixmap.scaled(target_size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        label.setPixmap(scaled)
+        label.setAlignment(Qt.AlignCenter)
+        label.setVisible(True)
+        success_count += 1
+
+    print("-" * 80)
+    print(f"【汇总】造型示意图加载完成：成功显示 {success_count}/14 张")
+    if getattr(sys, 'frozen', False):
+        print(f"【打包】临时目录路径：{sys._MEIPASS if hasattr(sys, '_MEIPASS') else '未知'}")
         
     #------初步判断功能---------
      #导入造型参数值
