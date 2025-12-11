@@ -634,7 +634,7 @@ QGroupBox::title {
                             </font>
                            </property>
                            <property name="text">
-                            <string>输入文件路径：</string>
+                            <string>模型路径:</string>
                            </property>
                           </widget>
                          </item>
@@ -669,7 +669,7 @@ QGroupBox::title {
                             </font>
                            </property>
                            <property name="text">
-                            <string>输入文件路径：</string>
+                            <string>造型+技术方案数据集路径：</string>
                            </property>
                           </widget>
                          </item>
@@ -701,7 +701,7 @@ QGroupBox::title {
                             </font>
                            </property>
                            <property name="text">
-                            <string>输入文件路径：</string>
+                            <string>噪声数据集：</string>
                            </property>
                           </widget>
                          </item>
@@ -19953,7 +19953,7 @@ QGroupBox::title {
   </layout>
  </widget>
  <resources>
-  <include location="res.qrc"/>
+  <include location="../../python第一课/UI/res.qrc"/>
  </resources>
  <connections/>
 </ui>
