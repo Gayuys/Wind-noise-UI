@@ -736,13 +736,27 @@ class MyWindow:
                 output_xlsx_path = full_path
             elif file_name == "histroy_data.xlsx":
                 histroy_data = full_path
-
+        #参数设置界面文件路径展示
         if hasattr(self.current_window, "C_5"):
             self.current_window.C_5.setText(pth_path)
         if hasattr(self.current_window, "C_6"):
             self.current_window.C_6.setText(input_xlsx_path)
         if hasattr(self.current_window, "C_7"):
             self.current_window.C_7.setText(output_xlsx_path)
+        #目标定义界面文件路径展示
+        if hasattr(self.current_window, "M_2"):
+            self.current_window.M_2.setText(pth_path)
+        #灵敏度分析界面文件路径展示
+        if hasattr(self.current_window, "ZL_1"):
+            self.current_window.ZL_1.setText(pth_path)
+        #模型预测界面文件路径展示
+        if hasattr(self.current_window, "Y_1"):
+            self.current_window.Y_1.setText(pth_path)
+        #造型优化界面文件路径展示
+        if hasattr(self.current_window, "ZJP_1"):
+            self.current_window.ZJP_1.setText(pth_path) #基于具体频段优化
+        if hasattr(self.current_window, "ZJX_1"):
+            self.current_window.ZJX_1.setText(pth_path) #基于具体频段优化
 
         msg = f"📁 已选择文件夹：{folder_path}\n"
         msg += f"\n模型文件 (.pth)：{pth_path if pth_path else '未找到'}"
