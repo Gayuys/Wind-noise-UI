@@ -173,10 +173,10 @@ def plot_error_boxplot(y_true, y_pred, save_dir=RESULT_DIR):
     plt.tight_layout()  # 自动调整布局，防止标签被截断
 
     # 保存图片
-    os.makedirs(save_dir, exist_ok=True)
-    plt.savefig(f'{save_dir}/test_error_boxplot.png', dpi=300, bbox_inches='tight')
-    plt.close()
-    print(f"测试集预测误差箱型图已保存到 {save_dir}/test_error_boxplot.png")
+    # os.makedirs(save_dir, exist_ok=True)
+    # plt.savefig(f'{save_dir}/test_error_boxplot.png', dpi=300, bbox_inches='tight')
+    # plt.close()
+    # print(f"测试集预测误差箱型图已保存到 {save_dir}/test_error_boxplot.png")
 
 
 # -------------------------- 3. 遗传算法超参数优化核心模块（保持不变） --------------------------
@@ -383,32 +383,6 @@ def genetic_algorithm_hpo(
         # 更新种群
         population = np.array(new_population[:pop_size])
 
-    # # 绘制遗传算法适应度曲线
-    # os.makedirs(save_dir, exist_ok=True)
-    # plt.figure(figsize=(10, 6))
-
-    # # 设置中文字体支持
-    # plt.rcParams["font.family"] = ["SimHei"]
-    # plt.rcParams["axes.unicode_minus"] = False  # 解决负号显示问题
-
-    # plt.plot(range(1, max_generations + 1), best_fitness_history, 'r-', linewidth=2,
-    #          label='每代最优适应度')
-    # plt.plot(range(1, max_generations + 1), avg_fitness_history, 'b--', linewidth=2,
-    #          label='每代平均适应度')
-    # plt.xlabel('迭代代数', fontsize=14)
-    # plt.ylabel('适应度值', fontsize=14)
-    # plt.title('遗传算法优化过程中的适应度曲线', fontsize=16)
-    # plt.legend(fontsize=12)
-    # plt.grid(True, alpha=0.3)
-    # plt.tick_params(axis='both', labelsize=12)
-    # plt.savefig(f'{save_dir}/ga_fitness_curve.png', dpi=300, bbox_inches='tight')
-    # plt.close()
-    # print(f"遗传算法适应度曲线已保存到 {save_dir}/ga_fitness_curve.png")
-
-    # # 输出优化结果
-    # print(f"\n=== 超参数优化完成 ===")
-    # print(f"最优超参数: {best_hparams}")
-    # print(f"最优验证集损失: {best_val_loss:.4f}")
     return best_hparams, best_fitness_history, avg_fitness_history #输出最优参数、每代最优适应度、每代平均适应度
 
 
@@ -463,21 +437,6 @@ def train_model(model, dataloader, val_dataloader, criterion, optimizer,
         if counter >= patience:
             print(f"早停：在 {epoch + 1} 轮未改善")
             break
-
-    # 绘制训练+验证损失曲线
-    # plt.figure(figsize=(10, 5))
-    # plt.plot(range(1, len(losses) + 1), losses, label='Training Loss', linewidth=2)
-    # plt.plot(range(1, len(val_losses) + 1), val_losses, label='Validation Loss', linewidth=2)
-    # plt.xlabel('Epoch', fontsize=24)
-    # plt.ylabel('Loss', fontsize=24)
-    # plt.title('Training & Validation Loss Curve', fontsize=24)
-    # plt.legend(fontsize=24)
-    # plt.grid(True)
-    # plt.tick_params(axis='both', labelsize=20)
-    # plt.savefig(f'{save_dir}/train_val_loss.png', dpi=300, bbox_inches='tight')
-    # plt.close()
-    # print(f"训练+验证损失曲线已保存到 {save_dir}/train_val_loss.png")
-
     return model, losses, val_losses
 
 
@@ -589,12 +548,12 @@ def model_Train_main(
     print(f"测试集RMSE（dB）: {rmse:.2f}")
     print(f"测试集R²: {r2:.4f}")
 
-    # 绘制测试集预测误差箱型图（横坐标为频率值）
-    plot_error_boxplot(
-        y_true_denorm,
-        y_pred_denorm,
-        save_dir=RESULT_DIR
-    )
+    # # 绘制测试集预测误差箱型图（横坐标为频率值）
+    # plot_error_boxplot(
+    #     y_true_denorm,
+    #     y_pred_denorm,
+    #     save_dir=RESULT_DIR
+    # )
 
     return best_fitness_history, avg_fitness_history, losses, val_losses, y_true_denorm, y_pred_denorm
 

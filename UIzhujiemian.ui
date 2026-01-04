@@ -63,7 +63,7 @@
       <enum>QTabWidget::TabShape::Triangular</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab_30">
       <property name="styleSheet">
@@ -6721,7 +6721,7 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>83</width>
+                             <width>88</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -6821,7 +6821,7 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>83</width>
+                             <width>88</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -7349,7 +7349,7 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>83</width>
+                             <width>88</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -7449,7 +7449,7 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>83</width>
+                             <width>88</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -7971,7 +7971,7 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>83</width>
+                             <width>88</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -8055,7 +8055,7 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>83</width>
+                             <width>88</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -8655,7 +8655,7 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>83</width>
+                             <width>88</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -8759,7 +8759,7 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>83</width>
+                             <width>88</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -9390,7 +9390,7 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>83</width>
+                             <width>88</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -9508,7 +9508,7 @@ border-image: url(:/imgs/imgs/屏幕截图 2025-11-07 143348.png);</string>
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>83</width>
+                             <width>88</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -15400,93 +15400,93 @@ QPushButton:hover {
                             </property>
                             <item>
                              <property name="text">
-                              <string>200</string>
+                              <string>200Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>250</string>
+                              <string>250Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>315</string>
+                              <string>315Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>400</string>
+                              <string>400Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>500</string>
+                              <string>500Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>630</string>
+                              <string>630Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>800</string>
+                              <string>800Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>1000</string>
+                              <string>1000Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>1250</string>
+                              <string>1250Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>1600</string>
+                              <string>1600Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>2000</string>
+                              <string>2000Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>2500</string>
+                              <string>2500Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>3150</string>
+                              <string>3150Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>4000</string>
+                              <string>4000Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>5000</string>
+                              <string>5000Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>6300</string>
+                              <string>6300Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>8000</string>
+                              <string>8000Hz</string>
                              </property>
                             </item>
                            </widget>
                           </item>
                           <item>
-                           <widget class="QComboBox" name="ZLCB2">
+                           <widget class="QComboBox" name="ZLCB_2">
                             <property name="font">
                              <font>
                               <pointsize>16</pointsize>
@@ -15502,87 +15502,87 @@ QPushButton:hover {
                             </property>
                             <item>
                              <property name="text">
-                              <string>200</string>
+                              <string>200Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>250</string>
+                              <string>250Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>315</string>
+                              <string>315Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>400</string>
+                              <string>400Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>500</string>
+                              <string>500Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>630</string>
+                              <string>630Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>800</string>
+                              <string>800Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>1000</string>
+                              <string>1000Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>1250</string>
+                              <string>1250Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>1600</string>
+                              <string>1600Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>2000</string>
+                              <string>2000Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>2500</string>
+                              <string>2500Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>3150</string>
+                              <string>3150Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>4000</string>
+                              <string>4000Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>5000</string>
+                              <string>5000Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>6300</string>
+                              <string>6300Hz</string>
                              </property>
                             </item>
                             <item>
                              <property name="text">
-                              <string>8000</string>
+                              <string>8000Hz</string>
                              </property>
                             </item>
                            </widget>
