@@ -9,6 +9,7 @@ from PySide6.QtCore import Qt
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 import trimesh
+import seaborn as sns
 import numpy as np
 import matplotlib.pyplot as plt
 from io import BytesIO
@@ -18,9 +19,11 @@ from openpyxl import load_workbook
 import re
 import shutil
 import pandas as pd
-import xcepxin_train
 import typing
 from PySide6.QtCore import QSize,QTimer
+#相关程序导入
+import xcepxin_train
+import MIV_calculate
 
 # 设置 Matplotlib 中文字体，解决中文显示问题
 plt.rcParams['font.sans-serif'] = ['Microsoft YaHei', 'SimSun', 'Arial']  # 优先使用支持中文的字体
@@ -260,6 +263,11 @@ class MyWindow:
         #定义用于数据交换所需的全局变量
         self.model_file = "./缓存/best_model.pth"  # 要移动的模型路径
         self.histroy_data = "./缓存/histroy_data.xlsx"  # 要移动的历史数据路径
+        self.input_file_path = None
+        self.output_file_path = None
+        self.Characteristic_name = "./data/灵敏度分析特征.xlsx"
+        self.all_characteristic = "./data/造型优化特征.xlsx"
+        self.huancun = "./缓存"
         # self.model_file = "./bestmodel.pth"  # 要移动的模型路径
         # self.model_file = "./bestmodel.pth"  # 要移动的模型路径
 
@@ -291,7 +299,7 @@ class MyWindow:
         else:
             QMessageBox.warning(self.current_window, "登录失败", "账号或密码错误，请重新输入！")
             return False
-
+    #绑定登录按钮点击事件
     def handle_login_button(self):
         """点击登录按钮后执行登录验证并跳转主界面"""
         if self.check_login_valid():
@@ -384,14 +392,17 @@ class MyWindow:
            
         #------灵敏度分析功能---------
         #点击导入模型及数据集
-        if hasattr(self.current_window, "pushButton_33"):
-            self.current_window.pushButton_33.clicked.connect(self.select_folder_lingmingdu)
+        if hasattr(self.current_window, "ZLPB_1"):
+            self.current_window.ZLPB_1.clicked.connect(self.select_folder_lingmingdu)
         #点击导入数据
-        if hasattr(self.current_window, "pushButton_51"):
-            self.current_window.pushButton_51.clicked.connect(self.select_lingmingduData_file)
+        if hasattr(self.current_window, "ZLPB_2"):
+            self.current_window.ZLPB_2.clicked.connect(self.select_lingmingduData_file)
         #点击进行灵敏度分析
-        if hasattr(self.current_window, "pushButton_52"):
-            self.current_window.pushButton_52.clicked.connect(self.plot_photo_lingmingdu)
+        if hasattr(self.current_window, "ZLPB_3"):
+            self.current_window.ZLPB_3.clicked.connect(self.MIV_Analysis)
+        #结果保存
+        if hasattr(self.current_window, "ZLPB_4"):
+            self.current_window.ZLPB_4.clicked.connect(self.save_results)
 
         # ---------------- 预测模型模块功能按钮 ---------------- #
         #------模型预测---------
@@ -662,7 +673,7 @@ class MyWindow:
     #----模型保存------              
     #保存训练好的模型
     def save_model(self):
-        """在旋转完成后保存 STL 文件"""
+        """在训练完成后保存训练结果文件"""
         if not hasattr(self, "model_train"):
             print("❌ 尚未进行模型训练，无法保存！")
             return
@@ -713,6 +724,7 @@ class MyWindow:
         QMessageBox.information(
             None, "成功", f"文件已移动至：\n{save_path}"
         )
+    
     #-----模型导入功能---------
     def select_Data_folder_canshushezhi(self):
         """选择文件夹，自动搜索 .pth、输入数据.xlsx、输出数据.xlsx 并写入相应输入框"""
@@ -732,8 +744,10 @@ class MyWindow:
                 pth_path = full_path
             elif file_name == "输入数据.xlsx":
                 input_xlsx_path = full_path
+                self.input_file_path = input_xlsx_path
             elif file_name == "输出数据.xlsx":
                 output_xlsx_path = full_path
+                self.output_file_path = output_xlsx_path
             elif file_name == "histroy_data.xlsx":
                 histroy_data = full_path
         #参数设置界面文件路径展示
@@ -783,10 +797,7 @@ class MyWindow:
         self.plot_fitness_history(best_fitness_history, avg_fitness_history, ga_max_generations, "Cwidget_5") 
         #绘制箱型图
         self.plot_boxplot(errors, "Cwidget_6") 
-           
-          
-            
-
+        
     # ---------------- 目标定义模块功能 ---------------- #
     #-----基于响度目标定义功能---------
     def select_Data_folder_xingdudingyi(self):
@@ -824,6 +835,7 @@ class MyWindow:
         msg += f"\n输出数据.xlsx：{output_xlsx_path if output_xlsx_path else '未找到'}"
         QMessageBox.information(None, "文件检测结果", msg)
         #结果导入
+    
     def plot_xingdudingyi_data(self):
         """计算评价及写入"""
 
@@ -872,8 +884,7 @@ class MyWindow:
 
         except Exception as e:
             QMessageBox.critical(self.current_window, "错误", f"运行出错：\n{e}")
-    
-      
+        
     #-----基于噪声曲线目标定义功能---------
     def select_Data_file(self):
         file_path, _ = QFileDialog.getOpenFileName(
@@ -957,11 +968,7 @@ class MyWindow:
         else:
             print("❌ 无法生成目标定义图，请检查数据集文件！")
         
-
-        
-
-    # ---------------- 造型评估模块功能 ---------------- #
-    
+    # ---------------- 造型评估模块功能 ---------------- #  
     # ----- STL文件预处理 -----
     def select_file(self):
         file_path, _ = QFileDialog.getOpenFileName(
@@ -1295,6 +1302,7 @@ class MyWindow:
             self.current_window.lineEdit_8.setText(file_path)
             
      #导入造型数据库
+    
     def select_chubupanduan_zaoxingtuijian_file(self):
         file_path, _ = QFileDialog.getOpenFileName(
             self.current_window,
@@ -1429,11 +1437,8 @@ class MyWindow:
         except Exception as e:
             QMessageBox.critical(self.current_window, "错误", f"运行出错：\n{e}")
 
-
-
     #--------灵敏度分析功能------------
     def select_folder_lingmingdu(self):
-        """选择文件夹，自动搜索 .pth、输入数据.xlsx、输出数据.xlsx 并写入相应输入框"""
         """选择文件夹，自动搜索 .pth、输入数据.xlsx、输出数据.xlsx 并写入相应输入框"""
         folder_path = QFileDialog.getExistingDirectory(None, "选择包含模型和数据的文件夹")
         if not folder_path:
@@ -1451,15 +1456,14 @@ class MyWindow:
                 pth_path = full_path
             elif file_name == "输入数据.xlsx":
                 input_xlsx_path = full_path
+                self.input_file_path = input_xlsx_path
+
             elif file_name == "输出数据.xlsx":
                 output_xlsx_path = full_path
+                self.output_file_path = output_xlsx_path
 
-        if hasattr(self.current_window, "lineEdit_136"):
-            self.current_window.lineEdit_136.setText(pth_path)
-        # if hasattr(self.current_window, "lineEdit_137"):
-        #     self.current_window.lineEdit_137.setText(input_xlsx_path)
-        # if hasattr(self.current_window, "lineEdit_115"):
-        #     self.current_window.lineEdit_115.setText(output_xlsx_path)
+        if hasattr(self.current_window, "ZL_1"):
+            self.current_window.ZL_1.setText(pth_path)
 
         msg = f"📁 已选择文件夹：{folder_path}\n"
         msg += f"\n模型文件 (.pth)：{pth_path if pth_path else '未找到'}"
@@ -1474,116 +1478,470 @@ class MyWindow:
             "",
             "数据集 (*.xlsx);;所有文件 (*.*)"
         )
-        if file_path and hasattr(self.current_window, "lineEdit_116"):
-            self.current_window.lineEdit_116.setText(file_path)
-            
-    def plot_photo_lingmingdu(self):
-        """绘制目标定义结果图"""
-        #从输入框中获取图像名称
-        def parse_coordinate_string(text):
-            """
-            将格式为"(200,300)"的文本解析成包含两个数字的数组
-            
-            Args:
-                text (str): 输入的坐标字符串，格式为"(数字1,数字2)"
-                
-            Returns:
-                list: 包含两个整数的列表 [数字1, 数字2]
-                
-            Raises:
-                ValueError: 当输入格式不正确或无法转换为数字时
-            """
-            try:
-                # 移除括号并去除前后空白字符
-                clean_text = text.strip('() ')
-                
-                # 以逗号为分隔符分割字符串
-                parts = clean_text.split(',')
-                
-                # 确保只有两个部分
-                if len(parts) != 2:
-                    raise ValueError("输入格式不正确，应为'(数字1,数字2)'格式")
-                
-                # 去除每个部分的空白字符并转换为整数
-                num1 = int(parts[0].strip())
-                num2 = int(parts[1].strip())
-                
-                # 返回包含两个数字的列表
-                return [num1, num2]
-            except Exception as e:
-                # 如果解析失败，抛出详细的错误信息
-                raise ValueError(f"无法解析输入字符串: {e}")
-        #从文件夹中提取图像
-        def load_images_to_array(folder_path, image_names):
-            """
-            从指定文件夹读取图像并存储到数组中
-            
-            Args:
-                folder_path (str): 图像文件夹路径
-                image_names (list): 要读取的图像文件名列表（最多4个）
-                
-            Returns:
-                list: 包含QPixmap对象的数组，如果图像不存在则对应位置为None
-            """
-            # 初始化结果数组
-            pixmaps = []
-            
-            # 确保image_names是列表且最多包含4个文件名
-            if not isinstance(image_names, list):
-                raise TypeError("image_names必须是一个列表")
-            
-            # 限制为最多4张图像
-            image_names = image_names[:18]
-            
-            for img_name in image_names:
-                # 构建完整的文件路径
-                img_path = os.path.join(folder_path, img_name)
-                
-                # 检查文件是否存在
-                if os.path.exists(img_path):
-                    # 创建QPixmap对象
-                    pixmap = QPixmap(img_path)
-                    
-                    # 检查图像是否成功加载
-                    if not pixmap.isNull():
-                        pixmaps.append(pixmap)
-                        print(f"✅ 成功加载图像: {img_name}")
-                    else:
-                        pixmaps.append(None)
-                        print(f"❌ 无法加载图像: {img_name}（格式不支持或文件损坏）")
-                else:
-                    pixmaps.append(None)
-                    print(f"❌ 图像文件不存在: {img_name}")
-            
-            return pixmaps
-        folder_name = "绘图\灵敏度结果"
-        folder_path = os.path.join(current_dir, folder_name)
-        image_names = ["全频段.png", "200Hz.png", "250Hz.png", "315Hz.png", "400Hz.png", "500Hz.png", "630Hz.png", 
-                       "800Hz.png", "1000Hz.png", "1250Hz.png", "1600Hz.png", "2000Hz.png", "2500Hz.png", "3150Hz.png",
-                       "4000Hz.png", "5000Hz.png", "6300Hz.png", "8000Hz.png"]
-        # 加载图像
-        pixmaps = load_images_to_array(folder_path, image_names)
-        photo_name = self.current_window.lineEdit_4.text().strip() if hasattr(self.current_window, "lineEdit_4") else "" #获取文本
-        fre_range = parse_coordinate_string(photo_name) #转换为数字
-              
-        if pixmaps and len(pixmaps) == 18:
-            if fre_range[0] == fre_range[1]:
-                target_filename = f"{fre_range[0]}Hz.png"
-                try:
-                    position = image_names.index(target_filename)                  
-                except ValueError:
-                    print(f"{target_filename} 超出计算范围")
- 
-                if hasattr(self.current_window, "label_166"):
-                    self.current_window.label_166.setPixmap(pixmaps[position].scaled(
-                        self.current_window.label_166.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
-            else:
-                if hasattr(self.current_window, "label_166"):
-                    self.current_window.label_166.setPixmap(pixmaps[0].scaled(
-                        self.current_window.label_166.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))               
+        if file_path and hasattr(self.current_window, "ZL_2"):
+            self.current_window.ZL_2.setText(file_path)
 
+    def MIV_Analysis(self):
+        """执行灵敏度分析"""
+        def plot_sensitivityonly(miv1, Characteristic_name, y_label, title, widget_name, save_path=None):
+            """
+            在指定的UI QWidget中绘制灵敏度热力图（heatmap），Y轴显示频率标签，四组数据位于对应位置。
+            支持动态适应widget尺寸，并可选保存图像。
+            """
+            #读取技术方案名称
+            file_path = Characteristic_name #获取技术方案名称
+            data = pd.read_excel(file_path, header=0)  # 第一行作为列名
+            label = data.columns.tolist()
+            # 数据处理
+            miv = miv1.T
+            
+            corr_df = pd.DataFrame(miv, index=y_label, columns=label)  # 创建DataFrame用于绘图
+            corr_df_reversed = corr_df[::-1]  # 数据取反，使频率从小到大排序（从下到上）
+            
+            # 获取指定的QWidget
+            plot_widget = self.current_window.findChild(QWidget, widget_name)
+            if not plot_widget:
+                print(f"警告: 找不到名为'{widget_name}'的QWidget")
+                return
+            
+            # 获取widget的宽度和高度（单位：像素）
+            widget_width = plot_widget.width()
+            widget_height = plot_widget.height()
+            
+            # 创建matplotlib图形，尺寸转换为英寸（大致1英寸 ≈ 100 dpi）
+            fig, ax = plt.subplots(figsize=(widget_width / 100, widget_height / 100))
+            
+            # 设置中文字体支持
+            plt.rcParams['font.sans-serif'] = ['SimHei']
+            plt.rcParams['axes.unicode_minus'] = False
+            
+            # 绘制热力图
+            sns.heatmap(corr_df_reversed, 
+                        annot=True,                     # 显示数值
+                        cmap='coolwarm',                # 红蓝配色
+                        vmin=np.min(miv), 
+                        vmax=np.max(miv), 
+                        center=(np.min(miv) + np.max(miv)) / 2,
+                        fmt='.2f',                      # 保留2位小数
+                        annot_kws={'size': 8},          # 数值字体大小
+                        ax=ax,                          # 指定axes
+                        cbar_kws={"shrink": 0.8})       # 颜色条调整
+            
+            # 设置标题和轴标签
+            ax.set_title(title, fontsize=14, pad=15)
+            ax.set_xlabel('造型特征+技术方案', fontsize=12)
+            ax.set_ylabel('频率', fontsize=12)
+            
+            # 旋转x轴标签，避免重叠
+            plt.setp(ax.get_xticklabels(), rotation=45, ha='right', rotation_mode='anchor')
+            ax.tick_params(axis='x', which='major', pad=5)
+            
+            # 布局调整
+            plt.tight_layout()
+            
+            # 将图表嵌入到QWidget中
+            canvas = FigureCanvas(fig)
+            canvas.setParent(plot_widget)
+            canvas.draw()
+            
+            # 适应widget大小
+            canvas.setGeometry(plot_widget.rect())
+            canvas.setSizePolicy(plot_widget.sizePolicy())
+            
+            # 添加到布局（如果尚未有布局，则创建）
+            layout = plot_widget.layout()
+            if layout is None:
+                layout = QVBoxLayout(plot_widget)
+            
+            # 清除可能已存在的旧canvas（避免重复叠加）
+            for i in reversed(range(layout.count())):
+                old_widget = layout.itemAt(i).widget()
+                if isinstance(old_widget, FigureCanvas):
+                    old_widget.deleteLater()
+            
+            layout.addWidget(canvas)
+            
+            # 可选：保存图像到文件
+            if save_path:
+                save_pathnew = os.path.join(save_path, f'风噪灵敏度分析结果.png')
+                fig.savefig(save_pathnew, dpi=300, bbox_inches='tight')
+            
+            # 注意：不需要调用plt.show()或plt.close()，因为嵌入到Qt中由canvas管理
+        def plot_sensitivity(miv1, miv2, Characteristic_name, title, widget_name, save_path=None):
+            """
+            在指定的UI QWidget中绘制灵敏度热力图（heatmap），Y轴显示频率标签，四组数据位于对应位置。
+            支持动态适应widget尺寸，并可选保存图像。
+            """
+        #读取技术方案名称
+            file_path = Characteristic_name #获取技术方案名称
+            data = pd.read_excel(file_path, header=0)  # 第一行作为列名
+            label = data.columns.tolist()
+        # 数据处理
+            miv1 = miv1.T
+            miv2 = miv2.T
+
+            miv = np.vstack([miv1, miv2]) #将列向量转为行向量堆叠
+            
+            y_positions = ['+10%', '-10%'] #增加值的方向
+            
+            corr_df = pd.DataFrame(miv, index=y_positions, columns=label) # 创建DataFrame用于绘图
+    
+            # 获取指定的QWidget
+            plot_widget = self.current_window.findChild(QWidget, widget_name)
+            if not plot_widget:
+                print(f"警告: 找不到名为'{widget_name}'的QWidget")
+                return
+            
+            # 获取widget的宽度和高度（单位：像素）
+            widget_width = plot_widget.width()
+            widget_height = plot_widget.height()
+            
+            # 创建matplotlib图形，尺寸转换为英寸（大致1英寸 ≈ 100 dpi）
+            fig, ax = plt.subplots(figsize=(widget_width / 100, widget_height / 100))
+            
+            # 设置中文字体支持
+            plt.rcParams['font.sans-serif'] = ['SimHei']
+            plt.rcParams['axes.unicode_minus'] = False
+            
+            # 绘制热力图
+            sns.heatmap(corr_df, 
+                        annot=True,                     # 显示数值
+                        cmap='coolwarm',                # 红蓝配色
+                        vmin=np.min(miv), 
+                        vmax=np.max(miv), 
+                        center=(np.min(miv) + np.max(miv)) / 2,
+                        fmt='.2f',                      # 保留2位小数
+                        annot_kws={'size': 8},          # 数值字体大小
+                        ax=ax,                          # 指定axes
+                        cbar_kws={"shrink": 0.8})       # 颜色条调整
+            
+            # 设置标题和轴标签
+            ax.set_title(title, fontsize=14, pad=15)
+            ax.set_xlabel('造型特征+技术方案', fontsize=12)
+            ax.set_ylabel('变化范围', fontsize=12)
+            
+            # 旋转x轴标签，避免重叠
+            plt.setp(ax.get_xticklabels(), rotation=45, ha='right', rotation_mode='anchor')
+            ax.tick_params(axis='x', which='major', pad=5)
+            
+            # 布局调整
+            plt.tight_layout()
+            
+            # 将图表嵌入到QWidget中
+            canvas = FigureCanvas(fig)
+            canvas.setParent(plot_widget)
+            canvas.draw()
+            
+            # 适应widget大小
+            canvas.setGeometry(plot_widget.rect())
+            canvas.setSizePolicy(plot_widget.sizePolicy())
+            
+            # 添加到布局（如果尚未有布局，则创建）
+            layout = plot_widget.layout()
+            if layout is None:
+                layout = QVBoxLayout(plot_widget)
+            
+            # 清除可能已存在的旧canvas（避免重复叠加）
+            for i in reversed(range(layout.count())):
+                old_widget = layout.itemAt(i).widget()
+                if isinstance(old_widget, FigureCanvas):
+                    old_widget.deleteLater()
+            
+            layout.addWidget(canvas)
+            
+            # 可选：保存图像到文件
+            if save_path:
+                save_pathnew = os.path.join(save_path, f'风噪灵敏度分析结果.png')
+                fig.savefig(save_pathnew, dpi=300, bbox_inches='tight')
+            
+            # 注意：不需要调用plt.show()或plt.close()，因为嵌入到Qt中由canvas管理  
+        #输出优化方案
+        def sum_and_rank_params_from_heatmap(MIV, param_labels, freq_labels, save_path):
+            """
+            基于全频段热力图数据，计算每个参数对应的17个频点MIV数据之和，按从大到小排序取前十
+            :param MIV: 灵敏度矩阵（形状：参数数×17频点）
+            :param param_labels: 参数名称列表（对应热力图的列）
+            :param freq_labels: 频点名称列表（对应热力图的行）
+            :param save_path: 结果保存路径
+            """
+            # 1. 构建与热力图一致的DataFrame（参数×频点）
+            # 截断参数名称，确保与MIV行数一致
+            heatmap_df = pd.DataFrame(MIV,
+                                    index=param_labels[:MIV.shape[0]],  # 防止参数名称数量与MIV行数不匹配
+                                    columns=freq_labels)  # 列：频点（对应热力图的行）
+
+            # 2. 计算每个参数的17个频点MIV数据之和（对每个参数行求和）
+            param_total = heatmap_df.sum(axis=1)  # axis=1：对行求和（每个参数的17个频点）
+
+            # 3. 组合参数名称与对应总和（列名保持一致）
+            param_sum_df = pd.DataFrame({
+                "参数名称": param_total.index,
+                "17频点MIV总和（上调-下调噪声差值绝对值之和）": param_total.values  # 统一列名
+            })
+
+            # 4. 按总和【从大到小】排序，取前十名（列名与上面一致，修复KeyError）
+            param_sum_sorted = param_sum_df.sort_values(
+                by="17频点MIV总和（上调-下调噪声差值绝对值之和）",
+                ascending=False  # 改为False，实现从大到小排序
+            ).head(10)
+
+            # 5. 打印结果
+            print("=" * 80)
+            print("全频段热力图-每个参数17个频点MIV总和（从大到小排序，取前十）")
+            print("=" * 80)
+            print(param_sum_sorted)
+            print("=" * 80)
+
+            # 6. 保存到Excel（增加目录创建和异常捕获）
+            os.makedirs(os.path.dirname(save_path), exist_ok=True)
+            try:
+                with pd.ExcelWriter(save_path, engine='openpyxl') as writer:
+                    param_sum_sorted.to_excel(writer, index=False)
+                print(f"✅ 参数MIV总和排序结果已保存到：{save_path}")
+            except PermissionError:
+                print(f"❌ 权限错误：无法写入 {save_path}，请关闭该文件后重试")
+            except Exception as e:
+                print(f"❌ 保存失败：{str(e)}")
+
+            return param_sum_sorted
+        def match_params_and_fill_min_max(top10_params_path,
+                                    source_data_path,
+                                    optimize_data_path,
+                                    param_name_path):
+            """
+            1. 读取前十参数列表
+            2. 匹配参数对应的序号
+            3. 从源数据中提取对应序号的最小值和最大值（保留两位小数）
+            4. 直接覆盖回填到原需要优化的造型数据Excel中
+            :param top10_params_path: 前十参数保存路径
+            :param source_data_path: 源数据文件（处理后有噪声扩充造型数据...xlsx）
+            :param optimize_data_path: 需要优化的造型数据文件路径（直接覆盖此文件）
+            :param param_name_path: 造型特征+技术方案名称文件路径
+            """
+            # 1. 读取各文件（增加异常捕获）
+            try:
+                # 读取前十参数
+                top10_df = pd.read_excel(top10_params_path)
+                top10_param_names = top10_df["参数名称"].tolist()
+                print(f"\n读取到前十参数：{top10_param_names}")
+
+                # 读取参数名称列表（获取参数序号）
+                param_name_df = pd.read_excel(param_name_path, header=0)
+                all_param_names = param_name_df.columns.tolist()
+                print(f"总参数数量：{len(all_param_names)}")
+
+                # 读取源数据（提取最值）
+                source_df = pd.read_excel(source_data_path, header=0)
+                source_cols = source_df.columns.tolist()
+                print(f"源数据列数量：{len(source_cols)}")
+
+                # 读取需要优化的造型数据（原文件）
+                optimize_df = pd.read_excel(optimize_data_path, header=0)
+                # 确保优化文件有“最小值”“最大值”列（无则创建）
+                if "最小值" not in optimize_df.columns:
+                    optimize_df["最小值"] = np.nan
+                if "最大值" not in optimize_df.columns:
+                    optimize_df["最大值"] = np.nan
+                print(f"需要优化的造型数据列名：{optimize_df.columns.tolist()}")
+
+            except FileNotFoundError as e:
+                print(f"❌ 文件未找到：{str(e)}")
+                return None
+            except Exception as e:
+                print(f"❌ 读取文件失败：{str(e)}")
+                return None
+
+            # 2. 匹配前十参数对应的序号并提取最值（保留两位小数）
+            for param_name in top10_param_names:
+                # 匹配参数在总参数列表中的序号（索引）
+                if param_name in all_param_names:
+                    param_col_index = all_param_names.index(param_name)
+                    # 确保序号不超过源数据列数
+                    if param_col_index < len(source_cols):
+                        param_col_name = source_cols[param_col_index]  # 对应源数据的列名
+                        print(f"\n匹配到参数：{param_name}，序号：{param_col_index}，列名：{param_col_name}")
+
+                        # 提取源数据中该列的最小值和最大值，并保留两位小数
+                        param_min = round(source_df[param_col_name].min(), 2)  # 保留两位小数
+                        param_max = round(source_df[param_col_name].max(), 2)  # 保留两位小数
+                        print(f"  对应最小值：{param_min}，最大值：{param_max}")
+
+                        # 回填到优化数据中
+                        if "参数名称" in optimize_df.columns:
+                            # 按参数名称匹配回填（优先方案）
+                            optimize_df.loc[optimize_df["参数名称"] == param_name, "最小值"] = param_min
+                            optimize_df.loc[optimize_df["参数名称"] == param_name, "最大值"] = param_max
+                        else:
+                            # 按参数序号匹配（假设优化文件行顺序与参数序号一致）
+                            param_row_index = all_param_names.index(param_name)
+                            if param_row_index < len(optimize_df):
+                                optimize_df.loc[param_row_index, "最小值"] = param_min
+                                optimize_df.loc[param_row_index, "最大值"] = param_max
+                            else:
+                                print(f"警告：参数 {param_name} 序号 {param_row_index} 超出优化文件行数")
+                    else:
+                        print(f"警告：参数 {param_name} 序号 {param_col_index} 超出源数据列数")
+                else:
+                    print(f"警告：参数 {param_name} 未在总参数列表中找到，跳过")
+
+            # 3. 直接覆盖原文件保存（核心调整：无新文件，直接写入原路径）
+            try:
+                # 先关闭可能占用文件的句柄，再写入
+                with pd.ExcelWriter(optimize_data_path, engine='openpyxl', mode='w') as writer:
+                    optimize_df.to_excel(writer, index=False)
+                print(f"\n✅ 已直接覆盖原文件：{optimize_data_path}")
+                print(f"✅ 最值（保留两位小数）回填完成，原文件数据已更新")
+            except PermissionError:
+                print(f"❌ 权限错误：无法覆盖 {optimize_data_path}，请先关闭该Excel文件")
+            except Exception as e:
+                print(f"❌ 覆盖文件失败：{str(e)}")
+     
+
+        #获取文件路径
+        min_fre = self.current_window.ZLCB_1.currentText().strip()
+        max_fre = self.current_window.ZLCB_2.currentText().strip()
+        
+        try:
+            model_path=self.current_window.ZL_1.text().strip()
+        except ValueError:
+            QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择模型文件！")
+        try:
+            newinput_file_path=self.current_window.ZL_2.text().strip()
+        except ValueError:
+            QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择进行灵敏度排序的数据文件！")
+        
+        MIV, IV1, IV2 = MIV_calculate.calculate_result(self.input_file_path, self.output_file_path, newinput_file_path, model_path, self.Characteristic_name)
+
+        freq_labels = ["200Hz", "250Hz", "315Hz", "400Hz", "500Hz", "630Hz", "800Hz", "1000Hz", "1250Hz",
+                   "1600Hz", "2000Hz", "2500Hz", "3150Hz", "4000Hz", "5000Hz", "6300Hz", "8000Hz"]
+        fre_index1 = freq_labels.index(max_fre)
+        fre_index2 = freq_labels.index(min_fre)
+        if fre_index1 < fre_index2:
+            QMessageBox.warning(self.current_window, "输入错误", "分析频率范围最小值不能大于最大值！")
+        elif fre_index1 == fre_index2:
+            miv_for_freq1 = IV1[:,fre_index1]
+            miv_for_freq2 = IV2[:,fre_index1]
+            freq_title = f'风噪 {freq_labels[fre_index1]} 灵敏度分析'
+            plot_sensitivity(miv_for_freq1, miv_for_freq2, self.Characteristic_name, freq_title, "ZLwidget", save_path=self.huancun)
         else:
-            print("❌ 无法进行灵敏度计算，请检查数据集文件！")   
+            miv_data = MIV[:,fre_index2:fre_index1+1]
+            freq_title = f'风噪 {freq_labels[fre_index2]}Hz-{freq_labels[fre_index1]}Hz 灵敏度分析'
+            y_label = freq_labels[fre_index2:fre_index1+1]
+            plot_sensitivityonly(miv_data, self.Characteristic_name, y_label, freq_title, "ZLwidget", save_path=self.huancun)
+        
+        #生成优化方案初始文件
+        name = pd.read_excel(self.all_characteristic, header=0)#获取技术方案名称
+        param_names = name.columns.tolist()  # 第一行作为列名
+        new_input_data = pd.read_excel(newinput_file_path)
+        data = new_input_data.iloc[0, :].values
+        new_data = data.T
+        # 定义列名
+        #columns = ["参数名称", "原始值", "最小值", "最大值"]
+        df = pd.DataFrame(param_names, columns=['参数名称'])
+        df['原始值'] = new_data
+        df['最小值'] = new_data
+        df['最大值'] = new_data
+        save_path = os.path.join(self.huancun, "优化方案.xlsx")
+        df.to_excel(save_path, index=False, engine="openpyxl")
+        # 输出优化方案
+        # 1. 先执行MIV总和排序
+        name = pd.read_excel(self.Characteristic_name, header=0)#获取技术方案名称
+        labels = name.columns.tolist()  # 第一行作为列名
+        
+        sum_rank_save_path = os.path.join(self.huancun, "全频段参数MIV总和_前十.xlsx")
+        os.makedirs(os.path.dirname(sum_rank_save_path), exist_ok=True)
+        param_rank_result = sum_and_rank_params_from_heatmap(
+            MIV=MIV,
+            param_labels=labels,
+            freq_labels=freq_labels,
+            save_path=sum_rank_save_path
+        )
+
+        # 2. 再执行最值回填（直接覆盖原文件，最值保留两位小数）
+        # 定义各文件路径
+        top10_params_path = sum_rank_save_path
+        source_data_path = self.input_file_path
+        optimize_data_path = save_path  # 原文件路径（直接覆盖）
+        param_name_path = self.Characteristic_name
+
+        # 执行回填（无额外保存路径，直接覆盖原文件）
+        match_params_and_fill_min_max(
+            top10_params_path=top10_params_path,
+            source_data_path=source_data_path,
+            optimize_data_path=optimize_data_path,
+            param_name_path=param_name_path
+        )
+ 
+    def save_results(self):
+        """在灵敏度分析完成后保存分析结果"""
+        if not hasattr(self, "model_train"):
+            print("❌ 尚未进行模型训练，无法保存！")
+            return
+
+        # 弹出文件选择对话框
+        save_path, _ = QFileDialog.getSaveFileName(self.current_window, "保存分析结果", "", "文件夹 (*)")
+        try:
+            # 4. 创建新文件夹（exist_ok=False 避免重名）
+            os.makedirs(save_path, exist_ok=False)
+        except FileExistsError:
+            QMessageBox.critical(None, "错误", f"文件夹「{save_path}」已存在！")
+            return
+        except Exception as e:
+            QMessageBox.critical(None, "错误", f"创建文件夹失败：{str(e)}")
+            return
+
+        #设置要移动文件的路径
+        MIV_path = os.path.join(self.huancun, "MIV数组.xlsx")
+        IV1_path = os.path.join(self.huancun, "IV1数组.xlsx")
+        IV2_path = os.path.join(self.huancun, "IV2数组.xlsx")
+        heatmap_path = os.path.join(self.huancun, "风噪灵敏度分析结果.png")
+        Optim_result_path = os.path.join(self.huancun, "优化方案.xlsx")
+
+        # 5. 检查要移动的模型是否存在
+        if not os.path.exists(MIV_path):
+            QMessageBox.critical(None, "错误", f"指定文件MIV数组.xlsx不存在！")
+            return
+        if not os.path.exists(IV1_path):
+            QMessageBox.critical(None, "错误", f"指定文件IV1数组.xlsx不存在！")
+            return
+        if not os.path.exists(IV2_path):
+            QMessageBox.critical(None, "错误", f"指定文件IV2数组.xlsx不存在！")
+            return
+        if not os.path.exists(heatmap_path):
+            QMessageBox.critical(None, "错误", f"指定文件风噪灵敏度分析结果.png不存在！")
+            return
+        if not os.path.exists(Optim_result_path):
+            QMessageBox.critical(None, "错误", f"指定文件优化方案.xlsx不存在！")
+            return
+
+
+        # 6. 拼接文件移动后的新路径
+        new_MIV_path = os.path.join(save_path, "MIV数组.xlsx") #保存MIV数组
+        new_IV1_path = os.path.join(save_path, "IV1数组.xlsx") #保存IV1数组
+        new_IV2_path = os.path.join(save_path, "IV2数组.xlsx") #保存IV2数组
+        new_heatmap_path = os.path.join(save_path, "风噪灵敏度分析结果.png") #保存热力图
+        new_Optim_result_path = os.path.join(save_path, "优化方案.xlsx") #保存优化方案
+
+        try:
+            # 7. 移动文件到新文件夹
+            shutil.move(MIV_path, new_MIV_path)
+            shutil.move(IV1_path, new_IV1_path)
+            shutil.move(IV2_path, new_IV2_path)
+            shutil.move(heatmap_path, new_heatmap_path)
+            shutil.move(Optim_result_path, new_Optim_result_path)
+        except Exception as e:
+            QMessageBox.critical(None, "错误", f"移动文件失败：{str(e)}")
+            return
+
+        # 8. 弹窗提示文件保存的路径
+        QMessageBox.information(
+            None, "成功", f"文件已移动至：\n{save_path}"
+        )               
+        
+        
+            
+            
+    
 
     # ---------------- 预测模型模块功能 ---------------- #
 
