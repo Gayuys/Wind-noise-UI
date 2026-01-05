@@ -24,6 +24,8 @@ from PySide6.QtCore import QSize,QTimer
 #相关程序导入
 import xcepxin_train
 import MIV_calculate
+import optimization_pinduan
+import optimization_xiangdu
 
 # 设置 Matplotlib 中文字体，解决中文显示问题
 plt.rcParams['font.sans-serif'] = ['Microsoft YaHei', 'SimSun', 'Arial']  # 优先使用支持中文的字体
@@ -77,11 +79,9 @@ def load_stl_and_plot_separate_views(stl_path):
 
     return pixmaps  # 返回三个视图的 QPixmap 列表
 
-
 def degrees_to_radians(angles: Tuple[float, float, float]) -> Tuple[float, float, float]:
     """将角度（度）转换为弧度"""
     return tuple(np.radians(angle) for angle in angles)
-
 
 def create_rotation_matrices(rx: float, ry: float, rz: float) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """创建绕X、Y、Z轴的旋转矩阵"""
@@ -101,7 +101,6 @@ def create_rotation_matrices(rx: float, ry: float, rz: float) -> Tuple[np.ndarra
         [0, 0, 1]
     ])
     return R_x, R_y, R_z
-
 
 def rotate_stl_vertices(vertices: np.ndarray, rx: float, ry: float, rz: float,
                         rotation_order: str = "xyz") -> np.ndarray:
@@ -126,7 +125,6 @@ def rotate_stl_vertices(vertices: np.ndarray, rx: float, ry: float, rz: float,
     vertices_final = vertices_rotated + center
     return vertices_final
 
-
 def create_rotated_stl(mesh: trimesh.Trimesh, rotated_vertices: np.ndarray) -> trimesh.Trimesh:
     """基于旋转后的顶点创建新的STL网格对象"""
     rotated_mesh = trimesh.Trimesh(
@@ -135,7 +133,6 @@ def create_rotated_stl(mesh: trimesh.Trimesh, rotated_vertices: np.ndarray) -> t
         metadata=mesh.metadata
     )
     return rotated_mesh
-
 
 def plot_rotated_views(rotated_mesh: trimesh.Trimesh, rx: float, ry: float, rz: float):
     """绘制旋转后模型的三视图，并返回 QPixmap 列表"""
@@ -348,18 +345,19 @@ class MyWindow:
             self.current_window.pushButton_3.clicked.connect(self.plot_photo)
 
         # ---------------- 造型评估模块功能按钮 ---------------- #
+        #STL文件预处理
         # 选择 STL 文件
-        if hasattr(self.current_window, "pushButton_13"):
-            self.current_window.pushButton_13.clicked.connect(self.select_file)
+        if hasattr(self.current_window, "ZSPB_1"):
+            self.current_window.ZSPB_1.clicked.connect(self.select_file)
         # 显示原始三视图
-        if hasattr(self.current_window, "pushButton_14"):
-            self.current_window.pushButton_14.clicked.connect(self.run_stl_plot)
+        if hasattr(self.current_window, "ZSPB_2"):
+            self.current_window.ZSPB_2.clicked.connect(self.run_stl_plot)
         # 执行旋转并显示旋转后三视图
-        if hasattr(self.current_window, "pushButton_15"):
-            self.current_window.pushButton_15.clicked.connect(self.run_stl_rotation)
+        if hasattr(self.current_window, "ZSPB_3"):
+            self.current_window.ZSPB_3.clicked.connect(self.run_stl_rotation)
         # 选择保存路径
-        if hasattr(self.current_window, "pushButton_16"):
-            self.current_window.pushButton_16.clicked.connect(self.save_rotated_stl)
+        if hasattr(self.current_window, "ZSPB_4"):
+            self.current_window.ZSPB_4.clicked.connect(self.save_rotated_stl)
         # 造型提取
         if hasattr(self.current_window, "pushButton_17"):
             self.current_window.pushButton_17.clicked.connect(self.select_file_2)
@@ -420,22 +418,24 @@ class MyWindow:
         #---------------- 造型优化模块功能按钮 ---------------- #
         
         #----基于具体频段-----
-        if hasattr(self.current_window, "pushButton_7"):
-            self.current_window.pushButton_7.clicked.connect(self.select_folder_and_fill_files)
-        if hasattr(self.current_window, "pushButton_8"):
-            self.current_window.pushButton_8.clicked.connect(self.select_file_zxpg_4)
-        if hasattr(self.current_window, "pushButton_9"):
-            self.current_window.pushButton_9.clicked.connect(self.plot_photo_moxingyouhua_pindian)  # 运行优化
-        # if hasattr(self.current_window, "pushButton_10"):
-        #     self.current_window.pushButton_10.clicked.connect(self.select_save_dir_zxpg)  # 保存优化结果
-            
+        if hasattr(self.current_window, "ZJPPB_1"):
+            self.current_window.ZJPPB_1.clicked.connect(self.select_folder_pinduan)
+        if hasattr(self.current_window, "ZJPPB_2"):
+            self.current_window.ZJPPB_2.clicked.connect(self.select_file_zxyh_pinduan)
+        if hasattr(self.current_window, "ZJPPB_3"):
+            self.current_window.ZJPPB_3.clicked.connect(self.plot_moxingyouhua_pinduan)  #运行优化
+        if hasattr(self.current_window, "ZJPPB_4"):
+            self.current_window.ZJPPB_4.clicked.connect(self.save_result_pinduan)  # 保存优化结果
+   
         #----基于整体响度-----
-        if hasattr(self.current_window, "pushButton_11"):
-            self.current_window.pushButton_11.clicked.connect(self.select_folder_and_fill_files_xiangdu)
-        if hasattr(self.current_window, "pushButton_12"):
-            self.current_window.pushButton_12.clicked.connect(self.select_file_zxpg_4_xiangdu)
-        if hasattr(self.current_window, "pushButton_21"):
-            self.current_window.pushButton_21.clicked.connect(self.plot_photo_moxingyouhua)
+        if hasattr(self.current_window, "ZJXPB_1"):
+            self.current_window.ZJXPB_1.clicked.connect(self.select_folder_xiangdu)
+        if hasattr(self.current_window, "ZJXPB_2"):
+            self.current_window.ZJXPB_2.clicked.connect(self.select_file_zxyh_xiangdu)
+        if hasattr(self.current_window, "ZJXPB_3"):
+            self.current_window.ZJXPB_3.clicked.connect(self.plot_moxingyouhua_xiangdu) #运行优化
+        if hasattr(self.current_window, "ZJXPB_4"):
+            self.current_window.ZJXPB_4.clicked.connect(self.save_result_xiangdu)  # 保存优化结果
 
 
         # 显示主界面
@@ -977,13 +977,13 @@ class MyWindow:
             "",
             "STL文件 (*.stl);;所有文件 (*.*)"
         )
-        if file_path and hasattr(self.current_window, "lineEdit_22"):
-            self.current_window.lineEdit_22.setText(file_path)
+        if file_path and hasattr(self.current_window, "ZS_1"):
+            self.current_window.ZS_1.setText(file_path)
 
     def run_stl_plot(self):
         """从 lineEdit 获取 STL 文件路径并将三视图显示在 label_86、label_87、label_88 中"""
-        if hasattr(self.current_window, "lineEdit_22"):
-            stl_path = self.current_window.lineEdit_22.text().strip()
+        if hasattr(self.current_window, "ZS_1"):
+            stl_path = self.current_window.ZS_1.text().strip()
             if stl_path:
                 pixmaps = load_stl_and_plot_separate_views(stl_path)
                 if pixmaps and len(pixmaps) == 3:
@@ -1005,27 +1005,27 @@ class MyWindow:
                 else:
                     print("❌ 无法生成三视图，请检查 STL 文件！")
             else:
-                print("❌ lineEdit 为空，请先选择 STL 文件！")
+                print("❌ STL文件路径为空，请先选择 STL 文件！")
 
     def run_stl_rotation(self):
         """执行 STL 旋转并将旋转后三视图显示在 label_95、label_96、label_97 中"""
-        if not hasattr(self.current_window, "lineEdit_22"):
-            print("❌ lineEdit 不存在，请检查 UI 文件")
+        if not hasattr(self.current_window, "ZS_1"):
+            print("❌ ZS_1 不存在，请检查 UI 文件")
             return
 
-        stl_path = self.current_window.lineEdit_22.text().strip()
+        stl_path = self.current_window.ZS_1.text().strip()
         if not stl_path:
-            print("❌ lineEdit 为空，请先选择 STL 文件！")
+            print("❌  STL文件路径为空，请先选择 STL 文件！")
             return
 
         # 获取旋转角度
         try:
-            rx = float(self.current_window.lineEdit_25.text().strip()) if hasattr(self.current_window,
-                                                                                  "lineEdit_25") else 0
-            ry = float(self.current_window.lineEdit_26.text().strip()) if hasattr(self.current_window,
-                                                                                  "lineEdit_26") else 0
-            rz = float(self.current_window.lineEdit_27.text().strip()) if hasattr(self.current_window,
-                                                                                  "lineEdit_27") else 0
+            rx = float(self.current_window.ZS_2.text().strip()) if hasattr(self.current_window,
+                                                                                  "ZS_2") else 0
+            ry = float(self.current_window.ZS_3.text().strip()) if hasattr(self.current_window,
+                                                                                  "ZS_3") else 0
+            rz = float(self.current_window.ZS_4.text().strip()) if hasattr(self.current_window,
+                                                                                  "ZS_4") else 0
         except ValueError:
             print("❌ 旋转角度输入无效，请输入有效数字！")
             return
@@ -1938,10 +1938,6 @@ class MyWindow:
             None, "成功", f"文件已移动至：\n{save_path}"
         )               
         
-        
-            
-            
-    
 
     # ---------------- 预测模型模块功能 ---------------- #
 
@@ -2064,7 +2060,7 @@ class MyWindow:
 
     # ---------------- 造型优化模块功能 ---------------- #
     #----基于具体频段-----
-    def select_folder_and_fill_files(self):
+    def select_folder_pinduan(self):
         """选择文件夹，自动搜索 .pth、输入数据.xlsx、输出数据.xlsx 并写入相应输入框"""
         folder_path = QFileDialog.getExistingDirectory(None, "选择包含模型和数据的文件夹")
         if not folder_path:
@@ -2083,14 +2079,14 @@ class MyWindow:
             elif file_name == "输出数据.xlsx":
                 output_xlsx_path = full_path
 
-        if hasattr(self.current_window, "lineEdit_9"):
-            self.current_window.lineEdit_9.setText(pth_path)
+        if hasattr(self.current_window, "ZJP_1"):
+            self.current_window.ZJP_1.setText(pth_path)
 
         msg = f"📁 已选择文件夹：{folder_path}\n"
         msg += f"\n模型文件 (.pth)：{pth_path if pth_path else '未找到'}"
         QMessageBox.information(None, "文件检测结果", msg)
 
-    def select_file_zxpg_4(self):
+    def select_file_zxyh_pinduan(self):
         """选择 new_input_path 文件并自动读取原始值、最小值、最大值，填入 lineEdit"""
         file_path, _ = QFileDialog.getOpenFileName(
             None,
@@ -2102,14 +2098,14 @@ class MyWindow:
         if not file_path:
             return
 
-        # 写入 lineEdit_15
-        self.current_window.lineEdit_15.setText(file_path)
+        # 写入 ZJP_2
+        self.current_window.ZJP_2.setText(file_path)
 
         # ---------------------- 读取 Excel 并自动填入界面 ---------------------- #
         try:
             import pandas as pd
 
-            df = pd.read_excel(file_path, sheet_name="sheet1")
+            df = pd.read_excel(file_path, sheet_name="Sheet1")
 
             required_cols = ["原始值", "最小值", "最大值"]
             if not all(col in df.columns for col in required_cols):
@@ -2139,7 +2135,7 @@ class MyWindow:
 
             # ---------------------- 写入 UI（只写入可调整参数的信息） ---------------------- #
             # 索引写成 "0,1,2" 格式，便于后续 parse
-            self.current_window.lineEdit_12.setText(", ".join(str(i) for i in adjust_indices))
+            self.current_window.ZJP_3.setText(", ".join(str(i) for i in adjust_indices))
 
             # --- 这里是修改的核心部分 ---
             # 根据 adjust_indices 过滤出对应的最小值和最大值
@@ -2147,8 +2143,8 @@ class MyWindow:
             adjusted_param_max = [param_max_py[i] for i in adjust_indices]
 
             # 只将可调整参数的最小/最大值写成 "1.0, 2.0, 3.0" 格式
-            self.current_window.lineEdit_13.setText(", ".join(str(x) for x in adjusted_param_min))
-            self.current_window.lineEdit_14.setText(", ".join(str(x) for x in adjusted_param_max))
+            self.current_window.ZJP_4.setText(", ".join(str(x) for x in adjusted_param_min))
+            self.current_window.ZJP_5.setText(", ".join(str(x) for x in adjusted_param_max))
 
             QMessageBox.information(
                 None, "读取成功",
@@ -2161,83 +2157,273 @@ class MyWindow:
             traceback.print_exc()
             QMessageBox.critical(None, "错误", f"读取 Excel 时出错：\n{e}")
 
-    def plot_photo_moxingyouhua_pindian(self):
+    def plot_moxingyouhua_pinduan(self):
         """绘制模型预测结果图"""
 
-        # 从文件夹中提取图像
-        def load_images_to_array(folder_path, image_names):
+        # 可视化原始与优化方案结果对比
+        def visualize_freq_comparison(original, optimized, target_indices, widget_name, save_path=None):
             """
-            从指定文件夹读取图像并存储到数组中
-
-            Args:
-                folder_path (str): 图像文件夹路径
-                image_names (list): 要读取的图像文件名列表（最多4个）
-
-            Returns:
-                list: 包含QPixmap对象的数组，如果图像不存在则对应位置为None
+            在指定的UI QWidget中绘制原始与优化方案的频点对比折线图，高亮显示目标频段。
+            支持动态适应widget尺寸，并可选保存图像。
             """
-            # 初始化结果数组
-            pixmaps = []
-
-            # 确保image_names是列表且最多包含4个文件名
-            if not isinstance(image_names, list):
-                raise TypeError("image_names必须是一个列表")
-
-            # 限制为最多4张图像
-            image_names = image_names[:4]
-
-            for img_name in image_names:
-                # 构建完整的文件路径
-                img_path = os.path.join(folder_path, img_name)
-
-                # 检查文件是否存在
-                if os.path.exists(img_path):
-                    # 创建QPixmap对象
-                    pixmap = QPixmap(img_path)
-
-                    # 检查图像是否成功加载
-                    if not pixmap.isNull():
-                        pixmaps.append(pixmap)
-                        print(f"✅ 成功加载图像: {img_name}")
-                    else:
-                        pixmaps.append(None)
-                        print(f"❌ 无法加载图像: {img_name}（格式不支持或文件损坏）")
-                else:
-                    pixmaps.append(None)
-                    print(f"❌ 图像文件不存在: {img_name}")
-
-            return pixmaps
-
-        folder_name = "绘图\优化结果"
-        folder_path = os.path.join(current_dir, folder_name)
-        image_names = ["频点对比折线图.png", "参数调整对比图.png"]
-        # 加载图像
-        pixmaps = load_images_to_array(folder_path, image_names)
-
-        if pixmaps and len(pixmaps) == 2:
-            if hasattr(self.current_window, "label_35"):
-                self.current_window.label_35.setPixmap(pixmaps[0].scaled(
-                    self.current_window.label_35.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
-            else:
-                print("❌ label_35 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
-            if hasattr(self.current_window, "label_36"):
-                self.current_window.label_36.setPixmap(pixmaps[1].scaled(
-                    self.current_window.label_36.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
-            else:
-                print("❌ label_36 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
-        else:
-            print("❌ 无法生成目标定义图，请检查数据集文件！")
+            # 设置中文字体支持
+            plt.rcParams['font.sans-serif'] = ['SimHei']
+            plt.rcParams['axes.unicode_minus'] = False
             
+            # 频率标签（根据数据长度自动截取）
+            freq_labels = [200, 250, 315, 400, 500, 630, 800, 1000, 1250, 1600,
+                                2000, 2500, 3150, 4000, 5000, 6300, 8000][:len(original)]
+            x = np.arange(len(freq_labels))
+
+            # 获取指定的QWidget
+            plot_widget = self.current_window.findChild(QWidget, widget_name)
+            if not plot_widget:
+                print(f"警告: 找不到名为'{widget_name}'的QWidget")
+                return
+            
+            # 获取widget的宽度和高度（单位：像素）
+            widget_width = plot_widget.width()
+            widget_height = plot_widget.height()
+            
+            # 创建matplotlib图形，尺寸转换为英寸（约100 dpi）
+            fig, ax = plt.subplots(figsize=(widget_width / 100, widget_height / 100))
+            
+            # 绘制折线
+            ax.plot(x, original, 'ro-', linewidth=2, markersize=6, label='原始方案')
+            ax.plot(x, optimized, 'bo-', linewidth=2, markersize=6, label='优化方案')
+
+            # 高亮目标频段
+            if target_indices:
+                target_x = np.array(target_indices)
+                ax.fill_between(target_x, original[target_x], optimized[target_x],
+                                color='green', alpha=0.3, label='优化目标频段')
+
+            # 设置坐标轴和标题
+            ax.set_xticks(x)
+            ax.set_xticklabels(freq_labels, rotation=45, fontsize=12)
+            ax.set_xlabel('频率(Hz)', fontsize=14)
+            ax.set_ylabel('噪声值(dB)', fontsize=14)
+            ax.set_title('原始方案与优化方案的频点对比', fontsize=16, pad=15)
+            ax.legend(fontsize=12)
+            ax.grid(alpha=0.3)
+            
+            # 布局调整
+            plt.tight_layout()
+            
+            # 将图表嵌入到QWidget中
+            canvas = FigureCanvas(fig)
+            canvas.setParent(plot_widget)
+            canvas.draw()
+            
+            # 适应widget大小
+            canvas.setGeometry(plot_widget.rect())
+            canvas.setSizePolicy(plot_widget.sizePolicy())
+            
+            # 添加到布局（如果尚未有布局，则创建）
+            layout = plot_widget.layout()
+            if layout is None:
+                layout = QVBoxLayout(plot_widget)
+            
+            # 清除可能已存在的旧canvas（避免重复叠加）
+            for i in reversed(range(layout.count())):
+                old_widget = layout.itemAt(i).widget()
+                if isinstance(old_widget, FigureCanvas):
+                    old_widget.deleteLater()
+            
+            layout.addWidget(canvas)
+            
+            # 可选：保存图像到文件
+            if save_path:
+                save_pathnew = os.path.join(save_path, '频点对比折线图.png')
+                fig.savefig(save_pathnew, dpi=300, bbox_inches='tight')
+                print(f"频点对比折线图已保存至: {save_pathnew}")
+
+        # 可视化调整参数的前后
+        def visualize_param_changes(original_params, optimized_params, adjust_indices, 
+                                    param_min_dict, param_max_dict, widget_name, save_path=None):
+            """
+            在指定的UI QWidget中绘制调整参数的前后对比柱状图，并显示每个参数的调整范围。
+            支持动态适应widget尺寸，并可选保存图像。
+            """
+            # 设置中文字体支持
+            plt.rcParams['font.sans-serif'] = ['SimHei']
+            plt.rcParams['axes.unicode_minus'] = False
+
+            param_indices = adjust_indices
+            original_values = [original_params[i] for i in param_indices]
+            optimized_values = [optimized_params[i] for i in param_indices]
+            param_ranges = [f"{param_min_dict[i]}-{param_max_dict[i]}" for i in param_indices]
+
+            x = np.arange(len(param_indices))
+            width = 0.35
+
+            # 获取指定的QWidget
+            plot_widget = self.current_window.findChild(QWidget, widget_name)
+            if not plot_widget:
+                print(f"警告: 找不到名为'{widget_name}'的QWidget")
+                return
+            
+            # 获取widget的宽度和高度（单位：像素）
+            widget_width = plot_widget.width()
+            widget_height = plot_widget.height()
+            
+            # 创建matplotlib图形，尺寸转换为英寸（约100 dpi）
+            fig, ax = plt.subplots(figsize=(widget_width / 100, widget_height / 100))
+            
+            # 绘制柱状图
+            ax.bar(x - width / 2, original_values, width, label='原始参数值', alpha=0.8, color='#ff7f0e')
+            ax.bar(x + width / 2, optimized_values, width, label='优化参数值', alpha=0.8, color='#1f77b4')
+
+            # 设置x轴标签：参数索引 + 换行 + 调整范围
+            x_labels = [f'参数{i}\n({r})' for i, r in zip(param_indices, param_ranges)]
+            ax.set_xticks(x)
+            ax.set_xticklabels(x_labels, rotation=45, fontsize=11, ha='center')
+            
+            # 设置标题和轴标签
+            ax.set_xlabel('参数索引及调整范围', fontsize=14)
+            ax.set_ylabel('参数值', fontsize=14)
+            ax.set_title('调整参数的前后对比', fontsize=16, pad=15)
+            ax.legend(fontsize=12)
+            ax.grid(axis='y', alpha=0.3)
+
+            # 在柱子上方标注数值
+            max_val = max(max(original_values), max(optimized_values))
+            offset = max_val * 0.02  # 略微上移，避免重叠
+            for i, (orig, opt) in enumerate(zip(original_values, optimized_values)):
+                ax.text(i - width / 2, orig + offset, f'{orig:.2f}', ha='center', fontsize=10, fontweight='bold', rotation=45)
+                ax.text(i + width / 2, opt + offset, f'{opt:.2f}', ha='center', fontsize=10, fontweight='bold', rotation=45)
+
+            # 布局调整
+            plt.tight_layout()
+            
+            # 将图表嵌入到QWidget中
+            canvas = FigureCanvas(fig)
+            canvas.setParent(plot_widget)
+            canvas.draw()
+            
+            # 适应widget大小
+            canvas.setGeometry(plot_widget.rect())
+            canvas.setSizePolicy(plot_widget.sizePolicy())
+            
+            # 添加到布局（如果尚未有布局，则创建）
+            layout = plot_widget.layout()
+            if layout is None:
+                layout = QVBoxLayout(plot_widget)
+            
+            # 清除可能已存在的旧canvas（避免重复叠加）
+            for i in reversed(range(layout.count())):
+                old_widget = layout.itemAt(i).widget()
+                if isinstance(old_widget, FigureCanvas):
+                    old_widget.deleteLater()
+            
+            layout.addWidget(canvas)
+            
+            # 可选：保存图像到文件
+            if save_path:
+                save_pathnew = os.path.join(save_path, '参数调整前后对比柱状图.png')
+                fig.savefig(save_pathnew, dpi=300, bbox_inches='tight')
+                print(f"参数对比图已保存至: {save_pathnew}")  
+        
+        #进行优化
+        try:
+            model_path=self.current_window.ZJP_1.text().strip()
+        except ValueError:
+            QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择模型文件！")
+        try:
+            new_input_path=self.current_window.ZJP_2.text().strip()
+        except ValueError:
+            QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择进行灵敏度排序的数据文件！")
+        
+        input_file_path = self.input_file_path #输入归一化
+        output_file_path = self.output_file_path #输出归一化
+        result_save_path = os.path.join(self.huancun, f'参数优化结果.xlsx') #优化结果保存路径
+        full_freq_table_path = os.path.join(self.huancun, f'噪声值对比表.xlsx') #200-8000Hz噪声值对比表保存路径
+        target_freq_min = int(self.current_window.ZJPCB_1.currentText())
+        target_freq_max = int(self.current_window.ZJPCB_2.currentText())
+        try:
+            generations = int(self.current_window.ZJP_7.text().strip())
+        except ValueError:
+            QMessageBox.warning(self.current_window, "输入错误", "遗传算法迭代次数必须为数字！")
+        try:
+            pop_size = int(self.current_window.ZJP_6.text().strip())
+        except ValueError:
+            QMessageBox.warning(self.current_window, "输入错误", "遗传算法方案数量必须为数字！")
+        #计算结果    
+        original_freq_values, best_freq_values, target_indices, base_params, best_params, adjust_indices, param_min_dict, param_max_dict = optimization_pinduan.optimization_program(model_path, input_file_path, output_file_path, new_input_path, result_save_path, full_freq_table_path, target_freq_min, target_freq_max, pop_size, generations)
+        #生成频点对比折线图
+        visualize_freq_comparison(original_freq_values, best_freq_values, target_indices, 'ZJPwidget_1', self.huancun)
+        #生成参数调整对比柱状图
+        visualize_param_changes(base_params, best_params, adjust_indices, param_min_dict, param_max_dict, 'ZJPwidget_2', self.huancun)
+
+    #----保存结果----
+    def save_result_pinduan(self):
+        """保存参数优化结果"""
+
+        # 弹出文件选择对话框
+        save_path, _ = QFileDialog.getSaveFileName(self.current_window, "保存分析结果", "", "文件夹 (*)")
+        try:
+            # 4. 创建新文件夹（exist_ok=False 避免重名）
+            os.makedirs(save_path, exist_ok=False)
+        except FileExistsError:
+            QMessageBox.critical(None, "错误", f"文件夹「{save_path}」已存在！")
+            return
+        except Exception as e:
+            QMessageBox.critical(None, "错误", f"创建文件夹失败：{str(e)}")
+            return
+
+        #设置要移动文件的路径
+
+        result_path = os.path.join(self.huancun, "参数优化结果.xlsx")
+        full_freq_table_path = os.path.join(self.huancun, "噪声值对比表.xlsx")
+        zhexian_path = os.path.join(self.huancun, "频点对比折线图.png")
+        zhuzhuang_path = os.path.join(self.huancun, "参数调整前后对比柱状图.png")
+
+        # 5. 检查要移动的模型是否存在
+        if not os.path.exists(result_path):
+            QMessageBox.critical(None, "错误", f"指定文件参数优化结果.xlsx不存在！")
+            return
+        if not os.path.exists(full_freq_table_path):
+            QMessageBox.critical(None, "错误", f"指定文件噪声值对比表.xlsx不存在！")
+            return
+        if not os.path.exists(zhexian_path):
+            QMessageBox.critical(None, "错误", f"指定文件频点对比折线图.png不存在！")
+            return
+        if not os.path.exists(zhuzhuang_path):
+            QMessageBox.critical(None, "错误", f"指定文件参数调整前后对比柱状图.png不存在！")
+            return
+
+
+
+        # 6. 拼接文件移动后的新路径
+        new_result_path = os.path.join(save_path, "参数优化结果.xlsx") #保存优化结果
+        new_full_freq_table_path = os.path.join(save_path, "噪声值对比表.xlsx") #保存噪声曲线对比
+        new_zhexian_path = os.path.join(save_path, "频点对比折线图.png") #保存频点对比折线图
+        new_zhuzhuang_path = os.path.join(save_path, "参数调整前后对比柱状图.png") #保存参数对比柱状图
+
+
+        try:
+            # 7. 移动文件到新文件夹
+            shutil.move(result_path, new_result_path)
+            shutil.move(full_freq_table_path, new_full_freq_table_path)
+            shutil.move(zhexian_path, new_zhexian_path)
+            shutil.move(zhuzhuang_path, new_zhuzhuang_path)
+        except Exception as e:
+            QMessageBox.critical(None, "错误", f"移动文件失败：{str(e)}")
+            return
+
+        # 8. 弹窗提示文件保存的路径
+        QMessageBox.information(
+            None, "成功", f"文件已移动至：\n{save_path}"
+        )
+    
     #----基于整体响度-----
-    def select_folder_and_fill_files_xiangdu(self):
+    def select_folder_xiangdu(self):
         """选择文件夹，自动搜索 .pth、输入数据.xlsx、输出数据.xlsx 并写入相应输入框"""
         folder_path = QFileDialog.getExistingDirectory(None, "选择包含模型和数据的文件夹")
         if not folder_path:
             return
 
         pth_path = ""
-        input_xlsx_path = ""
-        output_xlsx_path = ""
 
         for file_name in os.listdir(folder_path):
             lower_name = file_name.lower()
@@ -2250,20 +2436,14 @@ class MyWindow:
             elif file_name == "输出数据.xlsx":
                 output_xlsx_path = full_path
 
-        if hasattr(self.current_window, "lineEdit_16"):
-            self.current_window.lineEdit_16.setText(pth_path)
-        # if hasattr(self.current_window, "lineEdit_131"):
-        #     self.current_window.lineEdit_131.setText(input_xlsx_path)
-        # if hasattr(self.current_window, "lineEdit_132"):
-        #     self.current_window.lineEdit_132.setText(output_xlsx_path)
+        if hasattr(self.current_window, "ZJX_1"):
+            self.current_window.ZJX_1.setText(pth_path)
 
         msg = f"📁 已选择文件夹：{folder_path}\n"
         msg += f"\n模型文件 (.pth)：{pth_path if pth_path else '未找到'}"
-        msg += f"\n输入数据.xlsx：{input_xlsx_path if input_xlsx_path else '未找到'}"
-        msg += f"\n输出数据.xlsx：{output_xlsx_path if output_xlsx_path else '未找到'}"
         QMessageBox.information(None, "文件检测结果", msg)
 
-    def select_file_zxpg_4_xiangdu(self):
+    def select_file_zxyh_xiangdu(self):
         """选择 new_input_path 文件并自动读取原始值、最小值、最大值，填入 lineEdit"""
         file_path, _ = QFileDialog.getOpenFileName(
             None,
@@ -2275,14 +2455,14 @@ class MyWindow:
         if not file_path:
             return
 
-        # 写入 lineEdit_133
-        self.current_window.lineEdit_23.setText(file_path)
+        # 写入 ZJP_2
+        self.current_window.ZJX_2.setText(file_path)
 
         # ---------------------- 读取 Excel 并自动填入界面 ---------------------- #
         try:
             import pandas as pd
 
-            df = pd.read_excel(file_path, sheet_name="sheet1")
+            df = pd.read_excel(file_path, sheet_name="Sheet1")
 
             required_cols = ["原始值", "最小值", "最大值"]
             if not all(col in df.columns for col in required_cols):
@@ -2312,7 +2492,7 @@ class MyWindow:
 
             # ---------------------- 写入 UI（只写入可调整参数的信息） ---------------------- #
             # 索引写成 "0,1,2" 格式，便于后续 parse
-            self.current_window.lineEdit_19.setText(", ".join(str(i) for i in adjust_indices))
+            self.current_window.ZJX_3.setText(", ".join(str(i) for i in adjust_indices))
 
             # --- 这里是修改的核心部分 ---
             # 根据 adjust_indices 过滤出对应的最小值和最大值
@@ -2320,8 +2500,8 @@ class MyWindow:
             adjusted_param_max = [param_max_py[i] for i in adjust_indices]
 
             # 只将可调整参数的最小/最大值写成 "1.0, 2.0, 3.0" 格式
-            self.current_window.lineEdit_20.setText(", ".join(str(x) for x in adjusted_param_min))
-            self.current_window.lineEdit_21.setText(", ".join(str(x) for x in adjusted_param_max))
+            self.current_window.ZJX_4.setText(", ".join(str(x) for x in adjusted_param_min))
+            self.current_window.ZJX_5.setText(", ".join(str(x) for x in adjusted_param_max))
 
             QMessageBox.information(
                 None, "读取成功",
@@ -2333,72 +2513,265 @@ class MyWindow:
             import traceback
             traceback.print_exc()
             QMessageBox.critical(None, "错误", f"读取 Excel 时出错：\n{e}")
-            
-    def plot_photo_moxingyouhua(self):
+
+    def plot_moxingyouhua_xiangdu(self):
         """绘制模型预测结果图"""
-        
-        #从文件夹中提取图像
-        def load_images_to_array(folder_path, image_names):
+
+        # 可视化原始与优化方案结果对比
+        def visualize_freq_comparison(original, optimized, original_loudness, optimized_loudness,
+                                    widget_name, save_path=None):
             """
-            从指定文件夹读取图像并存储到数组中
-            
-            Args:
-                folder_path (str): 图像文件夹路径
-                image_names (list): 要读取的图像文件名列表（最多4个）
-                
-            Returns:
-                list: 包含QPixmap对象的数组，如果图像不存在则对应位置为None
+            在指定的UI QWidget中绘制原始与优化方案的频点对比折线图，
+            图例中显示各自响度值（sone），支持动态适应widget尺寸，并可选保存图像。
             """
-            # 初始化结果数组
-            pixmaps = []
+            # 设置中文字体支持
+            plt.rcParams['font.sans-serif'] = ['SimHei']
+            plt.rcParams['axes.unicode_minus'] = False
+
+            # 频率标签（根据数据长度自动截取）
+            freq_labels = [200, 250, 315, 400, 500, 630, 800, 1000, 1250, 1600,
+                        2000, 2500, 3150, 4000, 5000, 6300, 8000][:len(original)]
+            x = np.arange(len(freq_labels))
+
+            # 获取指定的QWidget
+            plot_widget = self.current_window.findChild(QWidget, widget_name)
+            if not plot_widget:
+                print(f"警告: 找不到名为'{widget_name}'的QWidget")
+                return
             
-            # 确保image_names是列表且最多包含4个文件名
-            if not isinstance(image_names, list):
-                raise TypeError("image_names必须是一个列表")
+            # 获取widget的宽度和高度（单位：像素）
+            widget_width = plot_widget.width()
+            widget_height = plot_widget.height()
             
-            # 限制为最多4张图像
-            image_names = image_names[:4]
+            # 创建matplotlib图形，尺寸转换为英寸（约100 dpi）
+            fig, ax = plt.subplots(figsize=(widget_width / 100, widget_height / 100))
             
-            for img_name in image_names:
-                # 构建完整的文件路径
-                img_path = os.path.join(folder_path, img_name)
-                
-                # 检查文件是否存在
-                if os.path.exists(img_path):
-                    # 创建QPixmap对象
-                    pixmap = QPixmap(img_path)
-                    
-                    # 检查图像是否成功加载
-                    if not pixmap.isNull():
-                        pixmaps.append(pixmap)
-                        print(f"✅ 成功加载图像: {img_name}")
-                    else:
-                        pixmaps.append(None)
-                        print(f"❌ 无法加载图像: {img_name}（格式不支持或文件损坏）")
-                else:
-                    pixmaps.append(None)
-                    print(f"❌ 图像文件不存在: {img_name}")
+            # 绘制折线，并在图例中显示响度
+            ax.plot(x, original, 'ro-', linewidth=2, markersize=6,
+                    label=f'原始方案 (响度: {original_loudness:.2f} sone)')
+            ax.plot(x, optimized, 'bo-', linewidth=2, markersize=6,
+                    label=f'优化方案 (响度: {optimized_loudness:.2f} sone)')
+
+            # 设置坐标轴
+            ax.set_xticks(x)
+            ax.set_xticklabels(freq_labels, rotation=45, fontsize=11)
+            ax.set_xlabel('频率(Hz)', fontsize=14)
+            ax.set_ylabel('噪声值(dB)', fontsize=14)
+            ax.set_title('原始方案与优化方案的频点对比（响度优化）', fontsize=16, pad=15)
+            ax.legend(fontsize=12, loc='upper right')
+            ax.grid(alpha=0.3)
+
+            # 布局调整
+            plt.tight_layout()
             
-            return pixmaps
-        folder_name = "绘图\优化结果"
-        folder_path = os.path.join(current_dir, folder_name)
-        image_names = ["结果对比响度.png", "参数对比响度.png"]
-        # 加载图像
-        pixmaps = load_images_to_array(folder_path, image_names)
+            # 将图表嵌入到QWidget中
+            canvas = FigureCanvas(fig)
+            canvas.setParent(plot_widget)
+            canvas.draw()
+            
+            # 适应widget大小
+            canvas.setGeometry(plot_widget.rect())
+            canvas.setSizePolicy(plot_widget.sizePolicy())
+            
+            # 添加到布局（如果尚未有布局，则创建）
+            layout = plot_widget.layout()
+            if layout is None:
+                layout = QVBoxLayout(plot_widget)
+            
+            # 清除可能已存在的旧canvas（避免重复叠加）
+            for i in reversed(range(layout.count())):
+                old_widget = layout.itemAt(i).widget()
+                if isinstance(old_widget, FigureCanvas):
+                    old_widget.deleteLater()
+            
+            layout.addWidget(canvas)
+            
+            # 可选：保存图像到文件
+            if save_path:
+                save_pathnew = os.path.join(save_path, '频点对比折线图(响度).png')
+                fig.savefig(save_pathnew, dpi=300, bbox_inches='tight')
+                print(f"频点对比折线图（含响度）已保存至: {save_pathnew}")
+
+        # 可视化调整参数的前后
+        def visualize_param_changes(original_params, optimized_params, adjust_indices, 
+                                    param_min_dict, param_max_dict, widget_name, save_path=None):
+            """
+            在指定的UI QWidget中绘制调整参数的前后对比柱状图，
+            x轴显示参数索引及调整范围，并在柱子上方标注数值。
+            支持动态适应widget尺寸，并可选保存图像。
+            """
+            # 设置中文字体支持
+            plt.rcParams['font.sans-serif'] = ['SimHei']
+            plt.rcParams['axes.unicode_minus'] = False
+
+            param_indices = adjust_indices
+            original_values = [original_params[i] for i in param_indices]
+            optimized_values = [optimized_params[i] for i in param_indices]
+            param_ranges = [f"{param_min_dict.get(i, '?')}-{param_max_dict.get(i, '?')}" for i in param_indices]
+
+            x = np.arange(len(param_indices))
+            width = 0.35
+
+            # 获取指定的QWidget
+            plot_widget = self.current_window.findChild(QWidget, widget_name)
+            if not plot_widget:
+                print(f"警告: 找不到名为'{widget_name}'的QWidget")
+                return
+            
+            # 获取widget的宽度和高度（单位：像素）
+            widget_width = plot_widget.width()
+            widget_height = plot_widget.height()
+            
+            # 创建matplotlib图形，尺寸转换为英寸（约100 dpi）
+            fig, ax = plt.subplots(figsize=(widget_width / 100, widget_height / 100))
+            
+            # 绘制并列柱状图
+            ax.bar(x - width / 2, original_values, width, label='原始参数值', alpha=0.8, color='#ff7f0e')
+            ax.bar(x + width / 2, optimized_values, width, label='优化参数值', alpha=0.8, color='#1f77b4')
+
+            # x轴标签：参数索引 + 换行 + 调整范围
+            x_labels = [f'参数{i}\n({r})' for i, r in zip(param_indices, param_ranges)]
+            ax.set_xticks(x)
+            ax.set_xticklabels(x_labels, rotation=45, fontsize=11, ha='center')
+
+            # 设置标题和轴标签
+            ax.set_xlabel('参数索引及调整范围', fontsize=14)
+            ax.set_ylabel('参数值', fontsize=14)
+            ax.set_title('调整参数的前后对比', fontsize=16, pad=15)
+            ax.legend(fontsize=12)
+            ax.grid(axis='y', alpha=0.3)
+
+            # 在每个柱子上方标注数值
+            max_val = max(max(original_values or [0]), max(optimized_values or [0]))
+            offset = max_val * 0.02 if max_val > 0 else 0.1  # 避免全零时重叠
+            for i, (orig, opt) in enumerate(zip(original_values, optimized_values)):
+                ax.text(i - width / 2, orig + offset, f'{orig:.2f}', 
+                        ha='center', va='bottom', fontsize=10, fontweight='bold', rotation=45)
+                ax.text(i + width / 2, opt + offset, f'{opt:.2f}', 
+                        ha='center', va='bottom', fontsize=10, fontweight='bold', rotation=45)
+
+            # 布局调整
+            plt.tight_layout()
+            
+            # 将图表嵌入到QWidget中
+            canvas = FigureCanvas(fig)
+            canvas.setParent(plot_widget)
+            canvas.draw()
+            
+            # 适应widget大小
+            canvas.setGeometry(plot_widget.rect())
+            canvas.setSizePolicy(plot_widget.sizePolicy())
+            
+            # 添加到布局（如果尚未有布局，则创建）
+            layout = plot_widget.layout()
+            if layout is None:
+                layout = QVBoxLayout(plot_widget)
+            
+            # 清除可能已存在的旧canvas（避免重复叠加）
+            for i in reversed(range(layout.count())):
+                old_widget = layout.itemAt(i).widget()
+                if isinstance(old_widget, FigureCanvas):
+                    old_widget.deleteLater()
+            
+            layout.addWidget(canvas)
+            
+            # 可选：保存图像到文件
+            if save_path:
+                save_pathnew = os.path.join(save_path, '参数调整前后对比柱状图(响度).png')
+                fig.savefig(save_pathnew, dpi=300, bbox_inches='tight')
+                print(f"参数对比图已保存至: {save_pathnew}")  
         
-        if pixmaps and len(pixmaps) == 2:
-            if hasattr(self.current_window, "label_49"):
-                self.current_window.label_49.setPixmap(pixmaps[0].scaled(
-                    self.current_window.label_49.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
-            else:
-                print("❌ label_49 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
-            if hasattr(self.current_window, "label_50"):
-                self.current_window.label_50.setPixmap(pixmaps[1].scaled(
-                    self.current_window.label_50.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
-            else:
-                print("❌ label_50 不存在，请检查 UIXINbuhanbanzidong.ui 文件")
-        else:
-            print("❌ 无法生成目标定义图，请检查数据集文件！") 
+        #进行优化
+        try:
+            model_path=self.current_window.ZJX_1.text().strip()
+        except ValueError:
+            QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择模型文件！")
+        try:
+            new_input_path=self.current_window.ZJX_2.text().strip()
+        except ValueError:
+            QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择进行优化的数据文件！")
+        
+        input_file_path = self.input_file_path #输入归一化
+        output_file_path = self.output_file_path #输出归一化
+        result_save_path = os.path.join(self.huancun, f'参数优化结果_响度.xlsx') #优化结果保存路径
+
+        try:
+            target_loudness = float(self.current_window.ZJX_8.text().strip())
+        except ValueError:
+            QMessageBox.warning(self.current_window, "输入错误", "响度值必须为数字！")
+            
+        try:
+            generations = int(self.current_window.ZJX_7.text().strip())
+        except ValueError:
+            QMessageBox.warning(self.current_window, "输入错误", "遗传算法迭代次数必须为数字！")
+        try:
+            pop_size = int(self.current_window.ZJX_6.text().strip())
+        except ValueError:
+            QMessageBox.warning(self.current_window, "输入错误", "遗传算法方案数量必须为数字！")
+        #计算结果    
+        original_freq_values, best_freq_values, original_loudness, best_loudness, base_params, best_params, adjust_indices, param_min_dict, param_max_dict,error = optimization_xiangdu.optimization_program(model_path, input_file_path, output_file_path, new_input_path, result_save_path, target_loudness, pop_size, generations)
+        if error ==1:
+            QMessageBox.warning(self.current_window, "优化失败", "未找到低于目标响度的方案，返回原始方案！")
+        #生成频点对比折线图
+        visualize_freq_comparison(original_freq_values, best_freq_values, original_loudness, best_loudness, 'ZJXwidget_1', self.huancun)
+        #生成参数调整对比柱状图
+        visualize_param_changes(base_params, best_params, adjust_indices, param_min_dict, param_max_dict, 'ZJXwidget_2', self.huancun)
+
+    #----保存结果----
+    def save_result_xiangdu(self):
+        """保存参数优化结果"""
+
+        # 弹出文件选择对话框
+        save_path, _ = QFileDialog.getSaveFileName(self.current_window, "保存分析结果", "", "文件夹 (*)")
+        try:
+            # 4. 创建新文件夹（exist_ok=False 避免重名）
+            os.makedirs(save_path, exist_ok=False)
+        except FileExistsError:
+            QMessageBox.critical(None, "错误", f"文件夹「{save_path}」已存在！")
+            return
+        except Exception as e:
+            QMessageBox.critical(None, "错误", f"创建文件夹失败：{str(e)}")
+            return
+
+        #设置要移动文件的路径
+
+        result_path = os.path.join(self.huancun, "参数优化结果_响度.xlsx")
+        zhexian_path = os.path.join(self.huancun, "频点对比折线图(响度).png")
+        zhuzhuang_path = os.path.join(self.huancun, "参数调整前后对比柱状图(响度).png")
+
+        # 5. 检查要移动的模型是否存在
+        if not os.path.exists(result_path):
+            QMessageBox.critical(None, "错误", f"指定文件参数优化结果.xlsx不存在！")
+            return
+        if not os.path.exists(zhexian_path):
+            QMessageBox.critical(None, "错误", f"频点对比折线图(响度).png不存在！")
+            return
+        if not os.path.exists(zhuzhuang_path):
+            QMessageBox.critical(None, "错误", f"指定文件参数调整前后对比柱状图(响度).png不存在！")
+            return
+
+
+
+        # 6. 拼接文件移动后的新路径
+        new_result_path = os.path.join(save_path, "参数优化结果_响度.xlsx") #保存优化结果
+        new_zhexian_path = os.path.join(save_path, "频点对比折线图(响度).png") #保存噪声对比曲线
+        new_zhuzhuang_path = os.path.join(save_path, "参数调整前后对比柱状图(响度).png") #保存参数对比柱状图
+ 
+
+        try:
+            # 7. 移动文件到新文件夹
+            shutil.move(result_path, new_result_path)
+            shutil.move(zhexian_path, new_zhexian_path)
+            shutil.move(zhuzhuang_path, new_zhuzhuang_path)
+        except Exception as e:
+            QMessageBox.critical(None, "错误", f"移动文件失败：{str(e)}")
+            return
+
+        # 8. 弹窗提示文件保存的路径
+        QMessageBox.information(
+            None, "成功", f"文件已移动至：\n{save_path}"
+        )
+  
 
 
 
