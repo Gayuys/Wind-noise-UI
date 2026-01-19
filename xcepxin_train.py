@@ -7,6 +7,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error, r2_score
 import os
+from openpyxl import Workbook
+from openpyxl import load_workbook
 from sklearn.model_selection import train_test_split
 from scipy.stats import uniform  # 用于超参数搜索空间初始化
 
@@ -442,7 +444,7 @@ def train_model(model, dataloader, val_dataloader, criterion, optimizer,
 
 # -------------------------- 5. 预测函数（保持不变） --------------------------
 def predict(new_input_data, input_cols, output_cols, input_mean, input_std,
-            model_path=os.path.join(MODEL_DIR, 'best_model.pth')):
+            model_path):
     model = AdvancedModel(input_dim=len(input_cols), output_dim=len(output_cols))
     model.load_state_dict(torch.load(model_path))
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

@@ -63,7 +63,7 @@
       <enum>QTabWidget::TabShape::Triangular</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="tab_30">
       <property name="styleSheet">
@@ -16062,7 +16062,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="6" column="1">
-                       <widget class="QLineEdit" name="YAS_3">
+                       <widget class="QLineEdit" name="YD_3">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -16133,7 +16133,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="8" column="1">
-                       <widget class="QLineEdit" name="YAS_4">
+                       <widget class="QLineEdit" name="YD_4">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -16163,7 +16163,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="4" column="1">
-                       <widget class="QLineEdit" name="YAS_2">
+                       <widget class="QLineEdit" name="YD_2">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -16204,7 +16204,7 @@ QPushButton:hover {
                        </spacer>
                       </item>
                       <item row="18" column="1">
-                       <widget class="QLineEdit" name="YAS_9">
+                       <widget class="QLineEdit" name="YD_9">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -16232,7 +16232,7 @@ QPushButton:hover {
                        </spacer>
                       </item>
                       <item row="14" column="1">
-                       <widget class="QLineEdit" name="YAS_7">
+                       <widget class="QLineEdit" name="YD_7">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -16247,7 +16247,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="16" column="1">
-                       <widget class="QLineEdit" name="YAS_8">
+                       <widget class="QLineEdit" name="YD_8">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -16262,7 +16262,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="2" column="1">
-                       <widget class="QLineEdit" name="YAS_1">
+                       <widget class="QLineEdit" name="YD_1">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -16379,7 +16379,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="12" column="1">
-                       <widget class="QLineEdit" name="YAS_6">
+                       <widget class="QLineEdit" name="YD_6">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -16409,7 +16409,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="10" column="1">
-                       <widget class="QLineEdit" name="YAS_5">
+                       <widget class="QLineEdit" name="YD_5">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -16536,7 +16536,7 @@ QPushButton:hover {
                        </spacer>
                       </item>
                       <item row="12" column="1">
-                       <widget class="QLineEdit" name="YAX_6">
+                       <widget class="QLineEdit" name="YD_15">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -16551,7 +16551,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="10" column="1">
-                       <widget class="QLineEdit" name="YAX_5">
+                       <widget class="QLineEdit" name="YD_14">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -16566,7 +16566,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="16" column="1">
-                       <widget class="QLineEdit" name="YAX_8">
+                       <widget class="QLineEdit" name="YD_17">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -16711,7 +16711,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="8" column="1">
-                       <widget class="QLineEdit" name="YAX_4">
+                       <widget class="QLineEdit" name="YD_13">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -16756,7 +16756,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="14" column="1">
-                       <widget class="QLineEdit" name="YAX_7">
+                       <widget class="QLineEdit" name="YD_16">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -16771,7 +16771,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="6" column="1">
-                       <widget class="QLineEdit" name="YAX_3">
+                       <widget class="QLineEdit" name="YD_12">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -16786,7 +16786,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="4" column="1">
-                       <widget class="QLineEdit" name="YAX_2">
+                       <widget class="QLineEdit" name="YD_11">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -16801,7 +16801,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="18" column="1">
-                       <widget class="QLineEdit" name="YAX_9">
+                       <widget class="QLineEdit" name="YD_18">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -16855,7 +16855,7 @@ QPushButton:hover {
                        </spacer>
                       </item>
                       <item row="2" column="1">
-                       <widget class="QLineEdit" name="YAX_1">
+                       <widget class="QLineEdit" name="YD_10">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -16967,7 +16967,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="8" column="1">
-                       <widget class="QLineEdit" name="YH_4">
+                       <widget class="QLineEdit" name="YD_22">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -17010,7 +17010,7 @@ QPushButton:hover {
                        </spacer>
                       </item>
                       <item row="16" column="1">
-                       <widget class="QLineEdit" name="YH_8">
+                       <widget class="QLineEdit" name="YD_26">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -17070,7 +17070,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="18" column="1">
-                       <widget class="QLineEdit" name="YH_9">
+                       <widget class="QLineEdit" name="YD_27">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -17131,7 +17131,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="4" column="1">
-                       <widget class="QLineEdit" name="YH_2">
+                       <widget class="QLineEdit" name="YD_20">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -17200,7 +17200,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="12" column="1">
-                       <widget class="QLineEdit" name="YH_6">
+                       <widget class="QLineEdit" name="YD_24">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -17215,7 +17215,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="14" column="1">
-                       <widget class="QLineEdit" name="YH_7">
+                       <widget class="QLineEdit" name="YD_25">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -17230,7 +17230,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="2" column="1">
-                       <widget class="QLineEdit" name="YH_1">
+                       <widget class="QLineEdit" name="YD_19">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -17271,7 +17271,7 @@ QPushButton:hover {
                        </spacer>
                       </item>
                       <item row="10" column="1">
-                       <widget class="QLineEdit" name="YH_5">
+                       <widget class="QLineEdit" name="YD_23">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -17299,7 +17299,7 @@ QPushButton:hover {
                        </spacer>
                       </item>
                       <item row="6" column="1">
-                       <widget class="QLineEdit" name="YH_3">
+                       <widget class="QLineEdit" name="YD_21">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -17398,7 +17398,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="2" column="1">
-                       <widget class="QLineEdit" name="YY0_1">
+                       <widget class="QLineEdit" name="YD_28">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -17441,7 +17441,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="14" column="1">
-                       <widget class="QLineEdit" name="YY0_7">
+                       <widget class="QLineEdit" name="YD_34">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -17469,7 +17469,7 @@ QPushButton:hover {
                        </spacer>
                       </item>
                       <item row="8" column="1">
-                       <widget class="QLineEdit" name="YY0_4">
+                       <widget class="QLineEdit" name="YD_31">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -17555,7 +17555,7 @@ QPushButton:hover {
                        </spacer>
                       </item>
                       <item row="16" column="1">
-                       <widget class="QLineEdit" name="YY0_8">
+                       <widget class="QLineEdit" name="YD_35">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -17598,7 +17598,7 @@ QPushButton:hover {
                        </spacer>
                       </item>
                       <item row="10" column="1">
-                       <widget class="QLineEdit" name="YY0_5">
+                       <widget class="QLineEdit" name="YD_32">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -17613,7 +17613,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="6" column="1">
-                       <widget class="QLineEdit" name="YY0_3">
+                       <widget class="QLineEdit" name="YD_30">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -17641,7 +17641,7 @@ QPushButton:hover {
                        </spacer>
                       </item>
                       <item row="22" column="1">
-                       <widget class="QLineEdit" name="YY0_11">
+                       <widget class="QLineEdit" name="YD_38">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -17743,7 +17743,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="4" column="1">
-                       <widget class="QLineEdit" name="YY0_2">
+                       <widget class="QLineEdit" name="YD_29">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -17758,7 +17758,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="12" column="1">
-                       <widget class="QLineEdit" name="YY0_6">
+                       <widget class="QLineEdit" name="YD_33">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -17773,7 +17773,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="18" column="1">
-                       <widget class="QLineEdit" name="YY0_9">
+                       <widget class="QLineEdit" name="YD_36">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -17816,7 +17816,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="20" column="1">
-                       <widget class="QLineEdit" name="YY0_10">
+                       <widget class="QLineEdit" name="YD_37">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -17858,7 +17858,7 @@ QPushButton:hover {
                     <item>
                      <layout class="QGridLayout" name="gridLayout_151" columnstretch="1,1">
                       <item row="14" column="1">
-                       <widget class="QLineEdit" name="YQ_7">
+                       <widget class="QLineEdit" name="YD_45">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -17886,7 +17886,7 @@ QPushButton:hover {
                        </spacer>
                       </item>
                       <item row="22" column="1">
-                       <widget class="QLineEdit" name="YQ_11">
+                       <widget class="QLineEdit" name="YD_49">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18015,7 +18015,7 @@ QPushButton:hover {
                        </spacer>
                       </item>
                       <item row="8" column="1">
-                       <widget class="QLineEdit" name="YQ_4">
+                       <widget class="QLineEdit" name="YD_42">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18030,7 +18030,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="10" column="1">
-                       <widget class="QLineEdit" name="YQ_5">
+                       <widget class="QLineEdit" name="YD_43">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18158,7 +18158,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="2" column="1">
-                       <widget class="QLineEdit" name="YQ_1">
+                       <widget class="QLineEdit" name="YD_39">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18173,7 +18173,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="12" column="1">
-                       <widget class="QLineEdit" name="YQ_6">
+                       <widget class="QLineEdit" name="YD_44">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18219,7 +18219,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="6" column="1">
-                       <widget class="QLineEdit" name="YQ_3">
+                       <widget class="QLineEdit" name="YD_41">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18262,7 +18262,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="20" column="1">
-                       <widget class="QLineEdit" name="YQ_10">
+                       <widget class="QLineEdit" name="YD_48">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18277,7 +18277,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="16" column="1">
-                       <widget class="QLineEdit" name="YQ_8">
+                       <widget class="QLineEdit" name="YD_46">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18292,7 +18292,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="4" column="1">
-                       <widget class="QLineEdit" name="YQ_2">
+                       <widget class="QLineEdit" name="YD_40">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18335,7 +18335,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="18" column="1">
-                       <widget class="QLineEdit" name="YQ_9">
+                       <widget class="QLineEdit" name="YD_47">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18378,7 +18378,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="23" column="1">
-                       <widget class="QLineEdit" name="lineEdit_22">
+                       <widget class="QLineEdit" name="YD_50">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18404,7 +18404,7 @@ QPushButton:hover {
                     <item>
                      <layout class="QGridLayout" name="gridLayout_152" columnstretch="1,1">
                       <item row="26" column="1">
-                       <widget class="QLineEdit" name="YJ_13">
+                       <widget class="QLineEdit" name="YD_63">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18447,7 +18447,7 @@ QPushButton:hover {
                        </spacer>
                       </item>
                       <item row="18" column="1">
-                       <widget class="QLineEdit" name="YJ_9">
+                       <widget class="QLineEdit" name="YD_59">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18462,7 +18462,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="14" column="1">
-                       <widget class="QLineEdit" name="YJ_7">
+                       <widget class="QLineEdit" name="YD_57">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18477,7 +18477,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="16" column="1">
-                       <widget class="QLineEdit" name="YJ_8">
+                       <widget class="QLineEdit" name="YD_58">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18492,7 +18492,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="20" column="1">
-                       <widget class="QLineEdit" name="YJ_10">
+                       <widget class="QLineEdit" name="YD_60">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18507,7 +18507,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="8" column="1">
-                       <widget class="QLineEdit" name="YJ_4">
+                       <widget class="QLineEdit" name="YD_54">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18634,7 +18634,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="4" column="1">
-                       <widget class="QLineEdit" name="YJ_2">
+                       <widget class="QLineEdit" name="YD_52">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18709,7 +18709,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="10" column="1">
-                       <widget class="QLineEdit" name="YJ_5">
+                       <widget class="QLineEdit" name="YD_55">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18819,7 +18819,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="32" column="1">
-                       <widget class="QLineEdit" name="YJ_16">
+                       <widget class="QLineEdit" name="YD_66">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18834,7 +18834,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="24" column="1">
-                       <widget class="QLineEdit" name="YJ_12">
+                       <widget class="QLineEdit" name="YD_62">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18849,7 +18849,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="28" column="1">
-                       <widget class="QLineEdit" name="YJ_14">
+                       <widget class="QLineEdit" name="YD_64">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18877,7 +18877,7 @@ QPushButton:hover {
                        </spacer>
                       </item>
                       <item row="2" column="1">
-                       <widget class="QLineEdit" name="YJ_1">
+                       <widget class="QLineEdit" name="YD_51">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18892,7 +18892,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="6" column="1">
-                       <widget class="QLineEdit" name="YJ_3">
+                       <widget class="QLineEdit" name="YD_53">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -18965,7 +18965,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="12" column="1">
-                       <widget class="QLineEdit" name="YJ_6">
+                       <widget class="QLineEdit" name="YD_56">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -19008,7 +19008,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="22" column="1">
-                       <widget class="QLineEdit" name="YJ_11">
+                       <widget class="QLineEdit" name="YD_61">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -19064,7 +19064,7 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item row="30" column="1">
-                       <widget class="QLineEdit" name="YJ_15">
+                       <widget class="QLineEdit" name="YD_65">
                         <property name="font">
                          <font>
                           <pointsize>16</pointsize>
@@ -19203,7 +19203,7 @@ QPushButton:hover {
  }</string>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="tab_4">
           <attribute name="title">
