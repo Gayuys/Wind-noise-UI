@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>2058</width>
-    <height>1275</height>
+    <height>1283</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -63,7 +63,7 @@
       <enum>QTabWidget::TabShape::Triangular</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_30">
       <property name="styleSheet">
@@ -1090,7 +1090,7 @@ QGroupBox::title {
 }</string>
                </property>
                <property name="currentIndex">
-                <number>2</number>
+                <number>5</number>
                </property>
                <widget class="QWidget" name="tab_22">
                 <attribute name="title">
@@ -1102,7 +1102,7 @@ QGroupBox::title {
                    <item row="8" column="1">
                     <layout class="QGridLayout" name="gridLayout_29">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MAS_7">
+                      <widget class="QLineEdit" name="MN_4">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -1117,7 +1117,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MAS_8">
+                      <widget class="QLineEdit" name="MX_4">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -1305,7 +1305,7 @@ QGroupBox::title {
                    <item row="4" column="1">
                     <layout class="QGridLayout" name="gridLayout_27">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MAS_3">
+                      <widget class="QLineEdit" name="MN_2">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -1320,7 +1320,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MAS_4">
+                      <widget class="QLineEdit" name="MX_2">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -1339,7 +1339,7 @@ QGroupBox::title {
                    <item row="10" column="1">
                     <layout class="QGridLayout" name="gridLayout_30">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MAS_9">
+                      <widget class="QLineEdit" name="MN_5">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -1354,7 +1354,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MAS_10">
+                      <widget class="QLineEdit" name="MX_5">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -1373,7 +1373,7 @@ QGroupBox::title {
                    <item row="6" column="1">
                     <layout class="QGridLayout" name="gridLayout_28">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MAS_5">
+                      <widget class="QLineEdit" name="MN_3">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -1388,7 +1388,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MAS_6">
+                      <widget class="QLineEdit" name="MX_3">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -1420,7 +1420,7 @@ QGroupBox::title {
                    <item row="12" column="1">
                     <layout class="QGridLayout" name="gridLayout_157">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MAS_11">
+                      <widget class="QLineEdit" name="MN_6">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -1435,7 +1435,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MAS_12">
+                      <widget class="QLineEdit" name="MX_6">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -1482,7 +1482,7 @@ QGroupBox::title {
                    <item row="2" column="1">
                     <layout class="QGridLayout" name="gridLayout_26">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MAS_1">
+                      <widget class="QLineEdit" name="MN_1">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -1497,7 +1497,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MAS_2">
+                      <widget class="QLineEdit" name="MX_1">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -1546,7 +1546,7 @@ QGroupBox::title {
                    <item row="14" column="1">
                     <layout class="QGridLayout" name="gridLayout_174">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MAS_13">
+                      <widget class="QLineEdit" name="MN_7">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -1561,7 +1561,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MAS_14">
+                      <widget class="QLineEdit" name="MX_7">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -1634,7 +1634,7 @@ QGroupBox::title {
                    <item row="18" column="1">
                     <layout class="QGridLayout" name="gridLayout_176">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MAS_17">
+                      <widget class="QLineEdit" name="MN_9">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -1649,7 +1649,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MAS_18">
+                      <widget class="QLineEdit" name="MX_9">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -1681,7 +1681,7 @@ QGroupBox::title {
                    <item row="16" column="1">
                     <layout class="QGridLayout" name="gridLayout_175">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MAS_15">
+                      <widget class="QLineEdit" name="MN_8">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -1696,7 +1696,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MAS_16">
+                      <widget class="QLineEdit" name="MX_8">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -1780,7 +1780,7 @@ QGroupBox::title {
                    <item row="2" column="1">
                     <layout class="QGridLayout" name="gridLayout_40">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MAX_1">
+                      <widget class="QLineEdit" name="MN_10">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -1795,7 +1795,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MAX_2">
+                      <widget class="QLineEdit" name="MX_10">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -1827,7 +1827,7 @@ QGroupBox::title {
                    <item row="12" column="1">
                     <layout class="QGridLayout" name="gridLayout_5">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MAX_11">
+                      <widget class="QLineEdit" name="MN_15">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -1842,7 +1842,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MAX_12">
+                      <widget class="QLineEdit" name="MX_15">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -1957,7 +1957,7 @@ QGroupBox::title {
                    <item row="8" column="1">
                     <layout class="QGridLayout" name="gridLayout_43">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MAX_7">
+                      <widget class="QLineEdit" name="MN_13">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -1972,7 +1972,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MAX_8">
+                      <widget class="QLineEdit" name="MX_13">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2062,7 +2062,7 @@ QGroupBox::title {
                    <item row="18" column="1">
                     <layout class="QGridLayout" name="gridLayout_32">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MAX_17">
+                      <widget class="QLineEdit" name="MAX_18">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2077,7 +2077,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MAX_18">
+                      <widget class="QLineEdit" name="MX_18">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2111,7 +2111,7 @@ QGroupBox::title {
                    <item row="10" column="1">
                     <layout class="QGridLayout" name="gridLayout_44">
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MAX_10">
+                      <widget class="QLineEdit" name="MX_14">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2126,7 +2126,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MAX_9">
+                      <widget class="QLineEdit" name="MN_14">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2201,7 +2201,7 @@ QGroupBox::title {
                    <item row="6" column="1">
                     <layout class="QGridLayout" name="gridLayout_42">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MAX_5">
+                      <widget class="QLineEdit" name="MN_12">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2216,7 +2216,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MAX_6">
+                      <widget class="QLineEdit" name="MX_12">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2235,7 +2235,7 @@ QGroupBox::title {
                    <item row="14" column="1">
                     <layout class="QGridLayout" name="gridLayout_25">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MAX_13">
+                      <widget class="QLineEdit" name="MN_16">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2250,7 +2250,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MAX_14">
+                      <widget class="QLineEdit" name="MX_16">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2284,7 +2284,7 @@ QGroupBox::title {
                    <item row="16" column="1">
                     <layout class="QGridLayout" name="gridLayout_31">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MAX_15">
+                      <widget class="QLineEdit" name="MAX_17">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2299,7 +2299,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MAX_16">
+                      <widget class="QLineEdit" name="MX_17">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2318,7 +2318,7 @@ QGroupBox::title {
                    <item row="4" column="1">
                     <layout class="QGridLayout" name="gridLayout_41">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MAX_3">
+                      <widget class="QLineEdit" name="MN_11">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2333,7 +2333,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MAX_4">
+                      <widget class="QLineEdit" name="MX_11">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2376,7 +2376,7 @@ QGroupBox::title {
                    <item row="16" column="1">
                     <layout class="QGridLayout" name="gridLayout_38">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MH_15">
+                      <widget class="QLineEdit" name="MN_26">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2391,7 +2391,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MH_16">
+                      <widget class="QLineEdit" name="MX_26">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2410,7 +2410,7 @@ QGroupBox::title {
                    <item row="2" column="1">
                     <layout class="QGridLayout" name="gridLayout_54">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MH_1">
+                      <widget class="QLineEdit" name="MN_19">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2425,7 +2425,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MH_2">
+                      <widget class="QLineEdit" name="MX_19">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2444,7 +2444,7 @@ QGroupBox::title {
                    <item row="14" column="1">
                     <layout class="QGridLayout" name="gridLayout_34">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MH_13">
+                      <widget class="QLineEdit" name="MN_25">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2459,7 +2459,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MH_14">
+                      <widget class="QLineEdit" name="MX_25">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2478,7 +2478,7 @@ QGroupBox::title {
                    <item row="10" column="1">
                     <layout class="QGridLayout" name="gridLayout_58">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MH_9">
+                      <widget class="QLineEdit" name="MN_23">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2493,7 +2493,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MH_10">
+                      <widget class="QLineEdit" name="MX_23">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2594,7 +2594,7 @@ QGroupBox::title {
                    <item row="4" column="1">
                     <layout class="QGridLayout" name="gridLayout_55">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MH_3">
+                      <widget class="QLineEdit" name="MN_20">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2609,7 +2609,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MH_4">
+                      <widget class="QLineEdit" name="MX_20">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2628,7 +2628,7 @@ QGroupBox::title {
                    <item row="12" column="1">
                     <layout class="QGridLayout" name="gridLayout_33">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MH_11">
+                      <widget class="QLineEdit" name="MN_24">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2643,7 +2643,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MH_12">
+                      <widget class="QLineEdit" name="MX_24">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2690,7 +2690,7 @@ QGroupBox::title {
                    <item row="8" column="1">
                     <layout class="QGridLayout" name="gridLayout_57">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MH_7">
+                      <widget class="QLineEdit" name="MN_22">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2705,7 +2705,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MH_8">
+                      <widget class="QLineEdit" name="MX_22">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2906,7 +2906,7 @@ QGroupBox::title {
                    <item row="18" column="1">
                     <layout class="QGridLayout" name="gridLayout_39">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MH_17">
+                      <widget class="QLineEdit" name="MN_27">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2921,7 +2921,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MH_18">
+                      <widget class="QLineEdit" name="MX_27">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2940,7 +2940,7 @@ QGroupBox::title {
                    <item row="6" column="1">
                     <layout class="QGridLayout" name="gridLayout_56">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MH_5">
+                      <widget class="QLineEdit" name="MN_21">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -2955,7 +2955,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MH_6">
+                      <widget class="QLineEdit" name="MX_21">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3069,7 +3069,7 @@ QGroupBox::title {
                    <item row="10" column="1">
                     <layout class="QGridLayout" name="gridLayout_128">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MY0_9">
+                      <widget class="QLineEdit" name="MN_32">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3084,7 +3084,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MY0_10">
+                      <widget class="QLineEdit" name="MX_32">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3118,7 +3118,7 @@ QGroupBox::title {
                    <item row="8" column="1">
                     <layout class="QGridLayout" name="gridLayout_127">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MY0_7">
+                      <widget class="QLineEdit" name="MN_31">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3133,7 +3133,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MY0_8">
+                      <widget class="QLineEdit" name="MX_31">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3274,7 +3274,7 @@ QGroupBox::title {
                    <item row="22" column="1">
                     <layout class="QGridLayout" name="gridLayout_47">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MY0_15">
+                      <widget class="QLineEdit" name="MN_38">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3289,7 +3289,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MY0_16">
+                      <widget class="QLineEdit" name="MX_38">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3351,7 +3351,7 @@ QGroupBox::title {
                    <item row="2" column="1">
                     <layout class="QGridLayout" name="gridLayout_124">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MY0_1">
+                      <widget class="QLineEdit" name="MN_28">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3366,7 +3366,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MY0_2">
+                      <widget class="QLineEdit" name="MX_28">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3411,7 +3411,7 @@ QGroupBox::title {
                    <item row="14" column="1">
                     <layout class="QGridLayout" name="gridLayout_137">
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="lineEdit_3">
+                      <widget class="QLineEdit" name="MX_34">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3423,7 +3423,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="lineEdit_4">
+                      <widget class="QLineEdit" name="MN_34">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3439,7 +3439,7 @@ QGroupBox::title {
                    <item row="12" column="1">
                     <layout class="QGridLayout" name="gridLayout_136">
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="lineEdit">
+                      <widget class="QLineEdit" name="MX_33">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3451,7 +3451,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="lineEdit_2">
+                      <widget class="QLineEdit" name="MN_33">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3528,7 +3528,7 @@ QGroupBox::title {
                    <item row="20" column="1">
                     <layout class="QGridLayout" name="gridLayout_46">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MY0_13">
+                      <widget class="QLineEdit" name="MN_37">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3543,7 +3543,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MY0_14">
+                      <widget class="QLineEdit" name="MX_37">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3562,7 +3562,7 @@ QGroupBox::title {
                    <item row="18" column="1">
                     <layout class="QGridLayout" name="gridLayout_45">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MY0_11">
+                      <widget class="QLineEdit" name="MN_36">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3577,7 +3577,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MY0_12">
+                      <widget class="QLineEdit" name="MX_36">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3611,7 +3611,7 @@ QGroupBox::title {
                    <item row="6" column="1">
                     <layout class="QGridLayout" name="gridLayout_126">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MY0_5">
+                      <widget class="QLineEdit" name="MN_30">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3626,7 +3626,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MY0_6">
+                      <widget class="QLineEdit" name="MX_30">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3671,7 +3671,7 @@ QGroupBox::title {
                    <item row="4" column="1">
                     <layout class="QGridLayout" name="gridLayout_125">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MY0_3">
+                      <widget class="QLineEdit" name="MN_29">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3686,7 +3686,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MY0_4">
+                      <widget class="QLineEdit" name="MX_29">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3720,7 +3720,7 @@ QGroupBox::title {
                    <item row="16" column="1">
                     <layout class="QGridLayout" name="gridLayout_143">
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="lineEdit_5">
+                      <widget class="QLineEdit" name="MX_35">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3732,7 +3732,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="lineEdit_6">
+                      <widget class="QLineEdit" name="MN_35">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3759,7 +3759,7 @@ QGroupBox::title {
                    <item row="10" column="1">
                     <layout class="QGridLayout" name="gridLayout_142">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MQ_9">
+                      <widget class="QLineEdit" name="MN_43">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3774,7 +3774,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MQ_10">
+                      <widget class="QLineEdit" name="MX_43">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3963,7 +3963,7 @@ QGroupBox::title {
                    <item row="2" column="1">
                     <layout class="QGridLayout" name="gridLayout_138">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MQ_1">
+                      <widget class="QLineEdit" name="MN_39">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -3978,7 +3978,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MQ_2">
+                      <widget class="QLineEdit" name="MX_39">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4068,7 +4068,7 @@ QGroupBox::title {
                    <item row="18" column="1">
                     <layout class="QGridLayout" name="gridLayout_60">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MQ_17">
+                      <widget class="QLineEdit" name="MN_47">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4083,7 +4083,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MQ_18">
+                      <widget class="QLineEdit" name="MX_47">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4102,7 +4102,7 @@ QGroupBox::title {
                    <item row="8" column="1">
                     <layout class="QGridLayout" name="gridLayout_141">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MQ_7">
+                      <widget class="QLineEdit" name="MN_42">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4117,7 +4117,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MQ_8">
+                      <widget class="QLineEdit" name="MX_42">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4136,7 +4136,7 @@ QGroupBox::title {
                    <item row="14" column="1">
                     <layout class="QGridLayout" name="gridLayout_53">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MQ_13">
+                      <widget class="QLineEdit" name="MN_45">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4151,7 +4151,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MQ_14">
+                      <widget class="QLineEdit" name="MX_45">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4170,7 +4170,7 @@ QGroupBox::title {
                    <item row="4" column="1">
                     <layout class="QGridLayout" name="gridLayout_139">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MQ_3">
+                      <widget class="QLineEdit" name="MN_40">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4185,7 +4185,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MQ_4">
+                      <widget class="QLineEdit" name="MX_40">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4204,7 +4204,7 @@ QGroupBox::title {
                    <item row="16" column="1">
                     <layout class="QGridLayout" name="gridLayout_59">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MQ_15">
+                      <widget class="QLineEdit" name="MN_46">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4219,7 +4219,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MQ_16">
+                      <widget class="QLineEdit" name="MX_46">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4266,7 +4266,7 @@ QGroupBox::title {
                    <item row="12" column="1">
                     <layout class="QGridLayout" name="gridLayout_52">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MQ_11">
+                      <widget class="QLineEdit" name="MN_44">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4281,7 +4281,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MQ_12">
+                      <widget class="QLineEdit" name="MX_44">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4328,7 +4328,7 @@ QGroupBox::title {
                    <item row="6" column="1">
                     <layout class="QGridLayout" name="gridLayout_140">
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="MQ_5">
+                      <widget class="QLineEdit" name="MN_41">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4343,7 +4343,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="MQ_6">
+                      <widget class="QLineEdit" name="MX_41">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4469,7 +4469,7 @@ QGroupBox::title {
                    <item row="20" column="1">
                     <layout class="QGridLayout" name="gridLayout_144">
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="lineEdit_7">
+                      <widget class="QLineEdit" name="MX_48">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4481,7 +4481,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="lineEdit_8">
+                      <widget class="QLineEdit" name="MN_48">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4497,7 +4497,7 @@ QGroupBox::title {
                    <item row="22" column="1">
                     <layout class="QGridLayout" name="gridLayout_145">
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="lineEdit_9">
+                      <widget class="QLineEdit" name="MX_49">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4509,7 +4509,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="lineEdit_10">
+                      <widget class="QLineEdit" name="MN_49">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4525,7 +4525,7 @@ QGroupBox::title {
                    <item row="24" column="1">
                     <layout class="QGridLayout" name="gridLayout_146">
                      <item row="0" column="1">
-                      <widget class="QLineEdit" name="lineEdit_11">
+                      <widget class="QLineEdit" name="MX_50">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4537,7 +4537,7 @@ QGroupBox::title {
                       </widget>
                      </item>
                      <item row="0" column="0">
-                      <widget class="QLineEdit" name="lineEdit_12">
+                      <widget class="QLineEdit" name="MN_50">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -6998,8 +6998,8 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>1476</width>
-                             <height>536</height>
+                             <width>88</width>
+                             <height>33</height>
                             </rect>
                            </property>
                            <attribute name="label">
@@ -7098,7 +7098,7 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>83</width>
+                             <width>88</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -7626,8 +7626,8 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>1476</width>
-                             <height>536</height>
+                             <width>88</width>
+                             <height>33</height>
                             </rect>
                            </property>
                            <attribute name="label">
@@ -7726,7 +7726,7 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>83</width>
+                             <width>88</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -8248,7 +8248,7 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>83</width>
+                             <width>88</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -8332,8 +8332,8 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>1476</width>
-                             <height>577</height>
+                             <width>88</width>
+                             <height>33</height>
                             </rect>
                            </property>
                            <attribute name="label">
@@ -8932,7 +8932,7 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>83</width>
+                             <width>88</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -9036,8 +9036,8 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>1476</width>
-                             <height>536</height>
+                             <width>88</width>
+                             <height>33</height>
                             </rect>
                            </property>
                            <attribute name="label">
@@ -9667,8 +9667,8 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>1476</width>
-                             <height>454</height>
+                             <width>88</width>
+                             <height>33</height>
                             </rect>
                            </property>
                            <attribute name="label">
@@ -9785,7 +9785,7 @@ border-image: url(:/imgs/imgs/屏幕截图 2025-11-07 143348.png);</string>
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>83</width>
+                             <width>88</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -9827,8 +9827,8 @@ border-image: url(:/imgs/imgs/屏幕截图 2025-11-07 143348.png);</string>
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>1476</width>
-                             <height>454</height>
+                             <width>100</width>
+                             <height>30</height>
                             </rect>
                            </property>
                            <attribute name="label">
