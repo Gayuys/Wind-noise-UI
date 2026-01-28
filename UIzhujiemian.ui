@@ -63,7 +63,7 @@
       <enum>QTabWidget::TabShape::Triangular</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="tab_30">
       <property name="styleSheet">
@@ -4679,8 +4679,20 @@ QGroupBox::title {
                    </item>
                    <item row="26" column="1">
                     <layout class="QGridLayout" name="gridLayout_129">
-                     <item row="0" column="0">
+                     <item row="0" column="1">
                       <widget class="QLineEdit" name="MJ_13">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">background-color: rgb(255, 255, 255);</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLineEdit" name="lineEdit_13">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4695,8 +4707,20 @@ QGroupBox::title {
                    </item>
                    <item row="12" column="1">
                     <layout class="QGridLayout" name="gridLayout_167">
-                     <item row="0" column="0">
+                     <item row="0" column="1">
                       <widget class="QLineEdit" name="MJ_6">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">background-color: rgb(255, 255, 255);</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLineEdit" name="lineEdit_6">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4711,27 +4735,73 @@ QGroupBox::title {
                    </item>
                    <item row="0" column="1">
                     <layout class="QGridLayout" name="gridLayout_154">
-                     <item row="0" column="0">
-                      <widget class="QLabel" name="label_435">
+                     <item row="1" column="0">
+                      <widget class="QLabel" name="label_215">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
                         </font>
                        </property>
                        <property name="text">
-                        <string>推荐值</string>
+                        <string>数值</string>
                        </property>
                        <property name="alignment">
                         <set>Qt::AlignmentFlag::AlignCenter</set>
                        </property>
                       </widget>
                      </item>
+                     <item row="2" column="0">
+                      <layout class="QGridLayout" name="gridLayout_155">
+                       <item row="0" column="1">
+                        <widget class="QLabel" name="label_202">
+                         <property name="font">
+                          <font>
+                           <pointsize>16</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>最大值</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignmentFlag::AlignCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="0">
+                        <widget class="QLabel" name="label_211">
+                         <property name="font">
+                          <font>
+                           <pointsize>16</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>最小值</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignmentFlag::AlignCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
                     </layout>
                    </item>
                    <item row="14" column="1">
                     <layout class="QGridLayout" name="gridLayout_168">
-                     <item row="0" column="0">
+                     <item row="0" column="1">
                       <widget class="QLineEdit" name="MJ_7">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">background-color: rgb(255, 255, 255);</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLineEdit" name="lineEdit_7">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4746,7 +4816,7 @@ QGroupBox::title {
                    </item>
                    <item row="8" column="1">
                     <layout class="QGridLayout" name="gridLayout_161">
-                     <item row="0" column="0">
+                     <item row="0" column="1">
                       <widget class="QLineEdit" name="MJ_4">
                        <property name="font">
                         <font>
@@ -4758,6 +4828,18 @@ QGroupBox::title {
                        </property>
                        <property name="alignment">
                         <set>Qt::AlignmentFlag::AlignCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLineEdit" name="lineEdit_4">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">background-color: rgb(255, 255, 255);</string>
                        </property>
                       </widget>
                      </item>
@@ -4778,7 +4860,7 @@ QGroupBox::title {
                    </item>
                    <item row="24" column="1">
                     <layout class="QGridLayout" name="gridLayout_123">
-                     <item row="0" column="0">
+                     <item row="0" column="1">
                       <widget class="QLineEdit" name="MJ_12">
                        <property name="font">
                         <font>
@@ -4790,6 +4872,18 @@ QGroupBox::title {
                        </property>
                        <property name="alignment">
                         <set>Qt::AlignmentFlag::AlignCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLineEdit" name="lineEdit_12">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">background-color: rgb(255, 255, 255);</string>
                        </property>
                       </widget>
                      </item>
@@ -4840,7 +4934,7 @@ QGroupBox::title {
                    </item>
                    <item row="10" column="1">
                     <layout class="QGridLayout" name="gridLayout_162">
-                     <item row="0" column="0">
+                     <item row="0" column="1">
                       <widget class="QLineEdit" name="MJ_5">
                        <property name="font">
                         <font>
@@ -4855,12 +4949,36 @@ QGroupBox::title {
                        </property>
                       </widget>
                      </item>
+                     <item row="0" column="0">
+                      <widget class="QLineEdit" name="lineEdit_5">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">background-color: rgb(255, 255, 255);</string>
+                       </property>
+                      </widget>
+                     </item>
                     </layout>
                    </item>
                    <item row="28" column="1">
                     <layout class="QGridLayout" name="gridLayout_130">
-                     <item row="0" column="0">
+                     <item row="0" column="1">
                       <widget class="QLineEdit" name="MJ_14">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">background-color: rgb(255, 255, 255);</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLineEdit" name="lineEdit_14">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -4875,7 +4993,7 @@ QGroupBox::title {
                    </item>
                    <item row="18" column="1">
                     <layout class="QGridLayout" name="gridLayout_61">
-                     <item row="0" column="0">
+                     <item row="0" column="1">
                       <widget class="QLineEdit" name="MJ_9">
                        <property name="font">
                         <font>
@@ -4887,6 +5005,18 @@ QGroupBox::title {
                        </property>
                        <property name="alignment">
                         <set>Qt::AlignmentFlag::AlignCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLineEdit" name="lineEdit_9">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">background-color: rgb(255, 255, 255);</string>
                        </property>
                       </widget>
                      </item>
@@ -4920,7 +5050,7 @@ QGroupBox::title {
                    </item>
                    <item row="6" column="1">
                     <layout class="QGridLayout" name="gridLayout_160">
-                     <item row="0" column="0">
+                     <item row="0" column="1">
                       <widget class="QLineEdit" name="MJ_3">
                        <property name="font">
                         <font>
@@ -4932,6 +5062,18 @@ QGroupBox::title {
                        </property>
                        <property name="alignment">
                         <set>Qt::AlignmentFlag::AlignCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLineEdit" name="lineEdit_3">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">background-color: rgb(255, 255, 255);</string>
                        </property>
                       </widget>
                      </item>
@@ -4969,7 +5111,7 @@ QGroupBox::title {
                    </item>
                    <item row="2" column="1">
                     <layout class="QGridLayout" name="gridLayout_158">
-                     <item row="0" column="0">
+                     <item row="0" column="1">
                       <widget class="QLineEdit" name="MJ_1">
                        <property name="font">
                         <font>
@@ -4984,11 +5126,23 @@ QGroupBox::title {
                        </property>
                       </widget>
                      </item>
+                     <item row="0" column="0">
+                      <widget class="QLineEdit" name="lineEdit">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">background-color: rgb(255, 255, 255);</string>
+                       </property>
+                      </widget>
+                     </item>
                     </layout>
                    </item>
                    <item row="4" column="1">
                     <layout class="QGridLayout" name="gridLayout_159">
-                     <item row="0" column="0">
+                     <item row="0" column="1">
                       <widget class="QLineEdit" name="MJ_2">
                        <property name="font">
                         <font>
@@ -5000,6 +5154,18 @@ QGroupBox::title {
                        </property>
                        <property name="alignment">
                         <set>Qt::AlignmentFlag::AlignCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLineEdit" name="lineEdit_2">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">background-color: rgb(255, 255, 255);</string>
                        </property>
                       </widget>
                      </item>
@@ -5035,8 +5201,20 @@ QGroupBox::title {
                    </item>
                    <item row="16" column="1">
                     <layout class="QGridLayout" name="gridLayout_169">
-                     <item row="0" column="0">
+                     <item row="0" column="1">
                       <widget class="QLineEdit" name="MJ_8">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">background-color: rgb(255, 255, 255);</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLineEdit" name="lineEdit_8">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -5120,8 +5298,20 @@ QGroupBox::title {
                    </item>
                    <item row="32" column="1">
                     <layout class="QGridLayout" name="gridLayout_132">
-                     <item row="0" column="0">
+                     <item row="0" column="1">
                       <widget class="QLineEdit" name="MJ_31">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">background-color: rgb(255, 255, 255);</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLineEdit" name="lineEdit_16">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -5192,8 +5382,20 @@ QGroupBox::title {
                    </item>
                    <item row="30" column="1">
                     <layout class="QGridLayout" name="gridLayout_131">
-                     <item row="0" column="0">
+                     <item row="0" column="1">
                       <widget class="QLineEdit" name="MJ_15">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">background-color: rgb(255, 255, 255);</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLineEdit" name="lineEdit_15">
                        <property name="font">
                         <font>
                          <pointsize>16</pointsize>
@@ -5236,7 +5438,7 @@ QGroupBox::title {
                    </item>
                    <item row="22" column="1">
                     <layout class="QGridLayout" name="gridLayout_66">
-                     <item row="0" column="0">
+                     <item row="0" column="1">
                       <widget class="QLineEdit" name="MJ_11">
                        <property name="font">
                         <font>
@@ -5248,6 +5450,18 @@ QGroupBox::title {
                        </property>
                        <property name="alignment">
                         <set>Qt::AlignmentFlag::AlignCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLineEdit" name="lineEdit_11">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">background-color: rgb(255, 255, 255);</string>
                        </property>
                       </widget>
                      </item>
@@ -5281,7 +5495,7 @@ QGroupBox::title {
                    </item>
                    <item row="20" column="1">
                     <layout class="QGridLayout" name="gridLayout_62">
-                     <item row="0" column="0">
+                     <item row="0" column="1">
                       <widget class="QLineEdit" name="MJ_10">
                        <property name="font">
                         <font>
@@ -5293,6 +5507,18 @@ QGroupBox::title {
                        </property>
                        <property name="alignment">
                         <set>Qt::AlignmentFlag::AlignCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLineEdit" name="lineEdit_10">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">background-color: rgb(255, 255, 255);</string>
                        </property>
                       </widget>
                      </item>
@@ -6998,7 +7224,7 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>88</width>
+                             <width>36</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -7098,7 +7324,7 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>88</width>
+                             <width>83</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -7626,7 +7852,7 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>88</width>
+                             <width>36</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -7726,7 +7952,7 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>88</width>
+                             <width>83</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -8248,7 +8474,7 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>88</width>
+                             <width>83</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -8332,7 +8558,7 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>88</width>
+                             <width>48</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -8932,7 +9158,7 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>88</width>
+                             <width>83</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -9036,7 +9262,7 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>88</width>
+                             <width>36</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -9667,7 +9893,7 @@ QGroupBox::title {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>88</width>
+                             <width>48</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -9785,7 +10011,7 @@ border-image: url(:/imgs/imgs/屏幕截图 2025-11-07 143348.png);</string>
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>88</width>
+                             <width>83</width>
                              <height>33</height>
                             </rect>
                            </property>
@@ -15945,7 +16171,7 @@ QPushButton:hover {
 }</string>
                       </property>
                       <property name="currentIndex">
-                       <number>0</number>
+                       <number>1</number>
                       </property>
                       <widget class="QWidget" name="tab_29">
                        <attribute name="title">
@@ -16388,7 +16614,7 @@ QPushButton:hover {
 }</string>
                   </property>
                   <property name="currentIndex">
-                   <number>5</number>
+                   <number>2</number>
                   </property>
                   <widget class="QWidget" name="tab_2">
                    <attribute name="title">
