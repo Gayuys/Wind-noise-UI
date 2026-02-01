@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1819</width>
-    <height>1299</height>
+    <width>2022</width>
+    <height>1300</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -357,7 +357,7 @@ QTreeWidget::item:selected:!active {
 </string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="page">
       <property name="styleSheet">
@@ -467,8 +467,8 @@ QGroupBox::title {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>739</width>
-                     <height>511</height>
+                     <width>831</width>
+                     <height>516</height>
                     </rect>
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_56">
@@ -529,14 +529,14 @@ QGroupBox::title {
                          </property>
                          <property name="styleSheet">
                           <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color:rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -607,14 +607,14 @@ QPushButton:hover {
                          </property>
                          <property name="styleSheet">
                           <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -728,14 +728,14 @@ QPushButton:hover {
                          </property>
                          <property name="styleSheet">
                           <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -756,14 +756,14 @@ QPushButton:hover {
                          </property>
                          <property name="styleSheet">
                           <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color:rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -918,8 +918,8 @@ QGroupBox::title {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>739</width>
-                     <height>511</height>
+                     <width>831</width>
+                     <height>515</height>
                     </rect>
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -1070,14 +1070,14 @@ QGroupBox::title {
                          </property>
                          <property name="styleSheet">
                           <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -1309,14 +1309,14 @@ QGroupBox::title {
                      </property>
                      <property name="styleSheet">
                       <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color: rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -1336,14 +1336,14 @@ QPushButton:hover {
                      </property>
                      <property name="styleSheet">
                       <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color: rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -1393,7 +1393,7 @@ QPushButton:hover {
                      </property>
                      <property name="styleSheet">
                       <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color: rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
@@ -1401,7 +1401,7 @@ QPushButton:hover {
        width: 205px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -1476,7 +1476,7 @@ QGroupBox::title {
 }</string>
                   </property>
                   <property name="currentIndex">
-                   <number>1</number>
+                   <number>0</number>
                   </property>
                   <widget class="QWidget" name="tab_22">
                    <attribute name="title">
@@ -4852,16 +4852,13 @@ QGroupBox::title {
                   <property name="alignment">
                    <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
                   </property>
-                  <layout class="QVBoxLayout" name="verticalLayout_63" stretch="1,14">
-                   <property name="spacing">
-                    <number>0</number>
-                   </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_65" stretch="1,15">
                    <property name="topMargin">
                     <number>20</number>
                    </property>
                    <item>
                     <widget class="QWidget" name="widget_46" native="true">
-                     <layout class="QHBoxLayout" name="horizontalLayout_85" stretch="5,1">
+                     <layout class="QHBoxLayout" name="horizontalLayout_85" stretch="5,1,1">
                       <property name="spacing">
                        <number>0</number>
                       </property>
@@ -4948,6 +4945,40 @@ QGroupBox::title {
                              <string>9号曲线</string>
                             </property>
                            </item>
+                          </widget>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QWidget" name="widget_56" native="true">
+                        <layout class="QVBoxLayout" name="verticalLayout_63">
+                         <item>
+                          <widget class="QPushButton" name="pushButton">
+                           <property name="font">
+                            <font>
+                             <pointsize>16</pointsize>
+                            </font>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">QPushButton {
+       background-color: rgb(0, 120, 215);
+       color: white;
+       border: none;
+       border-radius: 4px;
+       padding: 8px 16px;
+    }
+QPushButton:hover {
+      background-color: rgb(0, 105, 190);
+}
+ QPushButton:pressed {
+       background-color: #21618c;
+    }
+</string>
+                           </property>
+                           <property name="text">
+                            <string>绘图</string>
+                           </property>
                           </widget>
                          </item>
                         </layout>
@@ -5077,14 +5108,14 @@ QGroupBox::title {
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -5104,14 +5135,14 @@ QPushButton:hover {
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -5443,14 +5474,14 @@ QGroupBox::title {
                      </property>
                      <property name="styleSheet">
                       <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -5470,14 +5501,14 @@ QPushButton:hover {
                      </property>
                      <property name="styleSheet">
                       <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color: rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -5677,14 +5708,14 @@ QGroupBox::title {
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -5704,14 +5735,14 @@ QPushButton:hover {
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -5852,14 +5883,14 @@ QGroupBox::title {
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -5879,14 +5910,14 @@ QPushButton:hover {
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -6467,8 +6498,8 @@ QGroupBox::title {
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>1117</width>
-                            <height>648</height>
+                            <width>1252</width>
+                            <height>644</height>
                            </rect>
                           </property>
                           <attribute name="label">
@@ -6502,8 +6533,8 @@ QGroupBox::title {
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>100</width>
-                            <height>30</height>
+                            <width>1119</width>
+                            <height>643</height>
                            </rect>
                           </property>
                           <attribute name="label">
@@ -6515,8 +6546,8 @@ QGroupBox::title {
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>100</width>
-                            <height>30</height>
+                            <width>1119</width>
+                            <height>643</height>
                            </rect>
                           </property>
                           <attribute name="label">
@@ -6528,8 +6559,8 @@ QGroupBox::title {
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>100</width>
-                            <height>30</height>
+                            <width>1119</width>
+                            <height>643</height>
                            </rect>
                           </property>
                           <attribute name="label">
@@ -6541,8 +6572,8 @@ QGroupBox::title {
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>100</width>
-                            <height>30</height>
+                            <width>1119</width>
+                            <height>643</height>
                            </rect>
                           </property>
                           <attribute name="label">
@@ -6554,8 +6585,8 @@ QGroupBox::title {
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>100</width>
-                            <height>30</height>
+                            <width>1119</width>
+                            <height>643</height>
                            </rect>
                           </property>
                           <attribute name="label">
@@ -6567,8 +6598,8 @@ QGroupBox::title {
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>88</width>
-                            <height>33</height>
+                            <width>1119</width>
+                            <height>643</height>
                            </rect>
                           </property>
                           <attribute name="label">
@@ -7095,8 +7126,8 @@ QGroupBox::title {
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>88</width>
-                            <height>33</height>
+                            <width>1119</width>
+                            <height>643</height>
                            </rect>
                           </property>
                           <attribute name="label">
@@ -7195,7 +7226,7 @@ QGroupBox::title {
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>88</width>
+                            <width>83</width>
                             <height>33</height>
                            </rect>
                           </property>
@@ -7717,7 +7748,7 @@ QGroupBox::title {
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>88</width>
+                            <width>83</width>
                             <height>33</height>
                            </rect>
                           </property>
@@ -7801,8 +7832,8 @@ QGroupBox::title {
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>88</width>
-                            <height>33</height>
+                            <width>1119</width>
+                            <height>684</height>
                            </rect>
                           </property>
                           <attribute name="label">
@@ -8401,7 +8432,7 @@ QGroupBox::title {
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>88</width>
+                            <width>83</width>
                             <height>33</height>
                            </rect>
                           </property>
@@ -8505,8 +8536,8 @@ QGroupBox::title {
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>88</width>
-                            <height>33</height>
+                            <width>1119</width>
+                            <height>643</height>
                            </rect>
                           </property>
                           <attribute name="label">
@@ -9136,7 +9167,7 @@ QGroupBox::title {
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>88</width>
+                            <width>83</width>
                             <height>33</height>
                            </rect>
                           </property>
@@ -9254,7 +9285,7 @@ border-image: url(:/imgs/imgs/屏幕截图 2025-11-07 143348.png);</string>
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>88</width>
+                            <width>83</width>
                             <height>33</height>
                            </rect>
                           </property>
@@ -9296,8 +9327,8 @@ border-image: url(:/imgs/imgs/屏幕截图 2025-11-07 143348.png);</string>
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>100</width>
-                            <height>30</height>
+                            <width>1119</width>
+                            <height>561</height>
                            </rect>
                           </property>
                           <attribute name="label">
@@ -9450,14 +9481,14 @@ QGroupBox::title {
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -9574,14 +9605,14 @@ QGroupBox::title {
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -9663,14 +9694,14 @@ QGroupBox::title {
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -9690,14 +9721,14 @@ QPushButton:hover {
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -10618,14 +10649,14 @@ QGroupBox::title {
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -10720,14 +10751,14 @@ QGroupBox::title {
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -10748,14 +10779,14 @@ QPushButton:hover {
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -10776,14 +10807,14 @@ QPushButton:hover {
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -14160,14 +14191,14 @@ QGroupBox::title {
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -14259,14 +14290,14 @@ QGroupBox::title {
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -14286,14 +14317,14 @@ QPushButton:hover {
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -14313,14 +14344,14 @@ QPushButton:hover {
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -14777,7 +14808,7 @@ QPushButton:hover {
        </property>
        <item>
         <widget class="QWidget" name="widget_26" native="true">
-         <layout class="QVBoxLayout" name="verticalLayout_40">
+         <layout class="QVBoxLayout" name="verticalLayout_40" stretch="1,2">
           <item>
            <widget class="QGroupBox" name="groupBox_3">
             <property name="font">
@@ -14922,14 +14953,14 @@ QGroupBox::title {
                         </property>
                         <property name="styleSheet">
                          <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -15008,14 +15039,14 @@ QPushButton:hover {
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -15026,82 +15057,20 @@ QPushButton:hover {
                   </property>
                  </widget>
                 </item>
-                <item>
-                 <widget class="QPushButton" name="ZJPPB_3">
-                  <property name="font">
-                   <font>
-                    <pointsize>16</pointsize>
-                    <bold>false</bold>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QPushButton {
-       background-color: #3498db;
-       color: white;
-       border: none;
-       border-radius: 4px;
-       padding: 8px 16px;
-    }
-QPushButton:hover {
-      background-color: #2980b9;
-}
- QPushButton:pressed {
-       background-color: #21618c;
-    }</string>
-                  </property>
-                  <property name="text">
-                   <string>进行参数优化</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="ZJPPB_4">
-                  <property name="font">
-                   <font>
-                    <pointsize>16</pointsize>
-                    <bold>false</bold>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QPushButton {
-       background-color: #3498db;
-       color: white;
-       border: none;
-       border-radius: 4px;
-       padding: 8px 16px;
-    }
-QPushButton:hover {
-      background-color: #2980b9;
-}
- QPushButton:pressed {
-       background-color: #21618c;
-    }</string>
-                  </property>
-                  <property name="text">
-                   <string>保存造型优化数据</string>
-                  </property>
-                 </widget>
-                </item>
                </layout>
               </widget>
              </item>
              <item>
               <widget class="QWidget" name="widget_50" native="true">
-               <layout class="QHBoxLayout" name="horizontalLayout_27" stretch="3,1">
-                <property name="leftMargin">
-                 <number>0</number>
+               <layout class="QHBoxLayout" name="horizontalLayout_57">
+                <property name="spacing">
+                 <number>30</number>
                 </property>
                 <property name="topMargin">
                  <number>0</number>
                 </property>
-                <property name="rightMargin">
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>0</number>
-                </property>
                 <item>
-                 <widget class="QWidget" name="widget_51" native="true">
+                 <widget class="QWidget" name="widget_67" native="true">
                   <layout class="QVBoxLayout" name="verticalLayout_45">
                    <property name="leftMargin">
                     <number>0</number>
@@ -15116,470 +15085,385 @@ QPushButton:hover {
                     <number>0</number>
                    </property>
                    <item>
-                    <widget class="QWidget" name="widget_52" native="true">
-                     <layout class="QVBoxLayout" name="verticalLayout_46">
-                      <item>
-                       <widget class="QLabel" name="label_32">
-                        <property name="font">
-                         <font>
-                          <pointsize>18</pointsize>
-                          <bold>false</bold>
-                         </font>
-                        </property>
-                        <property name="text">
-                         <string>优化的造型参数的索引值：</string>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
+                    <layout class="QHBoxLayout" name="horizontalLayout_27" stretch="1,3">
+                     <item>
+                      <widget class="QLabel" name="label_152">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>请输入遗传算法生成的方案数量：</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLineEdit" name="ZJP_6">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">background-color: rgb(255, 255, 255);</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignmentFlag::AlignCenter</set>
+                       </property>
+                       <property name="placeholderText">
+                        <string>示例：200</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
                    </item>
                    <item>
-                    <widget class="QWidget" name="widget_63" native="true">
-                     <layout class="QHBoxLayout" name="horizontalLayout_57">
-                      <item>
-                       <widget class="QLabel" name="label_65">
-                        <property name="font">
-                         <font>
-                          <pointsize>16</pointsize>
-                         </font>
-                        </property>
-                        <property name="text">
-                         <string>索引值:</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QLineEdit" name="ZJP_3">
-                        <property name="font">
-                         <font>
-                          <pointsize>16</pointsize>
-                          <bold>false</bold>
-                         </font>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">background-color: rgb(255, 255, 255);</string>
-                        </property>
-                        <property name="alignment">
-                         <set>Qt::AlignmentFlag::AlignCenter</set>
-                        </property>
-                        <property name="placeholderText">
-                         <string>示例：0, 2, 5, 10, 15, 22, 27, 31, 33, 37, 40, 42</string>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
+                    <layout class="QHBoxLayout" name="horizontalLayout_28" stretch="1,3">
+                     <item>
+                      <widget class="QLabel" name="label_153">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>请输入遗传算法的迭代次数：</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLineEdit" name="ZJP_7">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">background-color: rgb(255, 255, 255);</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignmentFlag::AlignCenter</set>
+                       </property>
+                       <property name="placeholderText">
+                        <string>示例：200</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
                    </item>
                    <item>
-                    <widget class="QWidget" name="widget_64" native="true">
-                     <layout class="QVBoxLayout" name="verticalLayout_48">
-                      <item>
-                       <widget class="QLabel" name="label_33">
-                        <property name="font">
-                         <font>
-                          <pointsize>18</pointsize>
-                          <bold>false</bold>
-                         </font>
+                    <layout class="QHBoxLayout" name="horizontalLayout_29" stretch="1,3">
+                     <item>
+                      <widget class="QLabel" name="label_9">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>请输入需要优化的频段:</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QWidget" name="widget_36" native="true">
+                       <layout class="QHBoxLayout" name="horizontalLayout_66">
+                        <property name="leftMargin">
+                         <number>0</number>
                         </property>
-                        <property name="text">
-                         <string>优化的造型参数的范围：</string>
+                        <property name="topMargin">
+                         <number>0</number>
                         </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QWidget" name="widget_65" native="true">
-                     <property name="font">
-                      <font>
-                       <pointsize>16</pointsize>
-                       <bold>true</bold>
-                      </font>
-                     </property>
-                     <layout class="QHBoxLayout" name="horizontalLayout_28">
-                      <item>
-                       <widget class="QLabel" name="label_37">
-                        <property name="font">
-                         <font>
-                          <pointsize>16</pointsize>
-                          <bold>false</bold>
-                         </font>
+                        <property name="rightMargin">
+                         <number>0</number>
                         </property>
-                        <property name="text">
-                         <string>最小值:</string>
+                        <property name="bottomMargin">
+                         <number>0</number>
                         </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QLineEdit" name="ZJP_4">
-                        <property name="font">
-                         <font>
-                          <pointsize>16</pointsize>
-                          <bold>false</bold>
-                         </font>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">background-color: rgb(255, 255, 255);</string>
-                        </property>
-                        <property name="alignment">
-                         <set>Qt::AlignmentFlag::AlignCenter</set>
-                        </property>
-                        <property name="placeholderText">
-                         <string>示例：0, 27, 2, 20, 10, 150, 1, 80, 120, 60, 140, 12</string>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QWidget" name="widget_66" native="true">
-                     <layout class="QHBoxLayout" name="horizontalLayout_29">
-                      <item>
-                       <widget class="QLabel" name="label_39">
-                        <property name="font">
-                         <font>
-                          <pointsize>16</pointsize>
-                          <bold>false</bold>
-                         </font>
-                        </property>
-                        <property name="text">
-                         <string>最大值:</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QLineEdit" name="ZJP_5">
-                        <property name="font">
-                         <font>
-                          <pointsize>16</pointsize>
-                          <bold>false</bold>
-                         </font>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">background-color: rgb(255, 255, 255);</string>
-                        </property>
-                        <property name="alignment">
-                         <set>Qt::AlignmentFlag::AlignCenter</set>
-                        </property>
-                        <property name="placeholderText">
-                         <string>示例：5, 40, 8, 45, 20, 190, 8, 90, 160, 75, 180, 18</string>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
+                        <item>
+                         <widget class="QComboBox" name="ZJPCB_1">
+                          <property name="font">
+                           <font>
+                            <pointsize>16</pointsize>
+                           </font>
+                          </property>
+                          <property name="styleSheet">
+                           <string notr="true">QComboBox {
+    background-color: white;
+    selection-background-color: white; 
+    selection-color: black;
+}
+</string>
+                          </property>
+                          <item>
+                           <property name="text">
+                            <string>200</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>250</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>315</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>400</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>500</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>630</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>800</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>1000</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>1250</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>1600</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>2000</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>2500</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>3150</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>4000</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>5000</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>6300</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>8000</string>
+                           </property>
+                          </item>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QComboBox" name="ZJPCB_2">
+                          <property name="font">
+                           <font>
+                            <pointsize>16</pointsize>
+                           </font>
+                          </property>
+                          <property name="styleSheet">
+                           <string notr="true">QComboBox {
+    background-color: white;
+    selection-background-color: white; 
+    selection-color: black;
+}
+</string>
+                          </property>
+                          <property name="currentText">
+                           <string>8000</string>
+                          </property>
+                          <property name="currentIndex">
+                           <number>16</number>
+                          </property>
+                          <item>
+                           <property name="text">
+                            <string>200</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>250</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>315</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>400</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>500</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>630</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>800</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>1000</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>1250</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>1600</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>2000</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>2500</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>3150</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>4000</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>5000</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>6300</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>8000</string>
+                           </property>
+                          </item>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                     </item>
+                    </layout>
                    </item>
                   </layout>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QWidget" name="widget_67" native="true">
-                  <layout class="QVBoxLayout" name="verticalLayout_37">
-                   <item>
-                    <widget class="QLabel" name="label_152">
-                     <property name="font">
-                      <font>
-                       <pointsize>16</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>请输入遗传算法生成的方案数量：</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLineEdit" name="ZJP_6">
-                     <property name="font">
-                      <font>
-                       <pointsize>16</pointsize>
-                      </font>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">background-color: rgb(255, 255, 255);</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignmentFlag::AlignCenter</set>
-                     </property>
-                     <property name="placeholderText">
-                      <string>示例：200</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="label_153">
-                     <property name="font">
-                      <font>
-                       <pointsize>16</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>请输入遗传算法的迭代次数：</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLineEdit" name="ZJP_7">
-                     <property name="font">
-                      <font>
-                       <pointsize>16</pointsize>
-                      </font>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">background-color: rgb(255, 255, 255);</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignmentFlag::AlignCenter</set>
-                     </property>
-                     <property name="placeholderText">
-                      <string>示例：200</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="label_9">
-                     <property name="font">
-                      <font>
-                       <pointsize>16</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>请输入需要优化的频段</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QWidget" name="widget_36" native="true">
-                     <layout class="QHBoxLayout" name="horizontalLayout_66">
-                      <property name="leftMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="topMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="rightMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="bottomMargin">
-                       <number>0</number>
-                      </property>
-                      <item>
-                       <widget class="QComboBox" name="ZJPCB_1">
-                        <property name="font">
-                         <font>
-                          <pointsize>16</pointsize>
-                         </font>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">QComboBox {
-    background-color: white;
-    selection-background-color: white; 
-    selection-color: black;
+                 <layout class="QVBoxLayout" name="verticalLayout_37" stretch="1,1">
+                  <property name="topMargin">
+                   <number>20</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>20</number>
+                  </property>
+                  <item>
+                   <widget class="QPushButton" name="ZJPPB_3">
+                    <property name="font">
+                     <font>
+                      <pointsize>16</pointsize>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QPushButton {
+       background-color:  rgb(0, 120, 215);
+       color: white;
+       border: none;
+       border-radius: 4px;
+       padding: 8px 16px;
+    }
+QPushButton:hover {
+      background-color: rgb(0, 105, 190);
 }
-</string>
-                        </property>
-                        <item>
-                         <property name="text">
-                          <string>200</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>250</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>315</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>400</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>500</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>630</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>800</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>1000</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>1250</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>1600</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>2000</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>2500</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>3150</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>4000</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>5000</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>6300</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>8000</string>
-                         </property>
-                        </item>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QComboBox" name="ZJPCB_2">
-                        <property name="font">
-                         <font>
-                          <pointsize>16</pointsize>
-                         </font>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">QComboBox {
-    background-color: white;
-    selection-background-color: white; 
-    selection-color: black;
+ QPushButton:pressed {
+       background-color: #21618c;
+    }</string>
+                    </property>
+                    <property name="text">
+                     <string>进行参数优化</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="ZJPPB_4">
+                    <property name="font">
+                     <font>
+                      <pointsize>16</pointsize>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QPushButton {
+       background-color:  rgb(0, 120, 215);
+       color: white;
+       border: none;
+       border-radius: 4px;
+       padding: 8px 16px;
+    }
+QPushButton:hover {
+      background-color: rgb(0, 105, 190);
 }
-</string>
-                        </property>
-                        <property name="currentText">
-                         <string>8000</string>
-                        </property>
-                        <property name="currentIndex">
-                         <number>16</number>
-                        </property>
-                        <item>
-                         <property name="text">
-                          <string>200</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>250</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>315</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>400</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>500</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>630</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>800</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>1000</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>1250</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>1600</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>2000</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>2500</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>3150</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>4000</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>5000</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>6300</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>8000</string>
-                         </property>
-                        </item>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
+ QPushButton:pressed {
+       background-color: #21618c;
+    }</string>
+                    </property>
+                    <property name="text">
+                     <string>保存造型优化数据</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                </layout>
               </widget>
@@ -15677,7 +15561,7 @@ border: 1px solid #444444;</string>
        </property>
        <item>
         <widget class="QWidget" name="widget_27" native="true">
-         <layout class="QVBoxLayout" name="verticalLayout_54">
+         <layout class="QVBoxLayout" name="verticalLayout_54" stretch="1,2">
           <item>
            <widget class="QGroupBox" name="groupBox_5">
             <property name="font">
@@ -15712,7 +15596,7 @@ QGroupBox::title {
             <property name="title">
              <string>车辆造型参数优化设置</string>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_49">
+            <layout class="QVBoxLayout" name="verticalLayout_49" stretch="1,1,1,1">
              <property name="topMargin">
               <number>20</number>
              </property>
@@ -15837,14 +15721,14 @@ QGroupBox::title {
                            </property>
                            <property name="styleSheet">
                             <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -15888,7 +15772,7 @@ QPushButton:hover {
              </item>
              <item>
               <widget class="QWidget" name="widget_86" native="true">
-               <layout class="QHBoxLayout" name="horizontalLayout_58">
+               <layout class="QHBoxLayout" name="horizontalLayout_58" stretch="0,0,0">
                 <item>
                  <widget class="QLabel" name="label_48">
                   <property name="font">
@@ -15925,14 +15809,14 @@ QPushButton:hover {
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
-       background-color: #3498db;
+       background-color:  rgb(0, 120, 215);
        color: white;
        border: none;
        border-radius: 4px;
        padding: 8px 16px;
     }
 QPushButton:hover {
-      background-color: #2980b9;
+      background-color: rgb(0, 105, 190);
 }
  QPushButton:pressed {
        background-color: #21618c;
@@ -15943,83 +15827,33 @@ QPushButton:hover {
                   </property>
                  </widget>
                 </item>
-                <item>
-                 <widget class="QPushButton" name="ZJXPB_3">
-                  <property name="font">
-                   <font>
-                    <pointsize>16</pointsize>
-                    <bold>false</bold>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QPushButton {
-       background-color: #3498db;
-       color: white;
-       border: none;
-       border-radius: 4px;
-       padding: 8px 16px;
-    }
-QPushButton:hover {
-      background-color: #2980b9;
-}
- QPushButton:pressed {
-       background-color: #21618c;
-    }</string>
-                  </property>
-                  <property name="text">
-                   <string>进行参数优化</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="ZJXPB_4">
-                  <property name="font">
-                   <font>
-                    <pointsize>16</pointsize>
-                    <bold>false</bold>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QPushButton {
-       background-color: #3498db;
-       color: white;
-       border: none;
-       border-radius: 4px;
-       padding: 8px 16px;
-    }
-QPushButton:hover {
-      background-color: #2980b9;
-}
- QPushButton:pressed {
-       background-color: #21618c;
-    }</string>
-                  </property>
-                  <property name="text">
-                   <string>保存造型优化数据</string>
-                  </property>
-                 </widget>
-                </item>
                </layout>
               </widget>
              </item>
              <item>
               <widget class="QWidget" name="widget_78" native="true">
-               <layout class="QHBoxLayout" name="horizontalLayout_59" stretch="3,1">
+               <layout class="QHBoxLayout" name="horizontalLayout_64">
+                <property name="spacing">
+                 <number>30</number>
+                </property>
                 <property name="leftMargin">
-                 <number>0</number>
+                 <number>9</number>
                 </property>
                 <property name="topMargin">
                  <number>0</number>
                 </property>
                 <property name="rightMargin">
-                 <number>0</number>
+                 <number>9</number>
                 </property>
                 <property name="bottomMargin">
-                 <number>0</number>
+                 <number>9</number>
                 </property>
                 <item>
-                 <widget class="QWidget" name="widget_79" native="true">
-                  <layout class="QVBoxLayout" name="verticalLayout_79">
+                 <widget class="QWidget" name="widget_85" native="true">
+                  <layout class="QVBoxLayout" name="verticalLayout_41">
+                   <property name="spacing">
+                    <number>6</number>
+                   </property>
                    <property name="leftMargin">
                     <number>0</number>
                    </property>
@@ -16033,260 +15867,175 @@ QPushButton:hover {
                     <number>0</number>
                    </property>
                    <item>
-                    <widget class="QWidget" name="widget_80" native="true">
-                     <layout class="QVBoxLayout" name="verticalLayout_80">
-                      <item>
-                       <widget class="QLabel" name="label_47">
-                        <property name="font">
-                         <font>
-                          <pointsize>18</pointsize>
-                          <bold>false</bold>
-                         </font>
-                        </property>
-                        <property name="text">
-                         <string>优化的造型参数的索引值：</string>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
+                    <layout class="QHBoxLayout" name="horizontalLayout_59" stretch="1,3">
+                     <item>
+                      <widget class="QLabel" name="label_222">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>请输入遗传算法生成的方案数量：</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLineEdit" name="ZJX_6">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">background-color: rgb(255, 255, 255);</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignmentFlag::AlignCenter</set>
+                       </property>
+                       <property name="placeholderText">
+                        <string>示例：200</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
                    </item>
                    <item>
-                    <widget class="QWidget" name="widget_81" native="true">
-                     <layout class="QHBoxLayout" name="horizontalLayout_60">
-                      <item>
-                       <widget class="QLabel" name="label_64">
-                        <property name="font">
-                         <font>
-                          <pointsize>16</pointsize>
-                         </font>
-                        </property>
-                        <property name="text">
-                         <string>索引值:</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QLineEdit" name="ZJX_3">
-                        <property name="font">
-                         <font>
-                          <pointsize>16</pointsize>
-                          <bold>false</bold>
-                         </font>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">background-color: rgb(255, 255, 255);</string>
-                        </property>
-                        <property name="alignment">
-                         <set>Qt::AlignmentFlag::AlignCenter</set>
-                        </property>
-                        <property name="placeholderText">
-                         <string>示例：0, 2, 5, 10, 15, 22, 27, 31, 33, 37, 40, 42</string>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
+                    <layout class="QHBoxLayout" name="horizontalLayout_60" stretch="1,3">
+                     <item>
+                      <widget class="QLabel" name="label_223">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>请输入遗传算法的迭代次数：</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLineEdit" name="ZJX_7">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">background-color: rgb(255, 255, 255);</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignmentFlag::AlignCenter</set>
+                       </property>
+                       <property name="placeholderText">
+                        <string>示例：200</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
                    </item>
                    <item>
-                    <widget class="QWidget" name="widget_82" native="true">
-                     <layout class="QVBoxLayout" name="verticalLayout_81">
-                      <item>
-                       <widget class="QLabel" name="label_154">
-                        <property name="font">
-                         <font>
-                          <pointsize>18</pointsize>
-                          <bold>false</bold>
-                         </font>
-                        </property>
-                        <property name="text">
-                         <string>优化的造型参数的范围：</string>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QWidget" name="widget_83" native="true">
-                     <property name="font">
-                      <font>
-                       <pointsize>16</pointsize>
-                       <bold>true</bold>
-                      </font>
-                     </property>
-                     <layout class="QHBoxLayout" name="horizontalLayout_61">
-                      <item>
-                       <widget class="QLabel" name="label_155">
-                        <property name="font">
-                         <font>
-                          <pointsize>16</pointsize>
-                          <bold>false</bold>
-                         </font>
-                        </property>
-                        <property name="text">
-                         <string>最小值:</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QLineEdit" name="ZJX_4">
-                        <property name="font">
-                         <font>
-                          <pointsize>16</pointsize>
-                          <bold>false</bold>
-                         </font>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">background-color: rgb(255, 255, 255);</string>
-                        </property>
-                        <property name="alignment">
-                         <set>Qt::AlignmentFlag::AlignCenter</set>
-                        </property>
-                        <property name="placeholderText">
-                         <string>示例：0, 27, 2, 20, 10, 150, 1, 80, 120, 60, 140, 12</string>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QWidget" name="widget_84" native="true">
-                     <layout class="QHBoxLayout" name="horizontalLayout_64">
-                      <item>
-                       <widget class="QLabel" name="label_221">
-                        <property name="font">
-                         <font>
-                          <pointsize>16</pointsize>
-                          <bold>false</bold>
-                         </font>
-                        </property>
-                        <property name="text">
-                         <string>最大值:</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QLineEdit" name="ZJX_5">
-                        <property name="font">
-                         <font>
-                          <pointsize>16</pointsize>
-                          <bold>false</bold>
-                         </font>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">background-color: rgb(255, 255, 255);</string>
-                        </property>
-                        <property name="alignment">
-                         <set>Qt::AlignmentFlag::AlignCenter</set>
-                        </property>
-                        <property name="placeholderText">
-                         <string>示例：5, 40, 8, 45, 20, 190, 8, 90, 160, 75, 180, 18</string>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
+                    <layout class="QHBoxLayout" name="horizontalLayout_61" stretch="1,3">
+                     <item>
+                      <widget class="QLabel" name="label_10">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>请输入响度的上限值:</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLineEdit" name="ZJX_8">
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">background-color: rgb(255, 255, 255);</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignmentFlag::AlignCenter</set>
+                       </property>
+                       <property name="placeholderText">
+                        <string>示例：18</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
                    </item>
                   </layout>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QWidget" name="widget_85" native="true">
-                  <layout class="QVBoxLayout" name="verticalLayout_41">
-                   <item>
-                    <widget class="QLabel" name="label_222">
-                     <property name="font">
-                      <font>
-                       <pointsize>16</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>请输入遗传算法生成的方案数量：</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLineEdit" name="ZJX_6">
-                     <property name="font">
-                      <font>
-                       <pointsize>16</pointsize>
-                      </font>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">background-color: rgb(255, 255, 255);</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignmentFlag::AlignCenter</set>
-                     </property>
-                     <property name="placeholderText">
-                      <string>示例：200</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="label_223">
-                     <property name="font">
-                      <font>
-                       <pointsize>16</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>请输入遗传算法的迭代次数：</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLineEdit" name="ZJX_7">
-                     <property name="font">
-                      <font>
-                       <pointsize>16</pointsize>
-                      </font>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">background-color: rgb(255, 255, 255);</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignmentFlag::AlignCenter</set>
-                     </property>
-                     <property name="placeholderText">
-                      <string>示例：200</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="label_10">
-                     <property name="font">
-                      <font>
-                       <pointsize>16</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>请输入响度的上限值</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLineEdit" name="ZJX_8">
-                     <property name="font">
-                      <font>
-                       <pointsize>16</pointsize>
-                      </font>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">background-color: rgb(255, 255, 255);</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignmentFlag::AlignCenter</set>
-                     </property>
-                     <property name="placeholderText">
-                      <string>示例：18</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
+                 <layout class="QVBoxLayout" name="verticalLayout_79" stretch="1,1">
+                  <property name="topMargin">
+                   <number>20</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>20</number>
+                  </property>
+                  <item>
+                   <widget class="QPushButton" name="ZJXPB_3">
+                    <property name="font">
+                     <font>
+                      <pointsize>16</pointsize>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QPushButton {
+       background-color:  rgb(0, 120, 215);
+       color: white;
+       border: none;
+       border-radius: 4px;
+       padding: 8px 16px;
+    }
+QPushButton:hover {
+      background-color: rgb(0, 105, 190);
+}
+ QPushButton:pressed {
+       background-color: #21618c;
+    }</string>
+                    </property>
+                    <property name="text">
+                     <string>进行参数优化</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="ZJXPB_4">
+                    <property name="font">
+                     <font>
+                      <pointsize>16</pointsize>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QPushButton {
+       background-color:  rgb(0, 120, 215);
+       color: white;
+       border: none;
+       border-radius: 4px;
+       padding: 8px 16px;
+    }
+QPushButton:hover {
+      background-color: rgb(0, 105, 190);
+}
+ QPushButton:pressed {
+       background-color: #21618c;
+    }</string>
+                    </property>
+                    <property name="text">
+                     <string>保存造型优化数据</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                </layout>
               </widget>
