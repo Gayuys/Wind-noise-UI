@@ -1,6 +1,6 @@
 import sys
 import os
-from PySide6.QtWidgets import QApplication, QFileDialog, QLabel, QWidget, QMessageBox,QFrame, QStyleOption, QStyledItemDelegate, QMainWindow, QVBoxLayout
+from PySide6.QtWidgets import QApplication, QFileDialog, QLabel, QWidget, QMessageBox,QFrame, QStyleOption, QStyledItemDelegate, QMainWindow, QVBoxLayout, QTreeWidget, QComboBox
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QApplication, QWidget, QMessageBox
 from PySide6.QtCore import QFile, Qt
@@ -264,11 +264,41 @@ class MyWindow:
         self.histroy_data = "./缓存/histroy_data.xlsx"  # 要移动的历史数据路径
         self.input_file_path = None
         self.output_file_path = None
+        self.lingmingdujieguo_path = None
+        self.mubiaoquxian = None
         self.Characteristic_name = "./data/灵敏度分析特征.xlsx"
         self.all_characteristic = "./data/造型优化特征.xlsx"
         self.huancun = "./缓存"
         # self.model_file = "./bestmodel.pth"  # 要移动的模型路径
         # self.model_file = "./bestmodel.pth"  # 要移动的模型路径
+    def change_page(self, current_item, previous_item):
+        """树形控件切换堆叠页面核心方法"""
+        if not current_item:
+            return
+
+        click_text = current_item.text(0)
+        # 页面映射字典（根据实际UI的stackedWidget页面索引调整）
+        page_dict = {
+            "⚙️参数设置": 0,
+            "📌目标定义": 1,
+            "STL模型预处理": 2,
+            "造型特征参数提取": 3,
+            "造型符合度评分": 4,
+            "📈预测模型": 5,
+            "灵敏度分析": 6,
+            "基于具体频段为目标": 7,
+            "基于噪声响度为目标": 8
+        }
+
+        if click_text in page_dict:
+            target_page_index = page_dict[click_text]
+            if hasattr(self.current_window, "stackedWidget"):
+                self.current_window.stackedWidget.setCurrentIndex(target_page_index)
+                print(f"✅ 切换到页面: {click_text} (索引: {target_page_index})")
+            else:
+                QMessageBox.warning(self, "警告", "主界面未找到stackedWidget控件！")
+        else:
+            print(f"ℹ️ 点击了 '{click_text}'，未配置对应页面")
 
     def switch_to_main_ui(self):
         """切换到主界面 UIzhujiemian.ui"""
@@ -282,6 +312,24 @@ class MyWindow:
         self.current_window = self.load_ui(zhujiemian_window_file)
         if not self.current_window:
             return
+
+        # ─────────────── 重要 ───────────────
+        # 找到你的 QTreeWidget（请确认 objectName 是否真的是 treeWidget）
+        tree = self.current_window.findChild(QTreeWidget, "treeWidget")   # ← 改成你实际的名称！
+        
+        if tree:
+            # 断开旧的（避免重复绑定）
+            try:
+                tree.currentItemChanged.disconnect()
+            except TypeError:
+                pass
+            
+            # 绑定我们刚写的槽函数
+            tree.currentItemChanged.connect(self.change_page)
+            print("树形控件切换页面信号已绑定")
+        else:
+            print("警告：主界面中找不到名为 treeWidget 的 QTreeWidget")
+        # ─────────────────────────────────────
 
         # ←←← 新增：主界面加载完毕后，自动加载14张示意图
         QTimer.singleShot(100, self.load_styling_schematic_images)
@@ -331,6 +379,9 @@ class MyWindow:
         # 输出结果
         if hasattr(self.current_window, "MPB_2"):
             self.current_window.MPB_2.clicked.connect(self.mubiaodingyi_result)
+        #绘制方案曲线
+        if hasattr(self.current_window, "MPB_4"):
+            self.current_window.MPB_4.clicked.connect(self.plot_mubiaodingyi_result)       
 
         # ---------------- 造型评估模块功能按钮 ---------------- #
         #STL文件预处理
@@ -377,19 +428,7 @@ class MyWindow:
         if hasattr(self.current_window, "pushButton_28"):
             self.current_window.pushButton_28.clicked.connect(self.plot_zaoxingcanshupingjia)                
            
-        #------灵敏度分析功能按钮---------
-        #点击导入模型及数据集
-        if hasattr(self.current_window, "ZLPB_1"):
-            self.current_window.ZLPB_1.clicked.connect(self.select_folder_lingmingdu)
-        #点击导入数据
-        if hasattr(self.current_window, "ZLPB_2"):
-            self.current_window.ZLPB_2.clicked.connect(self.select_lingmingduData_file)
-        #点击进行灵敏度分析
-        if hasattr(self.current_window, "ZLPB_3"):
-            self.current_window.ZLPB_3.clicked.connect(self.MIV_Analysis)
-        #结果保存
-        if hasattr(self.current_window, "ZLPB_4"):
-            self.current_window.ZLPB_4.clicked.connect(self.save_results)
+
 
         # ---------------- 预测模型模块功能按钮 ---------------- #
         #------模型预测---------
@@ -408,6 +447,20 @@ class MyWindow:
 
 
         #---------------- 造型优化模块功能按钮 ---------------- #
+        
+        #------灵敏度分析功能按钮---------
+        #点击导入模型及数据集
+        if hasattr(self.current_window, "ZLPB_1"):
+            self.current_window.ZLPB_1.clicked.connect(self.select_folder_lingmingdu)
+        #点击导入数据
+        if hasattr(self.current_window, "ZLPB_2"):
+            self.current_window.ZLPB_2.clicked.connect(self.select_lingmingduData_file)
+        #点击进行灵敏度分析
+        if hasattr(self.current_window, "ZLPB_3"):
+            self.current_window.ZLPB_3.clicked.connect(self.MIV_Analysis)
+        #结果保存
+        if hasattr(self.current_window, "ZLPB_4"):
+            self.current_window.ZLPB_4.clicked.connect(self.save_results)
         
         #----基于具体频段-----
         if hasattr(self.current_window, "ZJPPB_1"):
@@ -471,7 +524,6 @@ class MyWindow:
         )
         if file_path and hasattr(self.current_window, "C_2"):
             self.current_window.C_2.setText(file_path)  
-    #执行模型训练    
     #绘制箱型图
     def plot_fitness_history(self, best_fitness_history, avg_fitness_history,max_generations,widget_name):
         """绘制最佳适应度和平均适应度的折线图，并根据QWidget的尺寸调整图像大小"""
@@ -663,7 +715,7 @@ class MyWindow:
         
         # 显示图表
         plot_widget.layout().addWidget(canvas)
-    
+    #执行模型训练    
     def model_train(self):
         #处理参数设置
         try:
@@ -845,8 +897,8 @@ class MyWindow:
             self.current_window.M_1.setText(file_path)
    
     def select_Data_folder_mubiaodingyi(self):
-        def select_Data_folder_canshushezhi(self):
-            """选择文件夹，自动搜索 .pth、输入数据.xlsx、输出数据.xlsx 并写入相应输入框"""
+       
+        """选择文件夹，自动搜索 .pth、输入数据.xlsx、输出数据.xlsx 并写入相应输入框"""
         folder_path = QFileDialog.getExistingDirectory(None, "选择包含模型和数据的文件夹")
         if not folder_path:
             return
@@ -889,7 +941,22 @@ class MyWindow:
         QMessageBox.information(None, "文件检测结果", msg)
         
     def mubiaodingyi_result(self):
-        """计算参数区间"""
+        """计算参数区间"""    
+        try:
+            model_path=self.current_window.M_2.text().strip()
+        except ValueError:
+            QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择模型文件！")
+        try:
+            original_data_path=self.current_window.M_1.text().strip()
+        except ValueError:
+            QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择目标车型的数据文件！")        
+        
+        df_results, feature_names, target_data, top_preds_for_plot = Objective_Definition.make_top10_optimization(model_path, self.input_file_path, self.output_file_path, original_data_path, result_save_path=self.huancun)
+        msg = "成功！计算结果已生成"
+        QMessageBox.information(None, "计算结果", msg)
+
+    def plot_mubiaodingyi_result(self):
+        #绘制符合目标曲线的前十方案
         def plot_top10_vs_target(target_data, top_preds_data, widget_name, title="Top 10 优选方案预测值 vs 目标值对比", save_path=None):
             """
             在指定的UI QWidget中绘制 Top 10 预测方案与目标值的对比折线图
@@ -924,15 +991,20 @@ class MyWindow:
                         2000, 2500, 3150, 4000, 5000, 6300, 8000]
             
             num_points = len(target_data)
+            print("target_data:", target_data)
+            print("top_preds_data:", top_preds_data)
+            print(num_points)
             x_labels = std_freqs[:num_points]
             x_axis = np.arange(num_points)   # 0,1,2,... 用于绘图
             
             # ── 绘制 Top10 预测曲线（灰色细虚线） ──
+            colors = ['#003366', '#FF4500', '#228B22', '#8A2BE2', '#00BFFF',
+                    '#FF6347', '#556B2F', '#4B0082', '#D2691E', '#00CED1']
             for i in range(len(top_preds_data)):
                 # 只给第一条（通常是最优）加图例标签
-                label = 'Top 10 方案' if i == 0 else None
+                label = f'{i+1}号曲线' 
                 ax.plot(x_axis, top_preds_data[i],
-                        color='gray',
+                        color=colors[i],
                         linestyle='--',
                         linewidth=1,
                         alpha=0.6,
@@ -940,7 +1012,7 @@ class MyWindow:
             
             # ── 高亮 Top1（通常是最优预测） ──
             ax.plot(x_axis, top_preds_data[0],
-                    color='blue',
+                    color='#003366',
                     linestyle='--',
                     linewidth=2,
                     label='最佳预测')
@@ -998,30 +1070,223 @@ class MyWindow:
                 save_file = os.path.join(save_path, "Top10_趋势对比图.png")
                 fig.savefig(save_file, dpi=300, bbox_inches='tight')
                 print(f"对比图已保存至: {save_file}")
+        def plot_comparison(target_data, top_preds_data, widget_name, num_data, title="方案预测值 vs 目标值对比", save_path=None):
+            """
+            在指定的UI QWidget中绘制 Top 10 预测方案与目标值的对比折线图
             
-        try:
-            model_path=self.current_window.M_2.text().strip()
-        except ValueError:
-            QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择模型文件！")
+            参数:
+                target_data: 目标真实值 (1D array/list)
+                top_preds_data: Top10 预测值列表，每项为长度与target_data相同的序列
+                widget_name: 要嵌入的QWidget的objectName
+                title: 图表标题
+                save_path: 保存路径（可选），若提供则保存为PNG
+            """          
+            # 读取 widget
+            plot_widget = self.current_window.findChild(QWidget, widget_name)
+            if not plot_widget:
+                print(f"警告: 找不到名为 '{widget_name}' 的QWidget")
+                return
+            
+            # 获取 widget 当前尺寸（像素）
+            widget_width = plot_widget.width()
+            widget_height = plot_widget.height()
+            
+            # 创建 matplotlib Figure，尺寸大致匹配 widget（dpi≈100）
+            fig = Figure(figsize=(widget_width / 100, widget_height / 100))
+            ax = fig.add_subplot(111)
+            
+            # 设置中文字体
+            plt.rcParams['font.sans-serif'] = ['SimHei', 'Microsoft YaHei', 'Arial Unicode MS']
+            plt.rcParams['axes.unicode_minus'] = False
+            
+            # 标准1/3倍频程频率点
+            std_freqs = [200, 250, 315, 400, 500, 630, 800, 1000, 1250, 1600,
+                        2000, 2500, 3150, 4000, 5000, 6300, 8000]
+            
+            num_points = len(target_data)
+            x_labels = std_freqs[:num_points]
+            x_axis = np.arange(num_points)   # 0,1,2,... 用于绘图
+            
+            # ── 绘制 Top10 预测曲线（灰色细虚线） ──
+            colors = ['#003366', '#FF4500', '#228B22', '#8A2BE2', '#00BFFF',
+                    '#FF6347', '#556B2F', '#4B0082', '#D2691E', '#00CED1']
+            if num_data == 0 :
+                label = '最优方案'
+            else:
+                label = f'{num_data+2}号曲线'  
+            ax.plot(x_axis, top_preds_data[num_data],
+                    color=colors[num_data],
+                    linestyle='--',
+                    linewidth=2.5,
+                    alpha=1,
+                    label=label)
+            
+            # ── 绘制目标真实值（粗红实线） ──
+            ax.plot(x_axis, target_data,
+                    color='red',
+                    marker='o',
+                    markersize=6,
+                    linewidth=2.5,
+                    label='目标数据')
+            
+            # ── 坐标轴设置 ──
+            ax.set_xticks(x_axis)
+            ax.set_xticklabels(x_labels, rotation=45, ha='right', fontsize=11)
+            
+            ax.tick_params(axis='y', labelsize=11)
+            ax.tick_params(axis='x', pad=8)
+            
+            ax.set_xlabel('频率 (Hz)', fontsize=13)
+            ax.set_ylabel('噪声 (dB)', fontsize=13)
+            ax.set_title(title, fontsize=14, pad=15)
+            
+            ax.legend(fontsize=11, loc='best', framealpha=0.9)
+            ax.grid(True, linestyle='--', alpha=0.3)
+            
+            fig.tight_layout()
+            
+            # ── 嵌入到 QWidget ──
+            canvas = FigureCanvas(fig)
+            canvas.setParent(plot_widget)
+            
+            # 设置大小策略和几何位置
+            canvas.setGeometry(plot_widget.rect())
+            canvas.setSizePolicy(plot_widget.sizePolicy())
+            
+            # 处理布局
+            layout = plot_widget.layout()
+            if layout is None:
+                layout = QVBoxLayout(plot_widget)
+                layout.setContentsMargins(0, 0, 0, 0)
+            
+            # 清除旧的 canvas（防止叠加）
+            for i in reversed(range(layout.count())):
+                item = layout.itemAt(i)
+                if item and item.widget() and isinstance(item.widget(), FigureCanvas):
+                    item.widget().deleteLater()
+            
+            layout.addWidget(canvas)
+            canvas.draw()
+            
+            # 可选保存
+            if save_path:
+                os.makedirs(save_path, exist_ok=True)
+                save_file = os.path.join(save_path, f"第{num_data+1}曲线趋势对比图.png")
+                fig.savefig(save_file, dpi=300, bbox_inches='tight')
+                print(f"对比图已保存至: {save_file}")
         try:
             original_data_path=self.current_window.M_1.text().strip()
+            self.mubiaoquxian = self.current_window.M_2.text().strip()
         except ValueError:
-            QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择目标车型的数据文件！")        
+            QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择目标车型的数据文件！") 
+
+        preds_data_path='./缓存/Top10_优化方案结果.xlsx'
+        #获取需要输出的曲线
+        selected_text = self.current_window.comboBox_2.currentText()
         
-        df_results, feature_names, target_data, top_preds_for_plot = Objective_Definition.make_top10_optimization(model_path, self.input_file_path, self.output_file_path, original_data_path, self.huancun)
-        plot_top10_vs_target(target_data, top_preds_for_plot, 'Mwidget_1', save_path=self.huancun)
-        feature_df = df_results[feature_names]
-        Top10_Min = np.round(feature_df.min().values, 3)
-        Top10_Max = np.round(feature_df.max().values, 3)
-        for i, value in enumerate(Top10_Min):
-            line_name = f"MN_{i + 1}"
-            if hasattr(self.current_window, line_name):
-                getattr(self.current_window, line_name).setText(str(value))
+        target_data = Objective_Definition.load_original_data(original_data_path)  
+        top_options = pd.read_excel(preds_data_path, sheet_name='Top10方案', header=0).values
+        top_preds_data = pd.read_excel(preds_data_path, sheet_name='Top10_预测结果', header=0).values
+        print(top_options)
         
-        for i, value in enumerate(Top10_Max):
-            line_name = f"MX_{i + 1}"
-            if hasattr(self.current_window, line_name):
-                getattr(self.current_window, line_name).setText(str(value))
+        if selected_text == "全部曲线":
+            plot_top10_vs_target(target_data, top_preds_data, 'Mwidget_1', title="Top 10 优选方案预测值 vs 目标值对比", save_path=self.huancun)
+            data = top_options[0]
+            for i, value in enumerate(data):
+                line_name = f"MN_{i + 1}"
+                if hasattr(self.current_window, line_name):
+                    formatted_value = f"{value:.3f}"
+                    getattr(self.current_window, line_name).setText(formatted_value)
+        elif selected_text == "最优曲线":
+            num_data = 0
+            plot_comparison(target_data, top_preds_data, 'Mwidget_1', num_data, title="方案预测值 vs 目标值对比", save_path=self.huancun)
+            data = top_options[num_data]
+            for i, value in enumerate(data):
+                line_name = f"MN_{i + 1}"
+                if hasattr(self.current_window, line_name):
+                    formatted_value = f"{value:.3f}"
+                    getattr(self.current_window, line_name).setText(formatted_value)
+        elif selected_text == "1号曲线":
+            num_data = 1
+            plot_comparison(target_data, top_preds_data, 'Mwidget_1', num_data, title="方案预测值 vs 目标值对比", save_path=self.huancun)
+            data = top_options[num_data]
+            for i, value in enumerate(data):
+                line_name = f"MN_{i + 1}"
+                if hasattr(self.current_window, line_name):
+                    formatted_value = f"{value:.3f}"
+                    getattr(self.current_window, line_name).setText(formatted_value)
+        elif selected_text == "2号曲线":
+            num_data = 2
+            plot_comparison(target_data, top_preds_data, 'Mwidget_1', num_data, title="方案预测值 vs 目标值对比", save_path=self.huancun)
+            data = top_options[num_data]
+            for i, value in enumerate(data):
+                line_name = f"MN_{i + 1}"
+                if hasattr(self.current_window, line_name):
+                    formatted_value = f"{value:.3f}"
+                    getattr(self.current_window, line_name).setText(formatted_value)
+        elif selected_text == "3号曲线":
+            num_data = 3
+            plot_comparison(target_data, top_preds_data, 'Mwidget_1', num_data, title="方案预测值 vs 目标值对比", save_path=self.huancun)
+            data = top_options[num_data]
+            for i, value in enumerate(data):
+                line_name = f"MN_{i + 1}"
+                if hasattr(self.current_window, line_name):
+                    formatted_value = f"{value:.3f}"
+                    getattr(self.current_window, line_name).setText(formatted_value)
+        elif selected_text == "4号曲线":
+            num_data = 4
+            plot_comparison(target_data, top_preds_data, 'Mwidget_1', num_data, title="方案预测值 vs 目标值对比", save_path=self.huancun)
+            data = top_options[num_data]
+            for i, value in enumerate(data):
+                line_name = f"MN_{i + 1}"
+                if hasattr(self.current_window, line_name):
+                    formatted_value = f"{value:.3f}"
+                    getattr(self.current_window, line_name).setText(formatted_value)
+        elif selected_text == "5号曲线":
+            num_data = 5
+            plot_comparison(target_data, top_preds_data, 'Mwidget_1', num_data, title="方案预测值 vs 目标值对比", save_path=self.huancun)
+            data = top_options[num_data]
+            for i, value in enumerate(data):
+                line_name = f"MN_{i + 1}"
+                if hasattr(self.current_window, line_name):
+                    formatted_value = f"{value:.3f}"
+                    getattr(self.current_window, line_name).setText(formatted_value)
+        elif selected_text == "6号曲线":
+            num_data = 6
+            plot_comparison(target_data, top_preds_data, 'Mwidget_1', num_data, title="方案预测值 vs 目标值对比", save_path=self.huancun)
+            data = top_options[num_data]
+            for i, value in enumerate(data):
+                line_name = f"MN_{i + 1}"
+                if hasattr(self.current_window, line_name):
+                    formatted_value = f"{value:.3f}"
+                    getattr(self.current_window, line_name).setText(formatted_value)
+        elif selected_text == "7号曲线":
+            num_data = 7
+            plot_comparison(target_data, top_preds_data, 'Mwidget_1', num_data, title="方案预测值 vs 目标值对比", save_path=self.huancun)
+            data = top_options[num_data]
+            for i, value in enumerate(data):
+                line_name = f"MN_{i + 1}"
+                if hasattr(self.current_window, line_name):
+                    formatted_value = f"{value:.3f}"
+                    getattr(self.current_window, line_name).setText(formatted_value)
+        elif selected_text == "8号曲线":
+            num_data = 8
+            plot_comparison(target_data, top_preds_data, 'Mwidget_1', num_data, title="方案预测值 vs 目标值对比", save_path=self.huancun)
+            data = top_options[num_data]
+            for i, value in enumerate(data):
+                line_name = f"MN_{i + 1}"
+                if hasattr(self.current_window, line_name):
+                    formatted_value = f"{value:.3f}"
+                    getattr(self.current_window, line_name).setText(formatted_value)
+        elif selected_text == "9号曲线":
+            num_data = 9
+            plot_comparison(target_data, top_preds_data, 'Mwidget_1', num_data, title="方案预测值 vs 目标值对比", save_path=self.huancun)
+            data = top_options[num_data]
+            for i, value in enumerate(data):
+                line_name = f"MN_{i + 1}"
+                if hasattr(self.current_window, line_name):
+                    formatted_value = f"{value:.3f}"
+                    getattr(self.current_window, line_name).setText(formatted_value)
         
     # ---------------- 造型评估模块功能 ---------------- #  
     # ----- STL文件预处理 -----
@@ -1284,7 +1549,7 @@ class MyWindow:
         ]
 
         label_names = [
-            "label_14", "label_21", "label_22", "label_27", "label_28",
+            "label_16", "label_21", "label_22", "label_27", "label_28",
             "label_40", "label_42", "label_51", "label_53", "label_148",
             "label_61", "label_56", "label_58", "label_59"
         ]
@@ -1344,7 +1609,7 @@ class MyWindow:
         if getattr(sys, 'frozen', False):
             print(f"【打包】临时目录路径：{sys._MEIPASS if hasattr(sys, '_MEIPASS') else '未知'}")
         
-    #------初步判断功能---------
+    #------造型评分功能---------
      #导入造型参数值
     def select_chubupanduan_zaoxingdaoru_file(self):
         file_path, _ = QFileDialog.getOpenFileName(
@@ -1491,8 +1756,245 @@ class MyWindow:
 
         except Exception as e:
             QMessageBox.critical(self.current_window, "错误", f"运行出错：\n{e}")
+   
 
-    #--------灵敏度分析功能------------
+    # ---------------- 预测模型模块功能 ---------------- #
+
+    #----模型预测------
+    #加载模型文件
+    def select_folder_yucemoxing_model(self):
+        """选择文件夹，自动搜索 .pth、输入数据.xlsx、输出数据.xlsx 并写入相应输入框"""
+        """选择文件夹，自动搜索 .pth、输入数据.xlsx、输出数据.xlsx 并写入相应输入框"""
+        folder_path = QFileDialog.getExistingDirectory(None, "选择包含模型和数据的文件夹2")
+        if not folder_path:
+            return
+
+        pth_path = ""
+        input_xlsx_path = ""
+        output_xlsx_path = ""
+
+        for file_name in os.listdir(folder_path):
+            lower_name = file_name.lower()
+            full_path = os.path.join(folder_path, file_name)
+
+            if lower_name.endswith(".pth") and not pth_path:
+                pth_path = full_path
+            elif file_name == "输入数据.xlsx":
+                input_xlsx_path = full_path
+            elif file_name == "输出数据.xlsx":
+                output_xlsx_path = full_path
+
+        if hasattr(self.current_window, "Y_1"):
+            self.current_window.Y_1.setText(pth_path)
+        # if hasattr(self.current_window, "lineEdit_137"):
+        #     self.current_window.lineEdit_137.setText(input_xlsx_path)
+        # if hasattr(self.current_window, "lineEdit_115"):
+        #     self.current_window.lineEdit_115.setText(output_xlsx_path)
+
+        msg = f"📁 已选择文件夹：{folder_path}\n"
+        msg += f"\n模型文件 (.pth)：{pth_path if pth_path else '未找到'}"
+        msg += f"\n输入数据.xlsx：{input_xlsx_path if input_xlsx_path else '未找到'}"
+        msg += f"\n输出数据.xlsx：{output_xlsx_path if output_xlsx_path else '未找到'}"
+        QMessageBox.information(None, "文件检测结果", msg)
+        
+    #加载输入数据
+    def select_file_yucemoxing_predict(self):
+        file_path, _ = QFileDialog.getOpenFileName(
+        self.current_window,
+        "选择文件",
+        "",
+        "造型参数+技术方案 (*.xlsx);;所有文件 (*.*)"
+    )
+        if file_path and hasattr(self.current_window, "Y_2"):
+            self.current_window.Y_2.setText(file_path)
+            new_input_path=self.current_window.Y_2.text().strip()
+            
+        new_input_data = pd.read_excel(new_input_path, header=0)
+        new_input_data = new_input_data.iloc[0].tolist()
+        #new_input_data = np.array(new_input_data).reshape(1, -1)    
+        for i, value in enumerate(new_input_data):
+            line_name = f"YD_{i + 1}"
+            if hasattr(self.current_window, line_name):
+                getattr(self.current_window, line_name).setText(str(value))
+            
+    def plot_photo_moxingyuce(self): 
+        
+        def visualize_predictions(predicted_data, widget_name, save_path=None, save_path_data=None):
+            """
+            可视化预测结果，嵌入到指定的 QWidget 中显示
+            参数:
+                predicted_data: 预测数据列表/数组
+                widget_name:    要嵌入图表的 QWidget 的 objectName
+                save_path:      保存图片的文件夹路径（可选）
+                save_path_data: 保存预测数据的 Excel 路径（可选）
+            """
+            plt.rcParams['font.sans-serif'] = ['SimHei', 'STKAITI']
+            plt.rcParams['axes.unicode_minus'] = False
+
+            min_length = min(len(predicted_data), 17)
+            predicted_data_slice = predicted_data[:min_length]
+
+            x_axis_data = [470 * i for i in range(1, min_length + 1)]
+            freq_labels = [200, 250, 315, 400, 500, 630, 800, 1000, 1250, 1600,
+                        2000, 2500, 3150, 4000, 5000, 6300, 8000][:min_length]
+
+            # ------------------- 创建图形 -------------------
+            fig = plt.figure(figsize=(10, 6))  # 先用默认大小，后面会调整
+
+            plt.plot(x_axis_data, predicted_data_slice, color="k", marker='s', linewidth=1.5, label='预测数据')
+            plt.xticks(x_axis_data, freq_labels, fontsize=12, rotation=45)
+            plt.xlabel('频率(Hz)', fontsize=14)
+            plt.ylabel('噪声(dB)', fontsize=14)
+            plt.legend(fontsize=12)
+            plt.grid(True, alpha=0.3)
+            plt.tight_layout()
+
+            # ------------------- 寻找目标 widget -------------------
+            plot_widget = self.current_window.findChild(QWidget, widget_name)
+            if not plot_widget:
+                print(f"警告: 找不到名为 '{widget_name}' 的 QWidget")
+                plt.close(fig)
+                return
+
+            # 获取 widget 当前尺寸（像素）
+            widget_width = plot_widget.width()
+            widget_height = plot_widget.height()
+
+            # 调整 figure 大小以尽量贴合 widget（dpi ≈ 100）
+            fig.set_size_inches(widget_width / 100, widget_height / 100)
+
+            # 创建 canvas 并嵌入
+            canvas = FigureCanvas(fig)
+            canvas.setParent(plot_widget)
+
+            # 清理旧的 canvas（防止重复添加）
+            layout = plot_widget.layout()
+            if layout is None:
+                layout = QVBoxLayout(plot_widget)
+                plot_widget.setLayout(layout)
+
+            # 删除旧的 FigureCanvas
+            for i in reversed(range(layout.count())):
+                item = layout.itemAt(i)
+                widget = item.widget()
+                if widget and isinstance(widget, FigureCanvas):
+                    widget.deleteLater()
+
+            # 添加新的 canvas
+            layout.addWidget(canvas)
+            canvas.draw()
+
+            # 让 canvas 跟随 widget 尺寸（推荐配合主窗口的 resizeEvent 使用）
+            canvas.setGeometry(plot_widget.rect())
+
+            # 可选：保存图片
+            if save_path:
+                save_img_path = os.path.join(save_path, '预测结果.png')
+                fig.savefig(save_img_path, dpi=300, bbox_inches='tight')
+                print(f"图像已保存至: {save_img_path}")
+
+            # 可选：保存数据到 Excel（保持原逻辑）
+            if save_path_data:
+                import pandas as pd
+                df = pd.DataFrame({
+                    '频率(Hz)': freq_labels,
+                    '预测值': predicted_data_slice
+                })
+                save_data_path = os.path.join(save_path_data, '预测结果.xlsx')
+                df.to_excel(save_data_path, index=False)
+                print(f"预测数据已保存至: {save_data_path}")
+
+        try:
+            model_path=self.current_window.Y_1.text().strip()
+        except ValueError:
+            QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择模型文件！")
+        try:
+            new_input_path=self.current_window.Y_2.text().strip()
+        except ValueError:
+            QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择进行灵敏度排序的数据文件！")
+        #获取造型+技术方案数据
+        new_input_data = pd.read_excel(new_input_path, header=0).values
+        pride_input_data = pd.read_excel(self.mubiaoquxian, header=0).values
+        input_data = []
+        for i in range(new_input_data.shape[1]):
+            line_name = f"YD_{i + 1}"
+            data = float(getattr(self.current_window, line_name).text().strip())
+            input_data.append(data)
+        #input_data = input_data.iloc[0].tolist()
+        print(input_data)
+        input_data = np.array(input_data)
+        print(input_data)
+        print(input_data.shape)
+        input_data = input_data.reshape(1, -1)
+        input_file_path = self.input_file_path #输入归一化
+        output_file_path = self.output_file_path #输出归一化
+
+        predicted_data = model_use.call_model(input_file_path, output_file_path, input_data, model_path)
+        visualize_predictions(predicted_data, 'Ywidget', self.huancun, self.huancun)
+        # 获取表头
+        df_headers = pd.read_excel(new_input_path, header=0)
+        column_names = df_headers.columns.tolist()
+        # 创建新DataFrame，使用原始表头和input_data作为一行数据
+        new_df = pd.DataFrame(input_data, columns=column_names)
+        # 保存为Excel文件
+        output_path = os.path.join(self.huancun, "造型参数+技术方案.xlsx")  # 或您指定的路径
+        new_df.to_excel(output_path, index=False)
+
+    def save_moxingyuce_result(self):
+        """在预测完成后保存分析结果"""
+        if not hasattr(self, "model_train"):
+            print("❌ 尚未进行模型训练，无法保存！")
+            return
+
+        # 弹出文件选择对话框
+        save_path, _ = QFileDialog.getSaveFileName(self.current_window, "保存预测结果", "", "文件 (*)")
+        try:
+            # 4. 创建新文件（exist_ok=False 避免重名）
+            os.makedirs(save_path, exist_ok=False)
+        except FileExistsError:
+            QMessageBox.critical(None, "错误", f"文件夹「{save_path}」已存在！")
+            return
+        except Exception as e:
+            QMessageBox.critical(None, "错误", f"创建文件失败：{str(e)}")
+            return
+
+        #设置要移动文件的路径
+        input_path = os.path.join(self.huancun, "造型参数+技术方案.xlsx")
+        result_path = os.path.join(self.huancun, "预测结果.xlsx")
+        photo_path = os.path.join(self.huancun, "预测结果.png")
+
+        # 5. 检查要移动的模型是否存在
+        if not os.path.exists(input_path):
+            QMessageBox.critical(None, "错误", f"指定文件造型参数+技术方案.xlsx不存在！")
+            return
+        if not os.path.exists(result_path):
+            QMessageBox.critical(None, "错误", f"指定文件预测结果.xlsx不存在！")
+            return
+        if not os.path.exists(photo_path):
+            QMessageBox.critical(None, "错误", f"指定文件预测结果.png不存在！")
+            return
+        result_name = os.path.basename(result_path) 
+        new_result_path = os.path.join(save_path, result_name) #保存预测结果
+        photo_name = os.path.basename(photo_path) 
+        new_photo_path = os.path.join(save_path, photo_name) #保存展示图片 
+        input_name = os.path.basename(input_path) 
+        new_input_path = os.path.join(save_path, input_name) #保存输入数据
+
+        try:
+            # 7. 移动文件到新文件夹
+            shutil.move(result_path, new_result_path)
+            shutil.move(photo_path, new_photo_path)
+            shutil.move(input_path, new_input_path)
+            QMessageBox.critical(None, "完成", f"移动文件成功！\n预测结果已保存至: {new_result_path}\n展示图片已保存至: {new_photo_path}\n输入数据已保存至: {new_input_path}")
+        except Exception as e:
+            QMessageBox.critical(None, "错误", f"移动文件失败：{str(e)}")
+            return     
+
+
+    # ---------------- 造型优化模块功能 ---------------- #
+    
+    #----灵敏度分析----
+        #--------灵敏度分析功能------------
     def select_folder_lingmingdu(self):
         """选择文件夹，自动搜索 .pth、输入数据.xlsx、输出数据.xlsx 并写入相应输入框"""
         folder_path = QFileDialog.getExistingDirectory(None, "选择包含模型和数据的文件夹")
@@ -2177,6 +2679,8 @@ class MyWindow:
             shutil.move(IV2_path, new_IV2_path)
             shutil.move(heatmap_path, new_heatmap_path)
             shutil.move(Optim_result_path, new_Optim_result_path)
+            self.current_window.ZJP_2.setText(new_Optim_result_path)
+            self.current_window.ZJX_2.setText(new_Optim_result_path)
         except Exception as e:
             QMessageBox.critical(None, "错误", f"移动文件失败：{str(e)}")
             return
@@ -2187,242 +2691,7 @@ class MyWindow:
         )               
         
 
-    # ---------------- 预测模型模块功能 ---------------- #
-
-    #----模型预测------
-    #加载模型文件
-    def select_folder_yucemoxing_model(self):
-        """选择文件夹，自动搜索 .pth、输入数据.xlsx、输出数据.xlsx 并写入相应输入框"""
-        """选择文件夹，自动搜索 .pth、输入数据.xlsx、输出数据.xlsx 并写入相应输入框"""
-        folder_path = QFileDialog.getExistingDirectory(None, "选择包含模型和数据的文件夹2")
-        if not folder_path:
-            return
-
-        pth_path = ""
-        input_xlsx_path = ""
-        output_xlsx_path = ""
-
-        for file_name in os.listdir(folder_path):
-            lower_name = file_name.lower()
-            full_path = os.path.join(folder_path, file_name)
-
-            if lower_name.endswith(".pth") and not pth_path:
-                pth_path = full_path
-            elif file_name == "输入数据.xlsx":
-                input_xlsx_path = full_path
-            elif file_name == "输出数据.xlsx":
-                output_xlsx_path = full_path
-
-        if hasattr(self.current_window, "Y_1"):
-            self.current_window.Y_1.setText(pth_path)
-        # if hasattr(self.current_window, "lineEdit_137"):
-        #     self.current_window.lineEdit_137.setText(input_xlsx_path)
-        # if hasattr(self.current_window, "lineEdit_115"):
-        #     self.current_window.lineEdit_115.setText(output_xlsx_path)
-
-        msg = f"📁 已选择文件夹：{folder_path}\n"
-        msg += f"\n模型文件 (.pth)：{pth_path if pth_path else '未找到'}"
-        msg += f"\n输入数据.xlsx：{input_xlsx_path if input_xlsx_path else '未找到'}"
-        msg += f"\n输出数据.xlsx：{output_xlsx_path if output_xlsx_path else '未找到'}"
-        QMessageBox.information(None, "文件检测结果", msg)
-        
-    #加载输入数据
-    def select_file_yucemoxing_predict(self):
-        file_path, _ = QFileDialog.getOpenFileName(
-        self.current_window,
-        "选择文件",
-        "",
-        "造型参数+技术方案 (*.xlsx);;所有文件 (*.*)"
-    )
-        if file_path and hasattr(self.current_window, "Y_2"):
-            self.current_window.Y_2.setText(file_path)
-            new_input_path=self.current_window.Y_2.text().strip()
-            
-        new_input_data = pd.read_excel(new_input_path, header=0)
-        new_input_data = new_input_data.iloc[0].tolist()
-        #new_input_data = np.array(new_input_data).reshape(1, -1)    
-        for i, value in enumerate(new_input_data):
-            line_name = f"YD_{i + 1}"
-            if hasattr(self.current_window, line_name):
-                getattr(self.current_window, line_name).setText(str(value))
-            
-    def plot_photo_moxingyuce(self): 
-        
-        def visualize_predictions(predicted_data, widget_name, save_path=None, save_path_data=None):
-            """
-            可视化预测结果，嵌入到指定的 QWidget 中显示
-            参数:
-                predicted_data: 预测数据列表/数组
-                widget_name:    要嵌入图表的 QWidget 的 objectName
-                save_path:      保存图片的文件夹路径（可选）
-                save_path_data: 保存预测数据的 Excel 路径（可选）
-            """
-            plt.rcParams['font.sans-serif'] = ['SimHei', 'STKAITI']
-            plt.rcParams['axes.unicode_minus'] = False
-
-            min_length = min(len(predicted_data), 17)
-            predicted_data_slice = predicted_data[:min_length]
-
-            x_axis_data = [470 * i for i in range(1, min_length + 1)]
-            freq_labels = [200, 250, 315, 400, 500, 630, 800, 1000, 1250, 1600,
-                        2000, 2500, 3150, 4000, 5000, 6300, 8000][:min_length]
-
-            # ------------------- 创建图形 -------------------
-            fig = plt.figure(figsize=(10, 6))  # 先用默认大小，后面会调整
-
-            plt.plot(x_axis_data, predicted_data_slice, color="k", marker='s', linewidth=1.5, label='预测数据')
-            plt.xticks(x_axis_data, freq_labels, fontsize=12, rotation=45)
-            plt.xlabel('频率(Hz)', fontsize=14)
-            plt.ylabel('噪声(dB)', fontsize=14)
-            plt.legend(fontsize=12)
-            plt.grid(True, alpha=0.3)
-            plt.tight_layout()
-
-            # ------------------- 寻找目标 widget -------------------
-            plot_widget = self.current_window.findChild(QWidget, widget_name)
-            if not plot_widget:
-                print(f"警告: 找不到名为 '{widget_name}' 的 QWidget")
-                plt.close(fig)
-                return
-
-            # 获取 widget 当前尺寸（像素）
-            widget_width = plot_widget.width()
-            widget_height = plot_widget.height()
-
-            # 调整 figure 大小以尽量贴合 widget（dpi ≈ 100）
-            fig.set_size_inches(widget_width / 100, widget_height / 100)
-
-            # 创建 canvas 并嵌入
-            canvas = FigureCanvas(fig)
-            canvas.setParent(plot_widget)
-
-            # 清理旧的 canvas（防止重复添加）
-            layout = plot_widget.layout()
-            if layout is None:
-                layout = QVBoxLayout(plot_widget)
-                plot_widget.setLayout(layout)
-
-            # 删除旧的 FigureCanvas
-            for i in reversed(range(layout.count())):
-                item = layout.itemAt(i)
-                widget = item.widget()
-                if widget and isinstance(widget, FigureCanvas):
-                    widget.deleteLater()
-
-            # 添加新的 canvas
-            layout.addWidget(canvas)
-            canvas.draw()
-
-            # 让 canvas 跟随 widget 尺寸（推荐配合主窗口的 resizeEvent 使用）
-            canvas.setGeometry(plot_widget.rect())
-
-            # 可选：保存图片
-            if save_path:
-                save_img_path = os.path.join(save_path, '预测结果.png')
-                fig.savefig(save_img_path, dpi=300, bbox_inches='tight')
-                print(f"图像已保存至: {save_img_path}")
-
-            # 可选：保存数据到 Excel（保持原逻辑）
-            if save_path_data:
-                import pandas as pd
-                df = pd.DataFrame({
-                    '频率(Hz)': freq_labels,
-                    '预测值': predicted_data_slice
-                })
-                save_data_path = os.path.join(save_path_data, '预测结果.xlsx')
-                df.to_excel(save_data_path, index=False)
-                print(f"预测数据已保存至: {save_data_path}")
-
-        try:
-            model_path=self.current_window.Y_1.text().strip()
-        except ValueError:
-            QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择模型文件！")
-        try:
-            new_input_path=self.current_window.Y_2.text().strip()
-        except ValueError:
-            QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择进行灵敏度排序的数据文件！")
-        #获取造型+技术方案数据
-        new_input_data = pd.read_excel(new_input_path, header=0).values
-        input_data = []
-        for i in range(new_input_data.shape[1]):
-            line_name = f"YD_{i + 1}"
-            data = float(getattr(self.current_window, line_name).text().strip())
-            input_data.append(data)
-        #input_data = input_data.iloc[0].tolist()
-        print(input_data)
-        input_data = np.array(input_data)
-        print(input_data)
-        print(input_data.shape)
-        input_data = input_data.reshape(1, -1)
-        input_file_path = self.input_file_path #输入归一化
-        output_file_path = self.output_file_path #输出归一化
-
-        predicted_data = model_use.call_model(input_file_path, output_file_path, input_data, model_path)
-        visualize_predictions(predicted_data, 'Ywidget', self.huancun, self.huancun)
-        # 获取表头
-        df_headers = pd.read_excel(new_input_path, header=0)
-        column_names = df_headers.columns.tolist()
-        # 创建新DataFrame，使用原始表头和input_data作为一行数据
-        new_df = pd.DataFrame(input_data, columns=column_names)
-        # 保存为Excel文件
-        output_path = os.path.join(self.huancun, "造型参数+技术方案.xlsx")  # 或您指定的路径
-        new_df.to_excel(output_path, index=False)
-
-    def save_moxingyuce_result(self):
-        """在预测完成后保存分析结果"""
-        if not hasattr(self, "model_train"):
-            print("❌ 尚未进行模型训练，无法保存！")
-            return
-
-        # 弹出文件选择对话框
-        save_path, _ = QFileDialog.getSaveFileName(self.current_window, "保存预测结果", "", "文件 (*)")
-        try:
-            # 4. 创建新文件（exist_ok=False 避免重名）
-            os.makedirs(save_path, exist_ok=False)
-        except FileExistsError:
-            QMessageBox.critical(None, "错误", f"文件夹「{save_path}」已存在！")
-            return
-        except Exception as e:
-            QMessageBox.critical(None, "错误", f"创建文件失败：{str(e)}")
-            return
-
-        #设置要移动文件的路径
-        input_path = os.path.join(self.huancun, "造型参数+技术方案.xlsx")
-        result_path = os.path.join(self.huancun, "预测结果.xlsx")
-        photo_path = os.path.join(self.huancun, "预测结果.png")
-
-        # 5. 检查要移动的模型是否存在
-        if not os.path.exists(input_path):
-            QMessageBox.critical(None, "错误", f"指定文件造型参数+技术方案.xlsx不存在！")
-            return
-        if not os.path.exists(result_path):
-            QMessageBox.critical(None, "错误", f"指定文件预测结果.xlsx不存在！")
-            return
-        if not os.path.exists(photo_path):
-            QMessageBox.critical(None, "错误", f"指定文件预测结果.png不存在！")
-            return
-        result_name = os.path.basename(result_path) 
-        new_result_path = os.path.join(save_path, result_name) #保存预测结果
-        photo_name = os.path.basename(photo_path) 
-        new_photo_path = os.path.join(save_path, photo_name) #保存展示图片 
-        input_name = os.path.basename(input_path) 
-        new_input_path = os.path.join(save_path, input_name) #保存输入数据
-
-        try:
-            # 7. 移动文件到新文件夹
-            shutil.move(result_path, new_result_path)
-            shutil.move(photo_path, new_photo_path)
-            shutil.move(input_path, new_input_path)
-            QMessageBox.critical(None, "完成", f"移动文件成功！\n预测结果已保存至: {new_result_path}\n展示图片已保存至: {new_photo_path}\n输入数据已保存至: {new_input_path}")
-        except Exception as e:
-            QMessageBox.critical(None, "错误", f"移动文件失败：{str(e)}")
-            return     
-        
-
-
-
-
-    # ---------------- 造型优化模块功能 ---------------- #
+    
     #----基于具体频段-----
     def select_folder_pinduan(self):
         """选择文件夹，自动搜索 .pth、输入数据.xlsx、输出数据.xlsx 并写入相应输入框"""
@@ -2496,19 +2765,6 @@ class MyWindow:
 
             # 自动识别可调整参数
             adjust_indices = [i for i in range(len(base_params_py)) if param_min_py[i] != param_max_py[i]]
-
-            # ---------------------- 写入 UI（只写入可调整参数的信息） ---------------------- #
-            # 索引写成 "0,1,2" 格式，便于后续 parse
-            self.current_window.ZJP_3.setText(", ".join(str(i) for i in adjust_indices))
-
-            # --- 这里是修改的核心部分 ---
-            # 根据 adjust_indices 过滤出对应的最小值和最大值
-            adjusted_param_min = [param_min_py[i] for i in adjust_indices]
-            adjusted_param_max = [param_max_py[i] for i in adjust_indices]
-
-            # 只将可调整参数的最小/最大值写成 "1.0, 2.0, 3.0" 格式
-            self.current_window.ZJP_4.setText(", ".join(str(x) for x in adjusted_param_min))
-            self.current_window.ZJP_5.setText(", ".join(str(x) for x in adjusted_param_max))
 
             QMessageBox.information(
                 None, "读取成功",
@@ -2718,7 +2974,6 @@ class MyWindow:
         visualize_freq_comparison(original_freq_values, best_freq_values, target_indices, 'ZJPwidget_1', self.huancun)
         #生成参数调整对比柱状图
         visualize_param_changes(base_params, best_params, adjust_indices, param_min_dict, param_max_dict, 'ZJPwidget_2', self.huancun)
-
     #----保存结果----
     def save_result_pinduan(self):
         """保存参数优化结果"""
@@ -2853,19 +3108,6 @@ class MyWindow:
 
             # 自动识别可调整参数
             adjust_indices = [i for i in range(len(base_params_py)) if param_min_py[i] != param_max_py[i]]
-
-            # ---------------------- 写入 UI（只写入可调整参数的信息） ---------------------- #
-            # 索引写成 "0,1,2" 格式，便于后续 parse
-            self.current_window.ZJX_3.setText(", ".join(str(i) for i in adjust_indices))
-
-            # --- 这里是修改的核心部分 ---
-            # 根据 adjust_indices 过滤出对应的最小值和最大值
-            adjusted_param_min = [param_min_py[i] for i in adjust_indices]
-            adjusted_param_max = [param_max_py[i] for i in adjust_indices]
-
-            # 只将可调整参数的最小/最大值写成 "1.0, 2.0, 3.0" 格式
-            self.current_window.ZJX_4.setText(", ".join(str(x) for x in adjusted_param_min))
-            self.current_window.ZJX_5.setText(", ".join(str(x) for x in adjusted_param_max))
 
             QMessageBox.information(
                 None, "读取成功",
