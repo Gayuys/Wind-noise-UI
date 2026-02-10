@@ -189,7 +189,7 @@ def MIV_analysis(model_path, X,  origin_x, input_cols, output_cols, input_mean, 
     outputs = []
 
     #变化造型参数+技术方案参数
-    for i in range(53):
+    for i in range(59):
         max_data = origin_x.iloc[:, i].max()
         min_data = origin_x.iloc[:, i].min()
         # 生成改变的值

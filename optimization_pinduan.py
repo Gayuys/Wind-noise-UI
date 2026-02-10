@@ -121,6 +121,9 @@ def genetic_algorithm_optimization(
         mutation_prob=0.1
 ):
     """遗传算法优化参数：支持分频段优化"""
+    
+    error = 0 #初始化错误指针
+    
     if len(adjust_indices) != len(param_range_min) or len(adjust_indices) != len(param_range_max):
         raise ValueError(f"调整参数数量（{len(adjust_indices)}）与范围数量不匹配，请检查列表长度")
 
@@ -185,18 +188,30 @@ def genetic_algorithm_optimization(
             best_freq_values = (freq_norm * output_std + output_mean).flatten()
 
         valid_indices = [i for i, f in enumerate(fitness_scores) if not np.isinf(f)]
-        if not valid_indices:
-            print(f"第{gen + 1}代所有个体适应度无效，重新初始化种群。")
+        if len(valid_indices) < 2:
+            print(f"第{gen + 1}代有效個體少於2個 → 重新初始化種群")
             population = init_population(pop_size)
             continue
 
-        valid_fitness = [fitness_scores[i] for i in valid_indices]
+        valid_fitness = np.array([fitness_scores[i] for i in valid_indices])
         valid_pop = population[valid_indices]
-        min_valid_fitness = min(valid_fitness)
-        if min_valid_fitness < 0:
-            valid_fitness = [f - min_valid_fitness + 1e-8 for f in valid_fitness]
-        probs = np.array(valid_fitness) / np.sum(valid_fitness)
-        selected_indices = np.random.choice(len(valid_pop), size=pop_size, p=probs)
+
+        # 使用 rank-based 或 softmax 避免比例為0的問題
+        # 這裡用簡單的 rank 方法（最穩）
+        ranked = np.argsort(-valid_fitness)  # 降序
+        ranks = np.arange(1, len(valid_fitness) + 1)
+        probs = (len(valid_fitness) + 1 - ranks) / np.sum(np.arange(1, len(valid_fitness) + 1))
+
+        # 或者用 softmax（效果更好，但需調溫控參數）
+        # temp = 5.0
+        # probs = np.exp(valid_fitness / temp) / np.sum(np.exp(valid_fitness / temp))
+
+        selected_indices = np.random.choice(
+            len(valid_pop),
+            size=pop_size,
+            p=probs,
+            replace=True
+        )
         selected_pop = valid_pop[selected_indices]
 
         new_population = []

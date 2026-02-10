@@ -14,11 +14,11 @@ from scipy.stats import uniform  # 用于超参数搜索空间初始化
 
 # -------------------------- 路径配置 --------------------------
 # 定义项目根目录（相对于当前脚本的位置）
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = './缓存'
 # 定义各子目录的相对路径
-DATA_DIR = os.path.join(BASE_DIR, 'data')          # 数据目录
-MODEL_DIR = os.path.join(BASE_DIR, '缓存')        # 模型保存目录
-RESULT_DIR = os.path.join(BASE_DIR, '缓存')     # 结果保存目录
+DATA_DIR = './Data'         # 数据目录
+MODEL_DIR = BASE_DIR       # 模型保存目录
+RESULT_DIR = BASE_DIR     # 结果保存目录
 
 # 创建目录（如果不存在）
 for dir_path in [DATA_DIR, MODEL_DIR, RESULT_DIR]:
@@ -467,6 +467,7 @@ def model_Train_main(
         output_file_path=os.path.join(DATA_DIR, '有噪声扩充风噪数据6-8-18-24-31-32-33.xlsx'),
         ga_max_generations=20,  # 遗传算法迭代代数（用户可自定义）
         ga_pop_size=80,  # 遗传算法种群规模（用户可自定义）
+        save_path = MODEL_DIR
 ):
     # 步骤1：加载数据
     print("=== 加载数据 ===")
@@ -526,7 +527,7 @@ def model_Train_main(
 
     # 步骤5：测试集最终评估（绘制误差箱型图）
     print("\n=== 测试集最终评估 ===")
-    trained_model.load_state_dict(torch.load(os.path.join(MODEL_DIR, 'best_model.pth')))
+    trained_model.load_state_dict(torch.load(os.path.join(save_path, 'best_model.pth')))
     trained_model.eval()
     device = next(trained_model.parameters()).device
     test_loss = 0.0

@@ -1,6 +1,6 @@
 import sys
 import os
-from PySide6.QtWidgets import QApplication, QFileDialog, QLabel, QWidget, QMessageBox,QFrame, QStyleOption, QStyledItemDelegate, QMainWindow, QVBoxLayout, QTreeWidget, QComboBox
+from PySide6.QtWidgets import QApplication, QFileDialog, QLabel, QWidget, QMessageBox,QFrame, QStyleOption, QStyledItemDelegate, QMainWindow, QVBoxLayout, QTreeWidget, QComboBox, QTableWidget, QTableWidgetItem
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QApplication, QWidget, QMessageBox
 from PySide6.QtCore import QFile, Qt
@@ -28,6 +28,8 @@ import model_use
 import optimization_pinduan
 import optimization_xiangdu
 import Objective_Definition
+import characteristics_rating
+import noise_rating
 
 # 设置 Matplotlib 中文字体，解决中文显示问题
 plt.rcParams['font.sans-serif'] = ['Microsoft YaHei', 'SimSun', 'Arial']  # 优先使用支持中文的字体
@@ -266,8 +268,10 @@ class MyWindow:
         self.output_file_path = None
         self.lingmingdujieguo_path = None
         self.mubiaoquxian = None
+        self.zaoxingfanwei = "./缓存/目标定义范围.xlsx"
         self.Characteristic_name = "./data/灵敏度分析特征.xlsx"
         self.all_characteristic = "./data/造型优化特征.xlsx"
+        self.zaoxingquanzhong = "./data/权重系数表.xlsx"
         self.huancun = "./缓存"
         # self.model_file = "./bestmodel.pth"  # 要移动的模型路径
         # self.model_file = "./bestmodel.pth"  # 要移动的模型路径
@@ -407,26 +411,17 @@ class MyWindow:
         if hasattr(self.current_window, "pushButton_19"):
             self.current_window.pushButton_19.clicked.connect(self.fill_default_values)
 
-        #------初步判断功能按钮---------
+        #------造型符合度功能按钮---------
         #导入造型参数值
-        if hasattr(self.current_window, "pushButton_23"):
-            self.current_window.pushButton_23.clicked.connect(self.select_chubupanduan_zaoxingdaoru_file)
-        #导入造型数据库
-        if hasattr(self.current_window, "pushButton_24"):
-            self.current_window.pushButton_24.clicked.connect(self.select_chubupanduan_zaoxingtuijian_file)
-            
-        #导入最大最小值
-        if hasattr(self.current_window, "pushButton_25"):
-            self.current_window.pushButton_25.clicked.connect(self.plot_zaoxingcanshupingjia_half)
-        #导入90%区间值
-        if hasattr(self.current_window, "pushButton_26"):
-            self.current_window.pushButton_26.clicked.connect(self.plot_zaoxingcanshupingjia_half)
-        #导入90%概率值
-        if hasattr(self.current_window, "pushButton_27"):
-            self.current_window.pushButton_27.clicked.connect(self.plot_zaoxingcanshupingjia_half)
-                  #执行造型参数评价
-        if hasattr(self.current_window, "pushButton_28"):
-            self.current_window.pushButton_28.clicked.connect(self.plot_zaoxingcanshupingjia)                
+        if hasattr(self.current_window, "ZCSPB_1"):
+            self.current_window.ZCSPB_1.clicked.connect(self.select_zaoxingpingu_zaoxingdaoru_file)
+        #导入预测模型
+        if hasattr(self.current_window, "ZCSPB_2"):
+            self.current_window.ZCSPB_2.clicked.connect(self.select_Data_folder_zaoxingpingu)            
+        #计算造型符合度
+        if hasattr(self.current_window, "ZCSPB_3"):
+            self.current_window.ZCSPB_3.clicked.connect(self.calculate_zaoxingpingu)
+              
            
 
 
@@ -750,7 +745,7 @@ class MyWindow:
         ws1.append(avg_fitness_history.tolist() if hasattr(avg_fitness_history, 'tolist') else avg_fitness_history)
         ws2 = wb.create_sheet(title="损失")
         ws2.append(losses.tolist() if hasattr(losses, 'tolist') else losses)
-        ws2.append(val_losses.tolist() if hasattr(val_losses, 'tolist') else val_losses)
+        ws2.append(val_losses.tolist() if hasattr(val_losses, 'tolist') else val_losses) 
         ws3 = wb.create_sheet(title="误差")
         for row in errors_to_list:
             ws3.append(row)
@@ -847,6 +842,9 @@ class MyWindow:
         #目标定义界面文件路径展示
         if hasattr(self.current_window, "M_2"):
             self.current_window.M_2.setText(pth_path)
+        #造型评估界面文件路径展示
+        if hasattr(self.current_window, "ZCS_2"):
+            self.current_window.ZCS_2.setText(pth_path)
         #灵敏度分析界面文件路径展示
         if hasattr(self.current_window, "ZL_1"):
             self.current_window.ZL_1.setText(pth_path)
@@ -1176,7 +1174,7 @@ class MyWindow:
                 print(f"对比图已保存至: {save_file}")
         try:
             original_data_path=self.current_window.M_1.text().strip()
-            self.mubiaoquxian = self.current_window.M_2.text().strip()
+            self.mubiaoquxian = self.current_window.M_1.text().strip()
         except ValueError:
             QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择目标车型的数据文件！") 
 
@@ -1611,154 +1609,283 @@ class MyWindow:
         
     #------造型评分功能---------
      #导入造型参数值
-    def select_chubupanduan_zaoxingdaoru_file(self):
+    def select_zaoxingpingu_zaoxingdaoru_file(self):
         file_path, _ = QFileDialog.getOpenFileName(
             self.current_window,
             "选择文件",
             "",
             "造型参数文件 (*.xlsx);;所有文件 (*.*)"
         )
-        if file_path and hasattr(self.current_window, "lineEdit_8"):
-            self.current_window.lineEdit_8.setText(file_path)
+        if file_path and hasattr(self.current_window, "ZCS_1"):
+            self.current_window.ZCS_1.setText(file_path)
             
-     #导入造型数据库
-    
-    def select_chubupanduan_zaoxingtuijian_file(self):
-        file_path, _ = QFileDialog.getOpenFileName(
-            self.current_window,
-            "选择文件",
-            "",
-            "造型参数文件 (*.xlsx);;所有文件 (*.*)"
-        )
-        if file_path and hasattr(self.current_window, "lineEdit_24"):
-            self.current_window.lineEdit_24.setText(file_path)
-    
-    #显示评价范围
-    def plot_zaoxingcanshupingjia_half(self):
-        """计算评价及写入"""
+    #导入预测模型
+    def select_Data_folder_zaoxingpingu(self):
+        """选择文件夹，自动搜索 .pth、输入数据.xlsx、输出数据.xlsx 并写入相应输入框"""
+        folder_path = QFileDialog.getExistingDirectory(None, "选择包含模型和数据的文件夹")
+        if not folder_path:
+            return
 
-        try:
+        pth_path = ""
 
-            data1 = [
-                    " ", " ", " ", " ", " ", 
-                    "52.10", "37.41", "0.00", "2.71", "0.85", 
-                    "69.81", "73.68", "9.48", "3.22", "23.04", 
-                    " ", " ", " ", " ", " ", 
-                    " ", " ", " ", " ", 
-                    "33.18", "25.80", "78.56", "58.17", 
-                    "33.18", "25.80", "78.56", "58.17", 
-                    " ", " ", " ", " ",
-                    " ", " ", " ", " ", " ", 
-                    "111.68", "2282.34", "32.98", "38.48", "54.87", 
-                    "187.32", "2876.36", "53.80", "65.24", "59.30", 
-                    " ", " ", " ", " ", " ", 
-                    " ", " ", " ", " ", 
-                    "2.60", "22.63", "82.34", "1.63", 
-                    "7.74", "42.11", "90.00", "2.02", 
-                    " ", " ", " ", " ", 
-                    " ", " ", " ", " ", " ", 
-                    "204.01", "209.01", "148.94", "63.29", "68.11", 
-                    "252.34", "250.36", "170.74", "87.24", "75.08", 
-                    " ", " ", " ", " ", " ", 
-                    " ", " ", " ", " ", 
-                    "170.72", "17.00", "18.00", "149.41", 
-                    "264.00", "22.50", "25.00", "157.04", 
-                    " ", " ", " ", " ", 
-                    " ", " ", " ", " ", " ", 
-                    "75.51", "34.06", "5.79", "0.00", "0.00", 
-                    "126.58", "70.15", "32.00", "3.71", "11.58", 
-                    " ", " ", " ", " ", " ", 
-                    " ", " ", " ", " ", 
-                    "4.50", "2.42", "0.00", "7.14", 
-                    "12.86", "29.03", "45.71", "12.46", 
-                    " ", " ", " ", " ", 
-                    " ", " ", " ", " ", " ", 
-                    "76.41", "26.57", "9.81", "0.07", "6.38", 
-                    "141.75", "63.56", "23.07", "2.89", "8.75", 
-                    " ", " ", " ", " ", " ", 
-                    " ", " ", " ", " ", 
-                    "1.76", "5.13", "0.00", "7.14", 
-                    "8.24", "20.30", "39.25", "12.46", 
-                    " ", " ", " ", " ", 
+        for file_name in os.listdir(folder_path):
+            lower_name = file_name.lower()
+            full_path = os.path.join(folder_path, file_name)
 
-                ]
+            if lower_name.endswith(".pth") and not pth_path:
+                pth_path = full_path
 
-            # 选择输出数据
-            output_data = data1 
-
-            # 写入 lineEdit_549 ~ lineEdit_598
-            for i, value in enumerate(data1):
-                line_name = f"lineEdit_{i + 550}"
-                if hasattr(self.current_window, line_name):
-                    getattr(self.current_window, line_name).setText(value)
-
-        except Exception as e:
-            QMessageBox.critical(self.current_window, "错误", f"运行出错：\n{e}")
-              
+        #参数设置界面文件路径展示
+        if hasattr(self.current_window, "ZCS_2"):
+            self.current_window.ZCS_2.setText(pth_path)
+        #灵敏度分析界面文件路径展示
+        if hasattr(self.current_window, "ZL_1"):
+            self.current_window.ZL_1.setText(pth_path)
+        #模型预测界面文件路径展示
+        if hasattr(self.current_window, "Y_1"):
+            self.current_window.Y_1.setText(pth_path)
+        #造型优化界面文件路径展示
+        if hasattr(self.current_window, "ZJP_1"):
+            self.current_window.ZJP_1.setText(pth_path) #基于具体频段优化
+        if hasattr(self.current_window, "ZJX_1"):
+            self.current_window.ZJX_1.setText(pth_path) #基于具体频段优化
+            
     #显示分析结果
-    def plot_zaoxingcanshupingjia(self):
+    def calculate_zaoxingpingu(self):
         """计算评价及写入"""
 
+        def plot_pred_vs_target_in_widget(freq_labels, y_pred, y_true, mape, score, widget_name, save_path=None):
+            """
+            将预测值与目标值的对比图嵌入指定的QWidget中显示
+            并可选保存高清图片
+            
+            参数:
+                freq_labels:    频率标签列表，例如 [200, 250, ..., 8000]
+                y_pred:         模型预测值 (list/array)
+                y_true:         真实目标值 (list/array)
+                mape:           MAPE 值（百分比）
+                score:          噪声曲线得分
+                widget_name:    要嵌入图表的 QWidget 的 objectName
+                save_path:      保存图片的路径（含文件名，例如 "result/compare.png"），可选
+                current_window: 主窗口实例，用于 findChild（通常是 self 或 self.main_window）
+            """
+            # 设置中文字体（根据你的环境可能需要调整字体名称）
+            plt.rcParams['font.sans-serif'] = ['SimHei', 'STKAITI', 'Microsoft YaHei']
+            plt.rcParams['axes.unicode_minus'] = False
+
+            # ------------------- 准备数据 -------------------
+            if len(y_pred) != len(y_true) or len(y_true) != len(freq_labels):
+                print("警告：y_pred, y_true, freq_labels 长度不一致")
+                return
+
+            x_pos = list(range(len(freq_labels)))   # 均匀分布的索引 0,1,2,...,16
+
+            # ------------------- 创建图形 -------------------
+            fig = Figure(figsize=(10, 6), dpi=100)   # 初始大小，后续会根据widget调整
+            ax = fig.add_subplot(111)
+
+            # 绘制两条折线
+            ax.plot(x_pos, y_true, 'ro-', linewidth=2.5, markersize=8, label='目标噪声值')
+            ax.plot(x_pos, y_pred, 'bo-', linewidth=2.5, markersize=8, label='模型预测值')
+
+            # 左上角文本框
+            ax.text(0.02, 0.98, 
+                    f'MAPE = {mape:.2f}% | 噪声曲线得分 = {score:.2f}',
+                    transform=ax.transAxes,
+                    fontsize=15,
+                    verticalalignment='top',
+                    bbox=dict(boxstyle='round,pad=0.5', 
+                            facecolor='lightgreen', 
+                            edgecolor='green',
+                            alpha=0.85))
+
+            # 设置坐标轴
+            ax.set_xticks(x_pos)
+            ax.set_xticklabels(freq_labels, rotation=45, fontsize=11)
+            ax.tick_params(axis='y', labelsize=12)
+            ax.set_xlabel('频率 (Hz)', fontsize=14, fontweight='bold')
+            ax.set_ylabel('噪声值 (dB)', fontsize=14, fontweight='bold')
+            ax.set_title('200–8000Hz 噪声值：模型预测 vs 目标值', 
+                        fontsize=15, fontweight='bold', pad=15)
+            
+            ax.legend(fontsize=13, loc='upper right')
+            ax.grid(True, alpha=0.3, linestyle='--')
+
+            fig.tight_layout()
+
+            # ------------------- 寻找目标 widget -------------------
+            if self.current_window is None:
+                print("错误：请传入 current_window 参数（通常是 self 或主窗口）")
+                return
+
+            plot_widget = self.current_window.findChild(QWidget, widget_name)
+            if not plot_widget:
+                print(f"警告: 找不到名为 '{widget_name}' 的 QWidget")
+                return
+
+            # 获取 widget 当前尺寸（像素）
+            widget_width = plot_widget.width()
+            widget_height = plot_widget.height()
+
+            # 根据 widget 实际大小动态调整 figure（dpi≈100）
+            if widget_width > 100 and widget_height > 100:
+                fig.set_size_inches(widget_width / 100, widget_height / 100)
+
+            # 创建 canvas 并嵌入
+            canvas = FigureCanvas(fig)
+            canvas.setParent(plot_widget)
+
+            # 清理旧的 canvas（防止重复叠加）
+            layout = plot_widget.layout()
+            if layout is None:
+                layout = QVBoxLayout(plot_widget)
+                plot_widget.setLayout(layout)
+                layout.setContentsMargins(0, 0, 0, 0)
+                layout.setSpacing(0)
+
+            # 删除旧的 FigureCanvas
+            for i in reversed(range(layout.count())):
+                item = layout.itemAt(i)
+                if item and item.widget() and isinstance(item.widget(), FigureCanvas):
+                    item.widget().deleteLater()
+
+            # 添加新 canvas 并重绘
+            layout.addWidget(canvas)
+            canvas.draw()
+
+            # 让 canvas 跟随 widget 大小变化（推荐在主窗口 resizeEvent 中再调用一次 resize）
+            canvas.setGeometry(plot_widget.rect())
+
+            # ------------------- 可选保存高清图片 -------------------
+            if save_path:
+                try:
+                    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+                    fig.savefig(save_path, dpi=300, bbox_inches='tight')
+                    print(f"对比图已保存至：{save_path}")
+                except Exception as e:
+                    print(f"保存图片失败：{e}")
+
+            # 注意：这里不调用 plt.close()，因为 fig 是我们手动创建的
+        def plot_characteristics(col_index, values, tableWidget_name):
+            """
+            一次性填充指定列
+            col_index: 列号（从0开始）
+            values:    这列的所有值（列表长度应等于表格当前行数）
+            """
+            if self.current_window is None:
+                print("错误：请传入 current_window 参数（通常是 self 或主窗口）")
+                return
+
+            target_table = self.current_window.findChild(QTableWidget, "tableWidget")
+            if not target_table:
+                print(f"警告: 找不到名为 '{tableWidget_name}' 的 QWidget")
+                return
+            
+            if col_index < 0 or col_index >= target_table.columnCount():
+                print(f"列索引 {col_index} 超出范围")
+                return
+
+            row_count = target_table.rowCount()
+            if len(values) != row_count:
+                print(f"数据长度 {len(values)} 与行数 {row_count} 不匹配")
+                return
+
+            for row in range(row_count):
+                item = QTableWidgetItem(str(values[row]))   # 记得转字符串
+                target_table.setItem(row, col_index, item)
+                
         try:
-
-            data1 = [
-                    "52.10", "37.41", "0.00", "2.71", "0.85", 
-                    "52.10", "37.41", "0.00", "2.71", "0.85", 
-                    "69.81", "73.68", "9.48", "3.22", "23.04", 
-                    "正常", "正常", "正常", "正常", "正常", 
-                    "33.18", "25.80", "78.56", "58.17", 
-                    "33.18", "25.80", "78.56", "58.17", 
-                    "33.18", "25.80", "78.56", "58.17", 
-                    "正常", "正常", "正常", "正常",
-                    "111.68", "2282.34", "32.98", "38.48", "54.87", 
-                    "111.68", "2282.34", "32.98", "38.48", "54.87", 
-                    "187.32", "2876.36", "53.80", "65.24", "59.30", 
-                    "正常", "正常", "正常", "正常", "正常", 
-                    "2.60", "22.63", "82.34", "1.63", 
-                    "2.60", "22.63", "82.34", "1.63", 
-                    "7.74", "42.11", "90.00", "2.02", 
-                    "正常", "正常", "正常", "正常", 
-                    "204.01", "209.01", "148.94", "63.29", "68.11", 
-                    "204.01", "209.01", "148.94", "63.29", "68.11", 
-                    "252.34", "250.36", "170.74", "87.24", "75.08", 
-                    "正常", "正常", "正常", "正常", "正常", 
-                    "170.72", "17.00", "18.00", "149.41", 
-                    "170.72", "17.00", "18.00", "149.41", 
-                    "264.00", "22.50", "25.00", "157.04", 
-                    "正常", "正常", "正常", "正常", 
-                    "75.51", "34.06", "5.79", "0.00", "0.00", 
-                    "75.51", "34.06", "5.79", "0.00", "0.00", 
-                    "126.58", "70.15", "32.00", "3.71", "11.58", 
-                    "正常", "正常", "正常", "正常", "正常", 
-                    "4.50", "2.42", "0.00", "7.14", 
-                    "4.50", "2.42", "0.00", "7.14", 
-                    "12.86", "29.03", "45.71", "12.46", 
-                    "正常", "正常", "正常", "正常", 
-                    "76.41", "26.57", "9.81", "0.07", "6.38", 
-                    "76.41", "26.57", "9.81", "0.07", "6.38", 
-                    "141.75", "63.56", "23.07", "2.89", "8.75", 
-                    "正常", "正常", "正常", "正常", "正常", 
-                    "1.76", "5.13", "0.00", "7.14", 
-                    "1.76", "5.13", "0.00", "7.14", 
-                    "8.24", "20.30", "39.25", "12.46", 
-                    "正常", "正常", "正常", "正常", 
-
-                ]
-
-            # 选择输出数据
-            output_data = data1 
-
-            # 写入 lineEdit_549 ~ lineEdit_598
-            for i, value in enumerate(data1):
-                line_name = f"lineEdit_{i + 550}"
-                if hasattr(self.current_window, line_name):
-                    getattr(self.current_window, line_name).setText(value)
-
+            model_path=self.current_window.ZCS_2.text().strip()
+        except ValueError:
+            QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择模型文件！")
+        try:
+            new_input_path=self.current_window.ZCS_1.text().strip()
+        except ValueError:
+            QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择评估车型的数据文件！")
+            
+        try:
+            target_df = pd.read_excel(
+                self.mubiaoquxian,
+                sheet_name='Sheet1',
+                header=None,
+                engine='openpyxl'          # 明确用 openpyxl
+            )
+            print(target_df)
         except Exception as e:
-            QMessageBox.critical(self.current_window, "错误", f"运行出错：\n{e}")
-   
-
-    # ---------------- 预测模型模块功能 ---------------- #
+            print("读取参数文件失败：", type(e).__name__)
+            print("详细错误：", str(e))
+            print("文件路径：", self.mubiaoquxian)
+            print("文件是否存在？", os.path.exists(self.mubiaoquxian))
+            print("文件大小：", os.path.getsize(self.mubiaoquxian) if os.path.exists(self.mubiaoquxian) else "不存在")
+            raise
+            
+        freq_labels, pred_noise, target_noise, mape, noise_score = noise_rating.calculate_rating(model_path, self.input_file_path, self.output_file_path, new_input_path, self.mubiaoquxian)
+        plot_pred_vs_target_in_widget(freq_labels, pred_noise, target_noise, mape, noise_score, 'PGwidget_1', save_path=None)
+        shape_score, df_transposed = characteristics_rating.calculate_rating(self.all_characteristic, new_input_path, self.zaoxingfanwei, self.zaoxingquanzhong)
+        print(df_transposed)
+        print(shape_score)
+        origin_data = df_transposed.iloc[0, :24].values
+        numeric_data = pd.to_numeric(origin_data, errors='coerce')
+        origin_data_rounded = numeric_data.round(2)
+        origin_data_list = origin_data_rounded.tolist()
+        plot_characteristics(0, origin_data_list, 'tableWidget')
+        
+        min_data = df_transposed.iloc[1, :24].values
+        min_data = np.array(min_data)
+        numeric_data = pd.to_numeric(min_data, errors='coerce')
+        min_data = np.round(numeric_data, 2)
+        min_data_list = min_data.tolist()
+        plot_characteristics(1, min_data_list, 'tableWidget')
+        
+        max_data = df_transposed.iloc[2, :24].values
+        max_data = np.array(max_data)
+        numeric_data = pd.to_numeric(max_data, errors='coerce')
+        max_data_rounded = numeric_data.round(2)
+        max_data_list = max_data_rounded.tolist()
+        plot_characteristics(2, max_data_list, 'tableWidget')
+        
+        score_data = df_transposed.iloc[4, :24].values
+        score_data = np.array(score_data)
+        numeric_data = pd.to_numeric(score_data, errors='coerce')
+        score_data_rounded = numeric_data.round(2)
+        score_data_list = score_data_rounded.tolist()
+        plot_characteristics(3, score_data_list, 'tableWidget')
+        
+        if hasattr(self.current_window, "ZCS_3"):
+            self.current_window.ZCS_3.setText(str(shape_score))
+        else:
+            print(f"警告: 找不到名为 'ZCS_3' 的 QWidget")
+            
+        if hasattr(self.current_window, "ZCS_4"):
+            self.current_window.ZCS_4.setText(str(mape))
+        else:
+            print(f"警告: 找不到名为 'ZCS_4' 的 QWidget")
+            
+        if hasattr(self.current_window, "ZCS_5"):
+            self.current_window.ZCS_5.setText(str(noise_score))
+        else:
+            print(f"警告: 找不到名为 'ZCS_5' 的 QWidget")
+        
+        try:
+            zaoxing_weight = float(self.current_window.ZCS_6.text().strip())
+        except ValueError:
+            QMessageBox.warning(self.current_window, "输入错误", "造型参数权重必须为数字！")
+        try:
+            noise_weight = float(self.current_window.ZCS_7.text().strip())
+        except ValueError:
+            QMessageBox.warning(self.current_window, "输入错误", "噪声权重必须为数字！")
+          
+        if zaoxing_weight and noise_weight:
+            shape_conformity_score = round(shape_score * zaoxing_weight + noise_score * noise_weight, 2)
+            if hasattr(self.current_window, "ZCS_8"):
+                self.current_window.ZCS_8.setText(str(shape_conformity_score))
+            else:
+                print(f"警告: 找不到名为 'ZCS_8' 的 QWidget")
+        else:
+            QMessageBox.warning(self.current_window, "输入错误", "请输入造型参数权重和噪声权重！")
+        
+        
+    # ---------- 预测模型模块功能 ---------------- #    
 
     #----模型预测------
     #加载模型文件
@@ -2049,11 +2176,13 @@ class MyWindow:
             file_path = Characteristic_name #获取技术方案名称
             data = pd.read_excel(file_path, header=0)  # 第一行作为列名
             label = data.columns.tolist()
+            print(label)
             # 数据处理
             miv = miv1.T
             
             corr_df = pd.DataFrame(miv, index=y_label, columns=label)  # 创建DataFrame用于绘图
             corr_df_reversed = corr_df[::-1]  # 数据取反，使频率从小到大排序（从下到上）
+            print(corr_df_reversed)
             
             # 获取指定的QWidget
             plot_widget = self.current_window.findChild(QWidget, widget_name)
@@ -2596,16 +2725,18 @@ class MyWindow:
         name = pd.read_excel(self.Characteristic_name, header=0)#获取技术方案名称
         labels = name.columns.tolist()  # 第一行作为列名
         
-        sum_rank_save_path = os.path.join(self.huancun, "全频段参数MIV_前十.xlsx")
-        os.makedirs(os.path.dirname(sum_rank_save_path), exist_ok=True)
+        all_rank_save_path = os.path.join(self.huancun, "全频段参数MIV_前十.xlsx")
+        os.makedirs(os.path.dirname(all_rank_save_path), exist_ok=True)
+        sum_rank_save_path = os.path.join(self.huancun, "全频段参数MIV总和_前十.xlsx")
+        os.makedirs(os.path.dirname(all_rank_save_path), exist_ok=True)
         param_rank_result = sum_and_rank_params_from_heatmap(
             MIV=MIV,
             param_labels=labels,
             freq_labels=freq_labels,
             save_path=sum_rank_save_path
         )
-        result_df = all_params_from_heatmap(MIV, labels, freq_labels, sum_rank_save_path)
-        plot_excel_table_widget(sum_rank_save_path, "Sheet1", "ZLwidget2")
+        result_df = all_params_from_heatmap(MIV, labels, freq_labels, all_rank_save_path)
+        plot_excel_table_widget(all_rank_save_path, "Sheet1", "ZLwidget2")
 
         # 2. 再执行最值回填（直接覆盖原文件，最值保留两位小数）
         # 定义各文件路径

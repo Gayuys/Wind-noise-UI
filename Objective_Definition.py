@@ -1,4 +1,5 @@
 import torch
+import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -124,26 +125,6 @@ def generate_lhs_samples(input_file_path, n_samples=1000):
     upper_bounds = df.max(axis=0)
     print(lower_bounds)
     print(upper_bounds)
-    
-    # # 读取 Excel
-    # df = pd.read_excel(range_file_path, header=0)
-    # if len(df) < 2:
-    #     raise ValueError("Excel文件数据不足，至少需要2行数据（范围）。")
-
-    # feature_names = df.columns.tolist()
-    # n_dims = len(feature_names)
-
-    # # -------------------------------------------------------
-    # # 1. 准备常规特征的范围 (为了不报错，先处理所有列的范围)
-    # # -------------------------------------------------------
-    # try:
-    #     row1 = df.iloc[0].values.astype(float)
-    #     row2 = df.iloc[1].values.astype(float)
-    # except ValueError:
-    #     raise ValueError("Excel数据包含非数字字符，请检查。")
-
-    # lower_bounds = np.minimum(row1, row2)
-    # upper_bounds = np.maximum(row1, row2)
 
     # 处理固定值 (防止 Scipy 报错)
     diff = upper_bounds - lower_bounds 
@@ -355,9 +336,7 @@ def make_top10_optimization(model_path, input_file_path, output_file_path, origi
     results_list = []
     for i, idx in enumerate(top_indices):
         row_data = {
-            'Rank': i + 1,
-            'Sample_ID': idx,
-            'RMSE_Score': top_rmse[i]
+
         }
         # 只添加特征数据
         for j, col in enumerate(feature_names):
@@ -370,19 +349,30 @@ def make_top10_optimization(model_path, input_file_path, output_file_path, origi
     # ---------------- 6. 计算特征统计 ----------------
     print("6. 计算 Top 10 方案的特征范围统计...")
     feature_df = df_results[feature_names]
-    stats_df = pd.DataFrame({
-        'Feature': feature_names,
-        'Top10_Min': feature_df.min().values,
-        'Top10_Max': feature_df.max().values,
-        'Top10_Mean': feature_df.mean().values,
-        'Range_Width': (feature_df.max() - feature_df.min()).values
-    })
-
+    stats_df = pd.DataFrame([
+        feature_df.min().values,
+        feature_df.max().values],
+        index=['Top10_Min', 'Top10_Max'],  # 设置行索引
+        columns=feature_df.columns)        # 设置列名为特征名
+        
+    
+    pred_data = pd.DataFrame(top_preds_for_plot, columns=range(17))
+    save_path = os.path.join(result_save_path, "Top10_优化方案结果.xlsx")
+    range_save_path = os.path.join(result_save_path, "目标定义范围.xlsx")
     # ---------------- 7. 保存 Excel ----------------
     try:
-        with pd.ExcelWriter(result_save_path) as writer:
-            df_results.to_excel(writer, sheet_name='Top10_Designs', index=False)
-            stats_df.to_excel(writer, sheet_name='Feature_Analysis', index=False)
+        with pd.ExcelWriter(save_path) as writer:
+            df_results.to_excel(writer, sheet_name='Top10方案', index=False)
+            stats_df.to_excel(writer, sheet_name='Feature_Analysis', index=True)
+            pred_data.to_excel(writer, sheet_name='Top10_预测结果', index=False)
+        print(f"\n成功！Excel结果已保存至: {result_save_path}")
+
+    except Exception as e:
+        print(f"保存Excel时出错: {e}")
+        
+    try:
+        with pd.ExcelWriter(range_save_path) as writer:
+            stats_df.to_excel(writer, index=False, header=False)
         print(f"\n成功！Excel结果已保存至: {result_save_path}")
 
     except Exception as e:
