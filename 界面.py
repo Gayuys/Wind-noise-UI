@@ -2687,7 +2687,7 @@ class MyWindow:
         except ValueError:
             QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择进行灵敏度排序的数据文件！")
         
-        MIV, IV1, IV2 = MIV_calculate.calculate_result(self.input_file_path, self.output_file_path, newinput_file_path, model_path, self.Characteristic_name)
+        MIV, IV1, IV2 = MIV_calculate.calculate_result(self.input_file_path, self.output_file_path, newinput_file_path, model_path, self.Characteristic_name,self.huancun)
 
         freq_labels = ["200Hz", "250Hz", "315Hz", "400Hz", "500Hz", "630Hz", "800Hz", "1000Hz", "1250Hz",
                    "1600Hz", "2000Hz", "2500Hz", "3150Hz", "4000Hz", "5000Hz", "6300Hz", "8000Hz"]

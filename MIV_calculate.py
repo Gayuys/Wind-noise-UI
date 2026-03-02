@@ -13,14 +13,14 @@ from matplotlib.colors import Normalize
 from mpl_toolkits.mplot3d import Axes3D
 
 # -------------------------- 路径配置 --------------------------
-# 定义项目根目录（相对于当前脚本的位置）
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# 定义各子目录的相对路径
-SAVE_DIR = os.path.join(BASE_DIR, '缓存')     # 结果保存目录
+# # 定义项目根目录（相对于当前脚本的位置）
+# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# # 定义各子目录的相对路径
+# SAVE_DIR = os.path.join(BASE_DIR, '缓存')     # 结果保存目录
 
-# 创建目录（如果不存在）
-for dir_path in [SAVE_DIR]:
-    os.makedirs(dir_path, exist_ok=True)
+# # 创建目录（如果不存在）
+# for dir_path in [SAVE_DIR]:
+#     os.makedirs(dir_path, exist_ok=True)
 # 设置 Matplotlib 显示中文
 plt.rcParams['font.sans-serif'] = ['SimHei']  # 黑体
 plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示问题
@@ -241,7 +241,7 @@ def MIV_analysis(model_path, X,  origin_x, input_cols, output_cols, input_mean, 
 
     return MIV, IV1, IV2
 
-def save_result(MIV, IV1, IV2, Characteristic_name,save_dir=SAVE_DIR):
+def save_result(MIV, IV1, IV2, Characteristic_name,save_dir):
     """
     保存 MIV, IV1, IV2 到指定目录
     """
@@ -279,7 +279,7 @@ def save_result(MIV, IV1, IV2, Characteristic_name,save_dir=SAVE_DIR):
     print(f"IV1数组已保存到: {iv1_save_path}")
     print(f"IV2数组已保存到: {iv2_save_path}")
 
-def calculate_result(input_file_path, output_file_path, new_input_path, model_path,Characteristic_name,save_dir=SAVE_DIR):
+def calculate_result(input_file_path, output_file_path, new_input_path, model_path,Characteristic_name,save_dir):
 
     X, y, input_cols, output_cols, input_mean, input_std, output_mean, output_std = load_data_from_excels(
             input_file_path,
