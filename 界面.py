@@ -21,6 +21,8 @@ import shutil
 import pandas as pd
 import typing
 from PySide6.QtCore import QSize,QTimer
+from shapely.geometry import Polygon, Point
+import cv2
 #相关程序导入
 import xcepxin_train
 import MIV_calculate
@@ -30,6 +32,7 @@ import optimization_xiangdu
 import Objective_Definition
 import characteristics_rating
 import noise_rating
+import STL_calculate
 
 # 设置 Matplotlib 中文字体，解决中文显示问题
 plt.rcParams['font.sans-serif'] = ['Microsoft YaHei', 'SimSun', 'Arial']  # 优先使用支持中文的字体
@@ -284,14 +287,15 @@ class MyWindow:
         # 页面映射字典（根据实际UI的stackedWidget页面索引调整）
         page_dict = {
             "⚙️参数设置": 0,
-            "📌目标定义": 1,
-            "STL模型预处理": 2,
-            "造型特征参数提取": 3,
-            "造型符合度评分": 4,
-            "📈预测模型": 5,
-            "灵敏度分析": 6,
-            "基于具体频段为目标": 7,
-            "基于噪声响度为目标": 8
+            "目标设定": 1,
+            "方案生成": 2,
+            "STL模型预处理": 3,
+            "造型特征参数提取": 4,
+            "造型符合度评分": 5,
+            "📈预测模型": 6,
+            "灵敏度分析": 7,
+            "基于具体频段为目标": 8,
+            "基于噪声响度为目标": 9
         }
 
         if click_text in page_dict:
@@ -403,13 +407,12 @@ class MyWindow:
             self.current_window.ZSPB_4.clicked.connect(self.save_rotated_stl)
         
         # 造型提取
-        if hasattr(self.current_window, "pushButton_17"):
-            self.current_window.pushButton_17.clicked.connect(self.select_file_2)
-        # 点击 pushButton_8 输入数据（车高计算、SUV/轿车数据填充）
-        if hasattr(self.current_window, "pushButton_18"):
-            self.current_window.pushButton_18.clicked.connect(self.run_height_and_fill_data)
-        if hasattr(self.current_window, "pushButton_19"):
-            self.current_window.pushButton_19.clicked.connect(self.fill_default_values)
+        if hasattr(self.current_window, "ZCLPB_1"):
+            self.current_window.ZCLPB_1.clicked.connect(self.select_file_2) #输入STL
+        if hasattr(self.current_window, "ZCLPB_5"):
+            self.current_window.ZCLPB_5.clicked.connect(self.calculate_tezhengtiqu) #点击计算造型参数
+        if hasattr(self.current_window, "ZCLPB_6"):
+            self.current_window.ZCLPB_6.clicked.connect(self.save_STL_values) #导出计算结果
 
         #------造型符合度功能按钮---------
         #导入造型参数值
@@ -1394,7 +1397,8 @@ class MyWindow:
         if save_path:
             try:
                 self.rotated_mesh.export(save_path)
-                print(f"旋转后的 STL 已保存至：{save_path}")
+                QMessageBox.information(None, "完成", f"保存STL成功！\nSTL已保存至: {save_path}")
+                self.current_window.ZCL_1.setText(save_path)
             except Exception as e:
                 print(f"保存旋转后 STL 失败：{str(e)}")
 
@@ -1408,118 +1412,6 @@ class MyWindow:
             print(f"✅ 已选择STL文件：{file_path}")
         else:
             print("❌ 未选择文件或 lineEdit_28 不存在")
-
-    def run_height_and_fill_data(self):
-        """计算车高并写入 SUV/轿车数据到 lineEdit_500~548"""
-        stl_path = self.current_window.lineEdit_28.text().strip()
-
-        if not stl_path:
-            QMessageBox.warning(self.current_window, "提示", "请先选择STL文件！")
-            return
-
-        try:
-            mesh = trimesh.load_mesh(stl_path)
-            vertices = mesh.vertices
-
-            # 计算车高
-            z_min = np.min(vertices[:, 2])
-            z_max = np.max(vertices[:, 2])
-            H = z_max - z_min
-            print(f"计算得到车高 H = {H:.2f} mm")
-
-            # SUV 数据
-            data1 = [
-                "76.41 - 141.75", "26.57 - 63.56", "9.81 - 23.07", "0.07 - 2.89", "6.38 - 8.75",
-                "1.76 - 8.24", "5.13 - 20.30", "0.00 - 39.25", "7.14 - 12.46", "75.51 - 126.58",
-                "34.06 - 70.15", "5.79 - 32.00", "0.00 - 3.71", "0.00 - 11.58", "4.50 - 12.86",
-                "2.42 - 29.03", "0.00 - 45.71", "7.14 - 12.46", "204.01 - 252.34", "209.01 - 250.36",
-                "148.94 - 170.74", "63.29 - 87.24", "68.11 - 75.08", "170.72 - 264.00", "17.00 - 22.50",
-                "18.00 - 25.00", "149.41 - 157.04", "111.68 - 187.32", "2282.34 - 2876.36", "32.98 - 53.80",
-                "38.48 - 65.24", "54.87 - 59.30", "2.60 - 7.74", "22.63 - 42.11", "82.34 - 90.00",
-                "1.63 - 2.02", "19 - 22", "21 - 25", "52.10 - 69.81", "37.41 - 73.68",
-                "0.00 - 9.48", "2.71 - 3.22","0.85 - 23.04", "33.18 - 60.57", "25.80 - 34.30",
-                "78.56 - 81.68", "58.17 - 65.76", "180 - 270", "1.63 - 2.02"
-            ]
-
-            # 轿车数据
-            data2 = [
-                "71.80 - 178.75", "22.17 - 46.09", "2.13 - 41.44", "0.20 - 3.64", "5.97 - 14.98",
-                "1.98 - 11.43", "0.19 - 37.75", "0.00 - 29.51", "6.55 - 15.00", "71.42 - 159.29",
-                "24.35 - 67.09", "3.53 - 107.43", "0.11 - 3.87", "4.99 - 12.63", "3.64 - 17.77",
-                "1.46 - 38.77", "0.00 - 28.04", "6.55 - 15.00", "172.43 - 232.44", "183.01 - 240.44",
-                "127.63 - 171.84", "60.66 - 96.24", "69.64 - 77.52", "125.20 - 243.69", "13.00 - 19.00",
-                "14.00 - 20.00", "148.97 - 181.66", "8.88 - 148.54", "564.81 - 3244.37", "17.98 - 66.08",
-                "12.85 - 79.97", "55.61 - 64.15", "3.19 - 10.07", "12.77 - 59.69", "52.12 - 90.00",
-                "1.72 - 2.24", "13 - 18", "14 - 19", "50.46 - 68.26", "40.27 - 69.54",
-                "0.00 - 16.54", "2.42 - 3.43","16.14 - 28.41", "28.12 - 89.71", "23.79 - 44.28",
-                "75.11 - 84.25", "49.52 - 68.02", "125 - 180", "1.72 - 2.24"
-            ]
-
-            # 选择输出数据
-            output_data = data1 if H > 1600 else data2
-            car_type = "SUV" if H > 1600 else "轿车"
-            print(f"检测结果：{car_type}（H = {H:.2f} mm）")
-
-            # 写入 lineEdit_500 ~ lineEdit_548
-            for i, value in enumerate(output_data):
-                line_name = f"lineEdit_{i + 500}"
-                if hasattr(self.current_window, line_name):
-                    getattr(self.current_window, line_name).setText(value)
-
-            QMessageBox.information(
-                self.current_window,
-                "完成",
-                f"检测结果：{car_type}\n车高 H = {H:.2f} mm\n数据已写入 lineEdit_500~lineEdit_548"
-            )
-
-        except Exception as e:
-            QMessageBox.critical(self.current_window, "错误", f"运行出错：\n{e}")
-
-    def fill_default_values(self):
-        """点击按钮后向 lineEdit_500~548 写入默认数据（红色）"""
-
-        # SUV 数据
-        data1 = [
-            "76.41", "26.57", "9.81", "0.07", "6.38",
-            "1.76", "5.13", "0.00", "7.14", "75.51",
-            "34.06", "5.79", "0.00", "0.00", "4.50",
-            "2.42", "0.00", "7.14", "204.01", "209.01",
-            "148.94", "63.29", "68.11", "170.72", "17.00",
-            "18.00", "149.41", "111.68", "2282.34", "32.98",
-            "38.48", "54.87", "2.60", "22.63", "82.34",
-            "1.63", "19", "21", "52.10", "37.41",
-            "0.00", "2.71", "0.85", "33.18", "25.80",
-            "78.56", "58.17", "180", "1.63"
-        ]
-
-        # # 轿车数据（如需使用，把 data1 改成 data2 即可）
-        # data2 = [
-        #     "71.80", "22.17", "2.13", "0.20", "5.97",
-        #     "1.98", "0.19", "0.00", "6.55", "71.42",
-        #     "24.35", "3.53", "0.11", "4.99", "3.64",
-        #     "1.46", "0.00", "6.55", "172.43", "183.01",
-        #     "127.63", "60.66", "69.64", "125.20", "13.00",
-        #     "14.00", "148.97", "8.88", "564.81", "17.98",
-        #     "12.85", "55.61", "3.19", "12.77", "52.12",
-        #     "1.72", "13", "14", "50.46", "40.27",
-        #     "0.00", "2.42", "16.14", "28.12", "23.79",
-        #     "75.11", "49.52", "125", "1.72"
-        # ]
-
-        # 选择要填充的数据（默认 SUV）
-        values = data1
-
-        # 遍历 lineEdit_500 ~ lineEdit_548
-        start_id = 500
-        for i, val in enumerate(values):
-            obj_name = f"lineEdit_{start_id + i}"
-
-            if hasattr(self.current_window, obj_name):
-                le = getattr(self.current_window, obj_name)
-                le.setText(val)
-                le.setStyleSheet("color: red;")  # 设置红色字体
-            else:
-                print(f"⚠ 未找到控件：{obj_name}（请检查 UIzhujiemianv3.ui）")
 
     # --------造型示意图------------
     def load_styling_schematic_images(self):
@@ -1606,6 +1498,112 @@ class MyWindow:
 
         if getattr(sys, 'frozen', False):
             print(f"【打包】临时目录路径：{sys._MEIPASS if hasattr(sys, '_MEIPASS') else '未知'}")
+
+    # --------特征提取功能------------
+    def select_file_2(self):
+        """选择第二个STL文件"""
+        file_path, _ = QFileDialog.getOpenFileName(
+            self.current_window,
+            "选择STL文件",
+            "",
+            "STL 文件 (*.stl);;所有文件 (*.*)"
+        )
+        if file_path and hasattr(self.current_window, "ZCL_1"):
+            self.current_window.ZCL_1.setText(file_path)
+            
+    def calculate_tezhengtiqu(self) :
+        if hasattr(self.current_window, "ZCL_1"):
+            stl_path = self.current_window.ZCL_1.text().strip()
+        selected_text = self.current_window.comboBox.currentText()
+        if selected_text == "燃油车轿车":
+            vehicle_type = "轿车"
+        elif selected_text == "燃油车SUV":
+            vehicle_type = "SUV"
+        elif selected_text == "新能源轿车":
+            vehicle_type = "轿车"
+        elif selected_text == "新能源SUV":
+            vehicle_type = "SUV"
+            
+        STL_result = STL_calculate.run_tasks_with_threadpool(stl_path, vehicle_type)
+        
+        msg = f"提取成功{len([r for r in STL_result if r is not None])}个参数"
+        msg += f"\n提取失败{len([r for r in STL_result if r is None])}个参数"
+        msg += "\n提取失败参数以None表示, 请填入大致值，并填写技术方案"
+        QMessageBox.information(None, "提取完成", msg)
+        print(STL_result)
+        for i, value in enumerate(STL_result):
+            line_name = f"ZCLAS_{i + 1}"
+            if hasattr(self.current_window, line_name):
+                if value is None:
+                    value = "None"
+                getattr(self.current_window, line_name).setText(str(value))
+                  
+    def save_STL_values(self):
+        """将输出的造型参数参数保存到Excel文件中"""
+        # 从界面获取参数值
+        calculate_result = []
+        for i in range(66):
+            line_name = f"ZCLAS_{i + 1}"
+            data_str = getattr(self.current_window, line_name).text().strip()
+            
+            # 检查是否输入数字
+            try:
+                data = float(data_str)
+            except ValueError:
+                # 如果输入不是数字，提示“请输入数字”
+                QMessageBox.information(None, f"第{i+1}行的输入无效，请输入数字。")
+                #print(f"第{i+1}行的输入无效，请输入数字。")
+                return  # 终止函数或显示提示，可以根据需求决定是否继续
+            
+            calculate_result.append(data)
+        
+        calculate_result = np.array(calculate_result)
+        calculate_result = calculate_result.reshape(1, -1)
+        
+        # 保存到Excel
+        df_headers = pd.read_excel(self.all_characteristic, header=0)
+        column_names = df_headers.columns.tolist()
+        
+        # 创建新DataFrame，使用原始表头和input_data作为一行数据
+        new_df = pd.DataFrame(calculate_result, columns=column_names)
+        
+        # 保存为Excel文件
+        output_path = os.path.join(self.huancun, "造型参数+技术方案.xlsx")  # 或您指定的路径
+        new_df.to_excel(output_path, index=False)
+        
+        #设置保存路径
+        # 弹出文件选择对话框
+        save_path, _ = QFileDialog.getSaveFileName(self.current_window, "保存提取结果", "", "文件 (*)")
+        try:
+            # 4. 创建新文件（exist_ok=False 避免重名）
+            os.makedirs(save_path, exist_ok=False)
+        except FileExistsError:
+            QMessageBox.critical(None, "错误", f"文件夹「{save_path}」已存在！")
+            return
+        except Exception as e:
+            QMessageBox.critical(None, "错误", f"创建文件失败：{str(e)}")
+            return
+
+        #设置要移动文件的路径
+        output_path = os.path.join(self.huancun, "造型参数+技术方案.xlsx")
+
+        # 5. 检查要移动的模型是否存在
+        if not os.path.exists(output_path):
+            QMessageBox.critical(None, "错误", f"指定文件造型参数+技术方案.xlsx不存在！")
+            return
+        output_name = os.path.basename(output_path) 
+        new_output_path = os.path.join(save_path, output_name) #保存预测结果
+
+        try:
+            # 7. 移动文件到新文件夹
+            shutil.move(output_path, new_output_path)
+            QMessageBox.information(None, "完成", f"移动文件成功！\n提取结果已保存至: {new_output_path}")
+            self.current_window.ZCS_1.setText(new_output_path)
+            self.current_window.Y_2.setText(new_output_path)
+            self.current_window.ZL_2.setText(new_output_path)
+        except Exception as e:
+            QMessageBox.critical(None, "错误", f"移动文件失败：{str(e)}")
+            return     
         
     #------造型评分功能---------
      #导入造型参数值
@@ -2047,11 +2045,7 @@ class MyWindow:
             line_name = f"YD_{i + 1}"
             data = float(getattr(self.current_window, line_name).text().strip())
             input_data.append(data)
-        #input_data = input_data.iloc[0].tolist()
-        print(input_data)
         input_data = np.array(input_data)
-        print(input_data)
-        print(input_data.shape)
         input_data = input_data.reshape(1, -1)
         input_file_path = self.input_file_path #输入归一化
         output_file_path = self.output_file_path #输出归一化
