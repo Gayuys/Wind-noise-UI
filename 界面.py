@@ -1067,10 +1067,13 @@ class MyWindow:
         selected_text = self.current_window.comboBox_3.currentText()
         if selected_text == "目标L":
             original_data_path = os.path.join(self.huancun, "Target_L.xlsx")
+            self.mubiaoquxian = original_data_path
         elif selected_text == "目标A":
             original_data_path = os.path.join(self.huancun, "Target_A.xlsx")
+            self.mubiaoquxian = original_data_path
         elif selected_text == "目标B":
             original_data_path = os.path.join(self.huancun, "Target_B.xlsx")
+            self.mubiaoquxian = original_data_path
     
         
         df_results, feature_names, target_data, top_preds_for_plot = Objective_Definition.make_top10_optimization(model_path, self.input_file_path, self.output_file_path, original_data_path, result_save_path=self.huancun)
@@ -2077,7 +2080,7 @@ class MyWindow:
             
     def plot_photo_moxingyuce(self): 
         
-        def visualize_predictions(predicted_data, widget_name, save_path=None, save_path_data=None):
+        def visualize_predictions(predicted_data, target_data, widget_name, save_path=None, save_path_data=None):
             """
             可视化预测结果，嵌入到指定的 QWidget 中显示
             参数:
@@ -2089,8 +2092,13 @@ class MyWindow:
             plt.rcParams['font.sans-serif'] = ['SimHei', 'STKAITI']
             plt.rcParams['axes.unicode_minus'] = False
 
+            # 确保数据维度一致 - 展平为1维数组
+            predicted_data = np.array(predicted_data).flatten()
+            target_data = np.array(target_data).flatten()
+            
             min_length = min(len(predicted_data), 17)
             predicted_data_slice = predicted_data[:min_length]
+            target_data_slice = target_data[:min_length]
 
             x_axis_data = [470 * i for i in range(1, min_length + 1)]
             freq_labels = [200, 250, 315, 400, 500, 630, 800, 1000, 1250, 1600,
@@ -2100,6 +2108,7 @@ class MyWindow:
             fig = plt.figure(figsize=(10, 6))  # 先用默认大小，后面会调整
 
             plt.plot(x_axis_data, predicted_data_slice, color="k", marker='s', linewidth=1.5, label='预测数据')
+            plt.plot(x_axis_data, target_data_slice, color="r", marker='o', linewidth=1.5, label='设定目标数据')
             plt.xticks(x_axis_data, freq_labels, fontsize=12, rotation=45)
             plt.xlabel('频率(Hz)', fontsize=14)
             plt.ylabel('噪声(dB)', fontsize=14)
@@ -2172,7 +2181,7 @@ class MyWindow:
             QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择进行灵敏度排序的数据文件！")
         #获取造型+技术方案数据
         new_input_data = pd.read_excel(new_input_path, header=0).values
-        pride_input_data = pd.read_excel(self.mubiaoquxian, header=0).values
+        target_data = pd.read_excel(self.mubiaoquxian, header=0).values
         input_data = []
         for i in range(new_input_data.shape[1]):
             line_name = f"YD_{i + 1}"
@@ -2184,7 +2193,7 @@ class MyWindow:
         output_file_path = self.output_file_path #输出归一化
 
         predicted_data = model_use.call_model(input_file_path, output_file_path, input_data, model_path)
-        visualize_predictions(predicted_data, 'Ywidget', self.huancun, self.huancun)
+        visualize_predictions(predicted_data, target_data, 'Ywidget', self.huancun, self.huancun)
         # 获取表头
         df_headers = pd.read_excel(new_input_path, header=0)
         column_names = df_headers.columns.tolist()
@@ -3636,9 +3645,6 @@ class MyWindow:
             None, "成功", f"文件已移动至：\n{save_path}"
         )
   
-
-
-
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
