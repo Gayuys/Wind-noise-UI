@@ -33,6 +33,7 @@ import Objective_Definition
 import characteristics_rating
 import noise_rating
 import STL_calculate
+import LAB
 
 # 设置 Matplotlib 中文字体，解决中文显示问题
 plt.rcParams['font.sans-serif'] = ['Microsoft YaHei', 'SimSun', 'Arial']  # 优先使用支持中文的字体
@@ -378,9 +379,14 @@ class MyWindow:
             self.current_window.CPB_3.clicked.connect(self.select_Data_folder_canshushezhi)
 
         # ---------------- 目标定义模块功能按钮 ---------------- #
-        # 选择主驾驶噪声
-        if hasattr(self.current_window, "MPB_1"):
-            self.current_window.MPB_1.clicked.connect(self.select_Data_file)
+        #-------目标计算-----
+        # 选择竞品车噪声集
+        if hasattr(self.current_window, "SJXZ_1"):
+            self.current_window.SJXZ_1.clicked.connect(self.select_Data_file_SJXZ)
+        # 计算LAB结果
+        if hasattr(self.current_window, "SJXZ_2"):
+            self.current_window.SJXZ_2.clicked.connect(self.select_Data_folder_mubiaodingyi_SJXZ)        
+        #-------方案计算-----
         # 输入 预测模型
         if hasattr(self.current_window, "MPB_3"):
             self.current_window.MPB_3.clicked.connect(self.select_Data_folder_mubiaodingyi)
@@ -887,15 +893,97 @@ class MyWindow:
         self.plot_boxplot(errors, "Cwidget_6") 
         
     # ---------------- 目标定义模块功能 ---------------- #
-    def select_Data_file(self):
+    #-------目标计算
+    def select_Data_file_SJXZ(self):
         file_path, _ = QFileDialog.getOpenFileName(
             self.current_window,
             "选择文件",
             "",
             "竞品车数据 (*.xlsx);;所有文件 (*.*)"
         )
-        if file_path and hasattr(self.current_window, "M_1"):
-            self.current_window.M_1.setText(file_path)
+        if file_path and hasattr(self.current_window, "SJXZL_1"):
+            self.current_window.SJXZL_1.setText(file_path)   
+ 
+    def select_Data_folder_mubiaodingyi_SJXZ(self):
+        def draw_chart(result_df, car_rows, df, target_column, widget_name, title_text):
+            """
+            在指定的 QWidget 中绘制噪声频率对比图（嵌入式 matplotlib）
+            参数中的 output_img_name 被移除，因为我们直接嵌入 UI 而非保存图片
+            """
+            # 获取目标 QWidget
+            plot_widget = self.current_window.findChild(QWidget, widget_name)
+            if not plot_widget:
+                print(f"警告: 找不到名为 '{widget_name}' 的 QWidget")
+                return
+
+            # 获取当前 widget 的实际尺寸（像素）
+            widget_width = plot_widget.width()
+            widget_height = plot_widget.height()
+
+            # 创建 matplotlib Figure，尺寸按 widget 像素估算（dpi ≈ 100）
+            fig, ax = plt.subplots(figsize=(widget_width / 100, widget_height / 100))
+
+            x_indices = range(len(result_df))
+            frequencies = [str(int(float(f))) for f in result_df['Frequency']]
+
+            # 动态生成颜色
+            colors = plt.cm.tab20(np.linspace(0, 1, len(car_rows)))
+
+            # 绘制背景线（各车辆噪声曲线）
+            for i, car in enumerate(car_rows):
+                ax.plot(x_indices, df.loc[car],
+                        linestyle='--', linewidth=0.8, alpha=0.6,
+                        marker='o', markersize=2, color=colors[i % len(colors)])
+
+            # 绘制目标线（突出显示）
+            ax.plot(x_indices, result_df[target_column],
+                    label=target_column, color='red', linewidth=3.0,
+                    linestyle='-', marker='o', markersize=6,
+                    markerfacecolor='orange', zorder=10)
+
+            # 图表样式设置
+            ax.set_xticks(x_indices)
+            ax.set_xticklabels(frequencies, rotation=45, fontsize=11)
+            ax.set_xlabel('频率 (Hz)', fontsize=13)
+            ax.set_ylabel('噪声 (dB)', fontsize=13)
+            ax.set_title(f'{title_text}', fontsize=15, fontweight='bold')
+            ax.grid(True, which='both', linestyle='--', alpha=0.5)
+            ax.legend(loc='upper right', frameon=True, ncol=3, fontsize=9)
+
+            # 嵌入到 PyQt widget
+            canvas = FigureCanvas(fig)
+            canvas.setParent(plot_widget)
+
+            # 获取或创建布局，并清理旧的 canvas
+            layout = plot_widget.layout()
+            if layout is None:
+                layout = QVBoxLayout(plot_widget)
+                plot_widget.setLayout(layout)
+
+            # 删除旧的 FigureCanvas（防止叠加）
+            for i in reversed(range(layout.count())):
+                item = layout.itemAt(i)
+                if item and item.widget() and isinstance(item.widget(), FigureCanvas):
+                    item.widget().deleteLater()
+
+            # 添加新的 canvas 到布局
+            layout.addWidget(canvas)
+            canvas.draw()
+
+            # 让 canvas 跟随 widget 大小变化（推荐方式）
+            canvas.setGeometry(plot_widget.rect())       
+        
+        try:
+            file_path = self.current_window.SJXZL_1.text().strip()
+        except ValueError:
+            QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择竞品车数据文件！")  
+            
+        result_df, car_rows, df = LAB.calculate_LAB(file_path, self.huancun) 
+        draw_chart(result_df, car_rows, df, 'Target L', 'SJXZW_1', 'Target L')
+        draw_chart(result_df, car_rows, df, 'Target A', 'SJXZW_2', 'Target A')
+        draw_chart(result_df, car_rows, df, 'Target B', 'SJXZW_3', 'Target B')
+                     
+    #-------方案计算
    
     def select_Data_folder_mubiaodingyi(self):
        
@@ -942,19 +1030,62 @@ class MyWindow:
         QMessageBox.information(None, "文件检测结果", msg)
         
     def mubiaodingyi_result(self):
-        """计算参数区间"""    
+        """计算参数区间""" 
+        def plot_characteristics(col_index, values, tableWidget_name):
+            """
+            一次性填充指定列
+            col_index: 列号（从0开始）
+            values:    这列的所有值（列表长度应等于表格当前行数）
+            """
+            if self.current_window is None:
+                print("错误：请传入 current_window 参数（通常是 self 或主窗口）")
+                return
+
+            target_table = self.current_window.findChild(QTableWidget, tableWidget_name)
+            if not target_table:
+                print(f"警告: 找不到名为 '{tableWidget_name}' 的 QWidget")
+                return
+            
+            if col_index < 0 or col_index >= target_table.columnCount():
+                print(f"列索引 {col_index} 超出范围")
+                return
+
+            row_count = target_table.rowCount()
+            if len(values) != row_count:
+                print(f"数据长度 {len(values)} 与行数 {row_count} 不匹配")
+                return
+
+            for row in range(row_count):
+                item = QTableWidgetItem(str(values[row]))   # 记得转字符串
+                target_table.setItem(row, col_index, item)
+                   
         try:
             model_path=self.current_window.M_2.text().strip()
         except ValueError:
             QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择模型文件！")
-        try:
-            original_data_path=self.current_window.M_1.text().strip()
-        except ValueError:
-            QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择目标车型的数据文件！")        
+
+        selected_text = self.current_window.comboBox_3.currentText()
+        if selected_text == "目标L":
+            original_data_path = os.path.join(self.huancun, "Target_L.xlsx")
+        elif selected_text == "目标A":
+            original_data_path = os.path.join(self.huancun, "Target_A.xlsx")
+        elif selected_text == "目标B":
+            original_data_path = os.path.join(self.huancun, "Target_B.xlsx")
+    
         
         df_results, feature_names, target_data, top_preds_for_plot = Objective_Definition.make_top10_optimization(model_path, self.input_file_path, self.output_file_path, original_data_path, result_save_path=self.huancun)
         msg = "成功！计算结果已生成"
         QMessageBox.information(None, "计算结果", msg)
+        
+        feature_df = df_results[feature_names]
+        Top10_Min = np.round(feature_df.min().values, 3)
+        Top10_Max = np.round(feature_df.max().values, 3)
+        
+        print("完成计算")
+        plot_characteristics(0, Top10_Min, "tableWidget_2")
+        plot_characteristics(1, Top10_Max, "tableWidget_2")
+        print("完成绘制")
+
 
     def plot_mubiaodingyi_result(self):
         #绘制符合目标曲线的前十方案
@@ -1175,12 +1306,14 @@ class MyWindow:
                 save_file = os.path.join(save_path, f"第{num_data+1}曲线趋势对比图.png")
                 fig.savefig(save_file, dpi=300, bbox_inches='tight')
                 print(f"对比图已保存至: {save_file}")
-        try:
-            original_data_path=self.current_window.M_1.text().strip()
-            self.mubiaoquxian = self.current_window.M_1.text().strip()
-        except ValueError:
-            QMessageBox.warning(self.current_window, "缺少必要的输入", "请选择目标车型的数据文件！") 
 
+        selected_text = self.current_window.comboBox_3.currentText()
+        if selected_text == "目标L":
+            original_data_path = os.path.join(self.huancun, "Target_L.xlsx")
+        elif selected_text == "目标A":
+            original_data_path = os.path.join(self.huancun, "Target_A.xlsx")
+        elif selected_text == "目标B":
+            original_data_path = os.path.join(self.huancun, "Target_B.xlsx")
         preds_data_path='./缓存/Top10_优化方案结果.xlsx'
         #获取需要输出的曲线
         selected_text = self.current_window.comboBox_2.currentText()

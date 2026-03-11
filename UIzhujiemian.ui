@@ -390,7 +390,7 @@ QTreeWidget::item:selected:!active {
 </string>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="page">
       <property name="styleSheet">
@@ -500,8 +500,8 @@ QGroupBox::title {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>713</width>
-                     <height>515</height>
+                     <width>508</width>
+                     <height>437</height>
                     </rect>
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_56">
@@ -955,8 +955,8 @@ QGroupBox::title {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>713</width>
-                     <height>515</height>
+                     <width>304</width>
+                     <height>438</height>
                     </rect>
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -1472,7 +1472,7 @@ QGroupBox::title {
 }</string>
                   </property>
                   <property name="currentIndex">
-                   <number>0</number>
+                   <number>2</number>
                   </property>
                   <widget class="QWidget" name="tab_5">
                    <attribute name="title">
@@ -1588,7 +1588,7 @@ QGroupBox::title {
             <property name="title">
              <string>方案生成</string>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_8" stretch="1,6">
+            <layout class="QVBoxLayout" name="verticalLayout_8" stretch="1,0">
              <property name="leftMargin">
               <number>9</number>
              </property>
@@ -1641,7 +1641,7 @@ QGroupBox::title {
                 </property>
                 <item>
                  <widget class="QWidget" name="widget_23" native="true">
-                  <layout class="QHBoxLayout" name="horizontalLayout_72" stretch="1,5,1,1">
+                  <layout class="QHBoxLayout" name="horizontalLayout_72" stretch="1,5,1">
                    <item>
                     <widget class="QLabel" name="label_314">
                      <property name="font">
@@ -1683,33 +1683,6 @@ QGroupBox::title {
                        <string>目标B</string>
                       </property>
                      </item>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QPushButton" name="MPB_1">
-                     <property name="font">
-                      <font>
-                       <pointsize>16</pointsize>
-                      </font>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">QPushButton {
-       background-color: rgb(0, 120, 215);
-       color: white;
-       border: none;
-       border-radius: 4px;
-       padding: 8px 16px;
-    }
-QPushButton:hover {
-      background-color: rgb(0, 105, 190);
-}
- QPushButton:pressed {
-       background-color: #21618c;
-    }</string>
-                     </property>
-                     <property name="text">
-                      <string>输入数据</string>
-                     </property>
                     </widget>
                    </item>
                    <item>
@@ -1902,7 +1875,7 @@ QGroupBox::title {
                    <enum>QTabWidget::TabShape::Rounded</enum>
                   </property>
                   <property name="currentIndex">
-                   <number>0</number>
+                   <number>1</number>
                   </property>
                   <widget class="QWidget" name="tab">
                    <attribute name="title">
@@ -5390,21 +5363,71 @@ QTableCornerButton::section {
                       </attribute>
                       <row>
                        <property name="text">
-                        <string>A柱上端Y向尺寸(mm)</string>
+                        <string>A柱上端X向尺寸(mm)</string>
                        </property>
                        <property name="font">
                         <font>
-                         <pointsize>14</pointsize>
+                         <pointsize>13</pointsize>
                         </font>
                        </property>
                       </row>
                       <row>
                        <property name="text">
-                        <string>A柱上端与前挡阶差(mm)</string>
+                        <string>A柱上端Y向尺寸(mm)</string>
                        </property>
                        <property name="font">
                         <font>
-                         <pointsize>14</pointsize>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>A柱上端与前风挡阶差(mm)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>A柱上端与亮条阶差(mm)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>亮条上端与侧窗阶差(mm)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>A柱上端与侧窗夹角(°)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>A柱上端与前风挡夹角(°)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
                         </font>
                        </property>
                       </row>
@@ -5414,157 +5437,7 @@ QTableCornerButton::section {
                        </property>
                        <property name="font">
                         <font>
-                         <pointsize>14</pointsize>
-                        </font>
-                       </property>
-                      </row>
-                      <row>
-                       <property name="text">
-                        <string>A柱下端Y向尺寸(mm)</string>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>14</pointsize>
-                        </font>
-                       </property>
-                      </row>
-                      <row>
-                       <property name="text">
-                        <string>A柱下端与前挡阶差(mm)</string>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>14</pointsize>
-                        </font>
-                       </property>
-                      </row>
-                      <row>
-                       <property name="text">
-                        <string>A柱下端平行段(mm)</string>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>14</pointsize>
-                        </font>
-                       </property>
-                      </row>
-                      <row>
-                       <property name="text">
-                        <string>A柱空间角度(与X轴)</string>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>14</pointsize>
-                        </font>
-                       </property>
-                      </row>
-                      <row>
-                       <property name="text">
-                        <string>A柱空间角度(与Y轴)</string>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>14</pointsize>
-                        </font>
-                       </property>
-                      </row>
-                      <row>
-                       <property name="text">
-                        <string>A柱空间角度(与Z轴)</string>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>14</pointsize>
-                        </font>
-                       </property>
-                      </row>
-                      <row>
-                       <property name="text">
-                        <string>后视镜X向尺寸(mm)</string>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>14</pointsize>
-                        </font>
-                       </property>
-                      </row>
-                      <row>
-                       <property name="text">
-                        <string>后视镜Y向尺寸(mm)</string>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>14</pointsize>
-                        </font>
-                       </property>
-                      </row>
-                      <row>
-                       <property name="text">
-                        <string>后视镜Z向尺寸(mm)</string>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>14</pointsize>
-                        </font>
-                       </property>
-                      </row>
-                      <row>
-                       <property name="text">
-                        <string>后视镜与侧窗距离(mm)</string>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>14</pointsize>
-                        </font>
-                       </property>
-                      </row>
-                      <row>
-                       <property name="text">
-                        <string>侧窗倾角(°)</string>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>14</pointsize>
-                        </font>
-                       </property>
-                      </row>
-                      <row>
-                       <property name="text">
-                        <string>后视镜前端最大角度(°)</string>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>14</pointsize>
-                        </font>
-                       </property>
-                      </row>
-                      <row>
-                       <property name="text">
-                        <string>后视镜后端最大角度(°)</string>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>14</pointsize>
-                        </font>
-                       </property>
-                      </row>
-                      <row>
-                       <property name="text">
-                        <string>前风挡角度(°)</string>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>14</pointsize>
-                        </font>
-                       </property>
-                      </row>
-                      <row>
-                       <property name="text">
-                        <string>引擎盖角度(°)</string>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>14</pointsize>
+                         <pointsize>13</pointsize>
                         </font>
                        </property>
                       </row>
@@ -5574,27 +5447,207 @@ QTableCornerButton::section {
                        </property>
                        <property name="font">
                         <font>
-                         <pointsize>14</pointsize>
+                         <pointsize>13</pointsize>
                         </font>
                        </property>
                       </row>
                       <row>
                        <property name="text">
-                        <string>引擎盖前端弧度倾角(°)</string>
+                        <string>A柱下端X向尺寸(mm)</string>
                        </property>
                        <property name="font">
                         <font>
-                         <pointsize>14</pointsize>
+                         <pointsize>13</pointsize>
                         </font>
                        </property>
                       </row>
                       <row>
                        <property name="text">
-                        <string>前格栅角度(°)</string>
+                        <string>A柱下端Y向尺寸(mm)</string>
                        </property>
                        <property name="font">
                         <font>
-                         <pointsize>14</pointsize>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>A柱下端与前风挡阶差(mm)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>A柱下端与亮条阶差(mm)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>亮条下端与侧窗阶差(mm)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>A柱下端与侧窗夹角(°)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>A柱下端与前风挡夹角(°)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>A柱下端平行段(mm)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>前风挡下端R角(°)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>后视镜X向尺寸(mm)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>后视镜Y向尺寸(mm)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>后视镜Z向尺寸(mm)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>三角饰盖Z向最小夹角(°)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>后视镜前端角度(°)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>后视镜后端角度(°)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>后视镜到车身距离(mm)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>后视镜末端平行段角度(°)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>后视镜末端平行段长度(mm)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>顶棚挠度(mm)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>顶棚X向尺寸(mm)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
                         </font>
                        </property>
                       </row>
@@ -5604,7 +5657,7 @@ QTableCornerButton::section {
                        </property>
                        <property name="font">
                         <font>
-                         <pointsize>14</pointsize>
+                         <pointsize>13</pointsize>
                         </font>
                        </property>
                       </row>
@@ -5614,17 +5667,357 @@ QTableCornerButton::section {
                        </property>
                        <property name="font">
                         <font>
-                         <pointsize>14</pointsize>
+                         <pointsize>13</pointsize>
                         </font>
                        </property>
                       </row>
                       <row>
                        <property name="text">
-                        <string>后视镜镜柄厚度(mm)</string>
+                        <string>前风挡角度(°)</string>
                        </property>
                        <property name="font">
                         <font>
-                         <pointsize>14</pointsize>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>前风挡与车顶棚连接面差(mm)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>引擎盖角度(°)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>引擎盖前端弧度倾角(°)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>前格栅角度(°)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>接近角(°)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>离去角(°)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>前轮腔前X向尺寸(mm)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>前轮腔后X向尺寸(mm)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>前保两侧切线方向与前轮距离(mm)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>迎风面积(m2)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>侧窗倾角(°)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>后视镜镜柄厚度（水切式）(mm)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>A柱与X轴空间角度(°)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>A柱与Y轴空间角度(°)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>A柱与Z轴空间角度(°)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>离地间隙(mm)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>后三角窗阶差(mm)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>底盘平整度(%)</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>前车窗玻璃厚度</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>后车窗玻璃厚度</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>前三角窗厚度</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>后三角窗厚度</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>前风挡玻璃厚度</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>后风挡玻璃厚度</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>天窗玻璃厚度</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>混响时间（均值）</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>声传函（均值）</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>前车窗玻璃材料</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>后车窗玻璃材料</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>前三角窗材料</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>后三角窗材料</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>前风挡玻璃材料</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>后风挡玻璃材料</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
+                        </font>
+                       </property>
+                      </row>
+                      <row>
+                       <property name="text">
+                        <string>天窗玻璃材料</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>13</pointsize>
                         </font>
                        </property>
                       </row>
@@ -6814,7 +7207,7 @@ QGroupBox::title {
                    <enum>QTabWidget::TabShape::Rounded</enum>
                   </property>
                   <property name="currentIndex">
-                   <number>5</number>
+                   <number>4</number>
                   </property>
                   <widget class="QWidget" name="tab_16">
                    <attribute name="title">
@@ -7290,7 +7683,7 @@ QGroupBox::title {
                           <string notr="true">background-color: rgb(255, 255, 255);</string>
                          </property>
                          <property name="currentIndex">
-                          <number>1</number>
+                          <number>6</number>
                          </property>
                          <widget class="QWidget" name="page_17">
                           <property name="geometry">
@@ -7332,8 +7725,8 @@ QGroupBox::title {
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>1075</width>
-                            <height>652</height>
+                            <width>88</width>
+                            <height>33</height>
                            </rect>
                           </property>
                           <attribute name="label">
@@ -7449,8 +7842,8 @@ QGroupBox::title {
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>88</width>
-                            <height>33</height>
+                            <width>1075</width>
+                            <height>652</height>
                            </rect>
                           </property>
                           <attribute name="label">
